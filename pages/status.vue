@@ -101,7 +101,7 @@ export default {
   methods: {
     async updateStatus () {
       try {
-        const { body } = await superagent.get(`http://localhost:3200/status`)
+        const { body } = await superagent.get(`https://api.discordfeeds.com/status`)
         this.status.shards = body.shards
         this.status.api = body.api
         this.status.feeds = body.feeds
