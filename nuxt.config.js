@@ -29,6 +29,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/axios'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -43,8 +44,13 @@ module.exports = {
   modules: [
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt',
-    'nuxt-fontawesome'
+    'nuxt-fontawesome',
+    '@nuxtjs/axios'
   ],
+  /*
+  ** Axios Config
+  */
+  axios: config.axios,
   /*
   ** Build configuration
   */

@@ -10,7 +10,9 @@ import Navbar from '../components/Navbar'
 export default {
   components: {
     Navbar
-  }
+  },
+
+  transition: 'default'
 }
 </script>
 
@@ -18,7 +20,7 @@ export default {
 html, body {
   height: 100%;
   color: white;
-  background-color: #292d32;
+  background-color: #36393f;
 }
 
 #app {
@@ -30,4 +32,14 @@ html, body {
   min-height: 100vh;
   padding-bottom: 6rem;
 }
+
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.1s;
+}
+.page-enter,
+.page-leave-to {
+  opacity: 0;
+}
+
 </style>
