@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="center p-5">
-      <h1>DiscordFeeds</h1>
+      <h1>SocialFeeds</h1>
       <h6>Get your favourite updates posted quickly from a range of supported sites.</h6>
-      <h6>Dashboard coming soon.</h6><br>
+      <h6>Dashboard now available!</h6><br>
 
-      <b-button class="blurple">
+      <b-button class="blurple" :to="{ name: 'invite' }">
         Invite Me
       </b-button>
-      <b-button class="outline-blurple disabled">
+      <b-button class="blurple" :to="{ name: 'dashboard' }">
         Dashboard
       </b-button>
     </div>
@@ -22,16 +22,16 @@
           <div class="col-md-6">
             <div class="card-body">
               <h5>Reliable and Trustworthy</h5>
-              <p>DiscordFeeds will always be online apart from any unexpected circumstances, which means you have 99.9% chance of getting you article. Those are good odds.</p><br><br>
+              <p>SocialFeeds will always be online apart from any unexpected circumstances, which means you have 99.9% chance of getting you article. Those are good odds.</p><br><br>
 
               <h5>Always Online</h5>
-              <p>DiscordFeeds has no reason to go offline. If the bot is ever offline, you can do whatever the bot can do via the website and vice versa.</p><br><br>
+              <p>SocialFeeds has no reason to go offline. If the bot is ever offline, you can do whatever the bot can do via the website and vice versa.</p><br><br>
 
               <h5>Range of Supported Sites</h5>
-              <p>DiscordFeeds supports YouTube channels, Reddit subreddits, Twitch Channels, Twitter Accounts and any website that supports RSS feeds. DiscordFeeds grabs the latest updates and delivers them straight to your server, easy.</p><br>
+              <p>SocialFeeds supports YouTube channels, Reddit subreddits, Twitch Channels, Twitter Accounts and any website that supports RSS feeds. DiscordFeeds grabs the latest updates and delivers them straight to your server, easy.</p><br>
 
               <h5>Discord Status Updates</h5>
-              <p>DiscordFeeds is now capable of sending Discord incidents to your server. Just so you know if Discords having any issues without having to leave your Discord server.</p>
+              <p>SocialFeeds is now capable of sending Discord incidents to your server. Just so you know if Discords having any issues without having to leave your Discord server.</p>
             </div>
           </div>
         </div>
