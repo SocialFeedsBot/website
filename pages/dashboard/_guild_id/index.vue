@@ -25,8 +25,12 @@
           </div>
 
           <div class="col-2 mt-4 mb-3">
-            <b-button class="discord-button-blue">Add Feed</b-button>
-            <b-button class="button-transparent" :to="{ name: 'dashboard' }">Switch Server</b-button>
+            <b-button class="discord-button-blue">
+              Add Feed
+            </b-button>
+            <b-button class="button-transparent" :to="{ name: 'dashboard' }">
+              Switch Server
+            </b-button>
           </div>
         </div>
       </b-container>
@@ -93,7 +97,7 @@ export default {
 
     async remove (data) {
       try {
-        await this.$axios.delete(`/feeds/delete`, {
+        await this.$axios.delete('/feeds', {
           data: {
             guildID: this.$route.params.guild_id,
             feed: { url: data.url, type: data.type },

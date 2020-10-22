@@ -3,9 +3,11 @@
 </template>
 
 <script>
+import config from '../../public_config.json'
+
 export default {
   mounted () {
-    window.location = 'https://discord.com/api/oauth2/authorize?client_id=640989075452723200&redirect_uri=https%3A%2F%2Fdiscordfeeds.com%2Fcallback&response_type=code&scope=guilds%20identify'
+    window.location = `https://discord.com/api/oauth2/authorize?client_id=${config.clientID}&redirect_uri=${encodeURIComponent(`${config.siteURL}/callback`)}&response_type=code&scope=guilds%20identify`
   }
 }
 </script>
