@@ -57,7 +57,7 @@ export default {
 </script>
 
 <style>
-  .guild-icon {
-    background-color: #2e3338
-  }
+.guild-icon {
+  background-color: #2e3338
+}
 </style>

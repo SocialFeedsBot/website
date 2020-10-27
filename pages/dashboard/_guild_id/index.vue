@@ -15,22 +15,46 @@
             </div>
           </div>
 
-          <div class="col-8 mt-4 text-left">
+          <div class="col-5 mt-4 text-left">
             <div class="h3 d-inline-block">
               {{ guild.name }}
             </div>
             <div class="p">
-              Total feeds: {{ feeds.flat().map(f => f.feeds).flat().length }}
+              Total feeds: {{ feedCount }}
             </div>
           </div>
 
-          <div class="col-2 mt-4 mb-3">
-            <b-button class="discord-button-blue">
-              Add Feed
-            </b-button>
+          <div class="col-5 mt-4 mb-3">
             <b-button class="button-transparent" :to="{ name: 'dashboard' }">
               Switch Server
-            </b-button>
+            </b-button><br><br>
+
+            <h5 class="channel-header">
+              ADD A FEED
+            </h5>
+            <div>
+              <b-input-group>
+                <b-form-input v-model="addData.url" />
+
+                <template #append>
+                  <b-dropdown v-model="addData.type" text="Type">
+                    <b-dropdown-item>Reddit</b-dropdown-item>
+                    <b-dropdown-item>RSS</b-dropdown-item>
+                    <b-dropdown-item>Twitter</b-dropdown-item>
+                    <b-dropdown-item>YouTube</b-dropdown-item>
+                  </b-dropdown>
+                  <b-dropdown v-model="addData.channel" text="Channel">
+                    <b-dropdown-item v-for="channel in Object.values(channels).filter(c => c.type === 0)" :key="channel.id">
+                      #{{ channel.name }}
+                    </b-dropdown-item>
+                  </b-dropdown>
+
+                  <b-button class="discord-button-blue" @click="test()">
+                    Add
+                  </b-button>
+                </template>
+              </b-input-group>
+            </div>
           </div>
         </div>
       </b-container>
@@ -41,12 +65,12 @@
           <h2>No feeds setup in this server</h2>
           <p>Add one using the df!add command or press 'Add' in the top corner.</p>
         </div>
-        <div v-for="channelFeeds in feeds" v-else :key="channelFeeds[0].channelID">
-          <h4 class="channel-header">
-            #{{ channels[channelFeeds[0].channelID].name.toUpperCase() }} ({{ channelFeeds.length }})
+        <div v-for="(feeds, channelID) in feeds" v-else :key="channelID">
+          <br><h4 class="channel-header">
+            #{{ channels[channelID].name.toUpperCase() }} ({{ feeds.length }})
           </h4><br>
           <b-row>
-            <FeedBlock v-for="(feed, i) in channelFeeds" :key="feed.channelID + '-' + i" :data="feed" @remove="remove(feed)" />
+            <FeedBlock v-for="(feed, i) in feeds" :key="channelID + '-' + i" :data="feed" @remove="remove(feed)" />
           </b-row>
         </div>
       </b-container>
@@ -65,7 +89,8 @@ export default {
     return {
       guild: {},
       feeds: [],
-      channels: null
+      channels: null,
+      addData: { type: '', channel: '', url: '' }
     }
   },
 
@@ -83,25 +108,36 @@ export default {
       }
 
       const channels = (await this.$axios.get(`/guilds/${this.$route.params.guild_id}/channels`)).data
-      const feeds = (await this.$axios.get(`/feeds/${this.$route.params.guild_id}`)).data
+      const feedInfo = (await this.$axios.get(`/feeds/${this.$route.params.guild_id}`)).data
+      const feeds = []
+
+      for (let i = 0; i < feedInfo.pages; i++) {
+        const data = (await this.$axios.get(`/feeds/${this.$route.params.guild_id}?page=${i + 1}`)).data
+        console.log(data)
+        feeds.push(...data.feeds)
+      }
 
       this.channels = channels
       this.guild = guild
 
-      const webhooks = [...new Set(feeds.map(feed => feed.token))]
-      this.feeds = await Promise.all(webhooks.map((webhookToken) => {
-        const feed = feeds.find(f => f.token === webhookToken)
-        return feeds.filter(f => f._id === feed._id)
-      }))
+      const groups = {}
+      feeds.forEach((doc) => {
+        if (channels[doc.channelID]) {
+          if (!groups[doc.channelID]) { groups[doc.channelID] = [] }
+          groups[doc.channelID].push({ ...doc, channelName: channels[doc.channelID].name })
+        }
+      })
+      this.feeds = groups
+      this.feedCount = feeds.length
     },
 
     async remove (data) {
       try {
         await this.$axios.delete('/feeds', {
           data: {
-            guildID: this.$route.params.guild_id,
-            feed: { url: data.url, type: data.type },
-            webhook: { id: data.webhook.id, token: data.webhook.token }
+            url: data.url,
+            type: data.type,
+            webhookID: data.webhook.id
           }
         })
         this.$bvToast.toast(`Feed removed successfully!`, {
@@ -119,6 +155,10 @@ export default {
           variant: 'danger'
         })
       }
+    },
+
+    test () {
+      console.log(this.addData)
     }
   }
 
@@ -128,7 +168,7 @@ export default {
 <style>
 .channel-header {
   font-size: 16px;
-  color: white;
+  color: darkgrey;
   font-weight: 600;
   flex: 1;
   margin: 0;
