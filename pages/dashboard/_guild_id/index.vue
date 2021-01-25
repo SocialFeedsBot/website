@@ -23,34 +23,49 @@
               Total feeds: {{ feedCount }}
             </div>
           </div>
+        </div>
+      </b-container>
 
-          <div class="col-5 mt-4 mb-3">
-            <b-button class="button-transparent" :to="{ name: 'dashboard' }">
-              Switch Server
-            </b-button><br><br>
+      <!-- adding new feeds -->
+      <b-container class="mt-4 mb-5 pb-3 pt-3 guild-info">
+        <div class="row">
+          <div class="col-12 mt-4 text-left">
+            <div class="h3 d-inline-block">
+              Add a new feed
+            </div>
+            <div class="p">
+              Here you can add feeds right from the dashboard to be posted. You only need to type the username, however a whole link is accepted. For example, you could use <strong>memes</strong> for reddit instead of <strong>/r/memes</strong>.
+            </div>
+          </div>
 
-            <h5 class="channel-header">
-              ADD A FEED
-            </h5>
+          <div class="col-12 mt-4 mb-3">
             <div>
               <b-input-group>
                 <b-form-input v-model="addData.url" />
 
-                <template #append>
-                  <b-dropdown v-model="addData.type" text="Type">
-                    <b-dropdown-item>Reddit</b-dropdown-item>
-                    <b-dropdown-item>RSS</b-dropdown-item>
-                    <b-dropdown-item>Twitter</b-dropdown-item>
-                    <b-dropdown-item>YouTube</b-dropdown-item>
+                <template>
+                  <b-dropdown v-model="addData.type" :text="addData.type ? addData.type : 'Type'">
+                    <b-dropdown-item-button @click="addData.type = 'Reddit'">
+                      Reddit
+                    </b-dropdown-item-button>
+                    <b-dropdown-item-button @click="addData.type = 'RSS'">
+                      RSS
+                    </b-dropdown-item-button>
+                    <b-dropdown-item-button @click="addData.type = 'Twitter'">
+                      Twitter
+                    </b-dropdown-item-button>
+                    <b-dropdown-item-button @click="addData.type = 'YouTube'">
+                      YouTube
+                    </b-dropdown-item-button>
                   </b-dropdown>
-                  <b-dropdown v-model="addData.channel" text="Channel">
-                    <b-dropdown-item v-for="channel in Object.values(channels).filter(c => c.type === 0)" :key="channel.id">
+                  <b-dropdown v-model="addData.channel" :text="addData.channel ? `#${channels[addData.channel].name}` : 'Channel'">
+                    <b-dropdown-item v-for="channel in Object.values(channels).filter(c => c.type === 0)" :key="channel.id" @click="addData.channel = channel.id">
                       #{{ channel.name }}
                     </b-dropdown-item>
                   </b-dropdown>
 
-                  <b-button class="discord-button-blue" @click="test()">
-                    Add
+                  <b-button class="discord-button-blue" @click="addFeed()">
+                    Add feed
                   </b-button>
                 </template>
               </b-input-group>
@@ -113,7 +128,6 @@ export default {
 
       for (let i = 0; i < feedInfo.pages; i++) {
         const data = (await this.$axios.get(`/feeds/${this.$route.params.guild_id}?page=${i + 1}`)).data
-        console.log(data)
         feeds.push(...data.feeds)
       }
 
@@ -137,7 +151,8 @@ export default {
           data: {
             url: data.url,
             type: data.type,
-            webhookID: data.webhook.id
+            webhookID: data.webhook.id,
+            guildID: this.$route.params.guild_id
           }
         })
         this.$bvToast.toast(`Feed removed successfully!`, {
@@ -157,8 +172,32 @@ export default {
       }
     },
 
-    test () {
-      console.log(this.addData)
+    async addFeed () {
+      try {
+        await this.$axios.post('/feeds', {
+          guildID: this.$route.params.guild_id,
+          url: this.addData.url,
+          type: this.addData.type.toLowerCase(),
+          channelID: this.addData.channel,
+          nsfw: this.channels[this.addData.channel].nsfw,
+          options: { replies: false }
+        })
+        this.$bvToast.toast(`Created new feed!`, {
+          title: 'Success',
+          autoHideDelay: 6000,
+          appendToast: false,
+          variant: 'success'
+        })
+        await this.update()
+      } catch (e) {
+        console.log(e)
+        this.$bvToast.toast(`Try again later, error message: ${e.response.body.message}`, {
+          title: 'Unable to add feed at this time.',
+          autoHideDelay: 6000,
+          appendToast: false,
+          variant: 'danger'
+        })
+      }
     }
   }
 
