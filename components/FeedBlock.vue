@@ -22,7 +22,7 @@
         <div class="flex" style="flex: 0 0 auto; justify-content: flex-end;">
           <b-button class="feed-button-delete" @click="remove()">
             <div class="feed-delete">
-              Delete feed
+              <fa icon="trash" style="color: #fff" />
             </div>
           </b-button>
         </div>
@@ -63,7 +63,7 @@ export default {
 .block {
   padding: 20px 16px;
   margin-bottom: 16px;
-  border-color: #292b2f;
+  border-color: #000000;
   background-color: rgba(32,34,37,0.3);
   position: relative;
   border-width: 1px;
@@ -120,14 +120,14 @@ export default {
 }
 .feed-button-delete {
   border: transparent;
-  color: #f04747;
+  background: #f54242;
 }
 .feed-button-delete:hover {
   border: transparent;
   color: #c91b1b;
 }
-.feed-button-delete, .feed-button-delete:hover {
-  background: transparent
+.feed-button-delete:hover {
+  background: #f23030
 }
 .feed-url {
   font-size: 12px;

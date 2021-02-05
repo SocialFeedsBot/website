@@ -7,15 +7,15 @@
     </div>
 
     <div v-else>
-      <b-container class="mt-4 mb-5 pb-3 pt-3 guild-info">
+      <b-container class="mt-4 mb-5 pb-3 pt-2 guild-info">
         <div class="row">
-          <div class="col-2 pr-1 text-right">
+          <div class="col-1 mr-5 text-right">
             <div class="d-inline-block">
-              <img :src="'https://cdn.discordapp.com/icons/' + guild.id + '/' + guild.icon + '.png'" class="rounded-circle" height="150" width="150" alt="guild icon">
+              <img :src="'https://cdn.discordapp.com/icons/' + guild.id + '/' + guild.icon + '.png'" class="rounded-circle" height="100" width="100" alt="guild icon">
             </div>
           </div>
 
-          <div class="col-5 mt-4 text-left">
+          <div class="col-5 ml-5 mt-3 text-left">
             <div class="h3 d-inline-block">
               {{ guild.name }}
             </div>
@@ -27,9 +27,9 @@
       </b-container>
 
       <!-- adding new feeds -->
-      <b-container class="mt-4 mb-5 pb-3 pt-3 guild-info">
+      <b-container class="mb-3 pb-3 pt-3 guild-info">
         <div class="row">
-          <div class="col-12 mt-4 text-left">
+          <div class="col-12 mt-1 text-left">
             <div class="h3 d-inline-block">
               Add a new feed
             </div>
@@ -41,23 +41,24 @@
           <div class="col-12 mt-4 mb-3">
             <div>
               <b-input-group>
-                <b-form-input v-model="addData.url" />
-
                 <template>
                   <b-dropdown v-model="addData.type" :text="addData.type ? addData.type : 'Type'">
                     <b-dropdown-item-button @click="addData.type = 'Reddit'">
-                      Reddit
+                      <fa :icon="['fab', 'reddit']" /> Reddit
                     </b-dropdown-item-button>
                     <b-dropdown-item-button @click="addData.type = 'RSS'">
-                      RSS
+                      <fa icon="rss" /> RSS
                     </b-dropdown-item-button>
                     <b-dropdown-item-button @click="addData.type = 'Twitter'">
-                      Twitter
+                      <fa :icon="['fab', 'twitter']" /> Twitter
                     </b-dropdown-item-button>
                     <b-dropdown-item-button @click="addData.type = 'YouTube'">
-                      YouTube
+                      <fa :icon="['fab', 'youtube']" /> YouTube
                     </b-dropdown-item-button>
                   </b-dropdown>
+
+                  <b-form-input id="url" v-model="addData.url" placeholder="Channel/account name or feed URL" />
+
                   <b-dropdown v-model="addData.channel" :text="addData.channel ? `#${channels[addData.channel].name}` : 'Channel'">
                     <b-dropdown-item v-for="channel in Object.values(channels).filter(c => c.type === 0)" :key="channel.id" @click="addData.channel = channel.id">
                       #{{ channel.name }}
@@ -69,18 +70,23 @@
                   </b-button>
                 </template>
               </b-input-group>
+
+              <br>
+              <div v-if="addData.type === 'Twitter'">
+                <p3><strong>Twitter feed options</strong></p3>
+                <SwitchButton :is-enabled="addData.replies" @toggle="toggleReplies">
+                  Include replies
+                </SwitchButton>
+              </div>
             </div>
           </div>
         </div>
       </b-container>
 
       <!-- feeds -->
+      <br>
       <b-container class="mb-3">
-        <div v-if="feeds.length === 0" style="text-align: center;">
-          <h2>No feeds setup in this server</h2>
-          <p>Add one using the df!add command or press 'Add' in the top corner.</p>
-        </div>
-        <div v-for="(feeds, channelID) in feeds" v-else :key="channelID">
+        <div v-for="(feeds, channelID) in feeds" :key="channelID">
           <br><h4 class="channel-header">
             #{{ channels[channelID].name.toUpperCase() }} ({{ feeds.length }})
           </h4><br>
@@ -94,18 +100,19 @@
 </template>
 
 <script>
+import SwitchButton from '../../../components/SwitchButton'
 import FeedBlock from '@/components/FeedBlock.vue'
 
 export default {
 
-  components: { FeedBlock },
+  components: { SwitchButton, FeedBlock },
 
   data () {
     return {
       guild: {},
       feeds: [],
       channels: null,
-      addData: { type: '', channel: '', url: '' }
+      addData: { replies: false, type: '', channel: '', url: '' }
     }
   },
 
@@ -145,6 +152,10 @@ export default {
       this.feedCount = feeds.length
     },
 
+    toggleReplies (val) {
+      this.addData.replies = val
+    },
+
     async remove (data) {
       try {
         await this.$axios.delete('/feeds', {
@@ -173,6 +184,15 @@ export default {
     },
 
     async addFeed () {
+      if (this.addData.url === '' || this.addData.type === '' || this.addData.channel === '') {
+        this.$bvToast.toast('Please ensure you fill in the feed type, url and the channel.', {
+          title: 'Error',
+          autoHideDelay: 6000,
+          appendToast: false,
+          variant: 'warning'
+        })
+        return
+      }
       try {
         await this.$axios.post('/feeds', {
           guildID: this.$route.params.guild_id,
@@ -180,7 +200,7 @@ export default {
           type: this.addData.type.toLowerCase(),
           channelID: this.addData.channel,
           nsfw: this.channels[this.addData.channel].nsfw,
-          options: { replies: false }
+          options: { replies: this.addData.replies }
         })
         this.$bvToast.toast(`Created new feed!`, {
           title: 'Success',
@@ -190,7 +210,6 @@ export default {
         })
         await this.update()
       } catch (e) {
-        console.log(e)
         this.$bvToast.toast(`Try again later, error message: ${e.response.body.message}`, {
           title: 'Unable to add feed at this time.',
           autoHideDelay: 6000,
@@ -220,15 +239,18 @@ export default {
   background: rgba(32,34,37,0.5);
   border-radius: 10px;
   border-width: 5px;
+  box-shadow: 0 0 5px 2px #23272A;
 }
 
 .discord-button-blue {
   background: #7289DA;
   color: #fff;
   border-radius: 3px;
+  width: 120px;
   border: none;
   padding: 2px 16px;
   box-sizing: border-box;
+  box-shadow: 0 0 5px 2px #23272A;
 }
 .discord-button-blue:hover {
   background: #5c73bd;
@@ -250,5 +272,16 @@ export default {
 }
 .button-transparent, .button-transparent:hover {
   background: transparent
+}
+
+#url {
+  background-color: #23272A;
+  border-color: #000000;
+  border-size: 1px;
+  color: #ffffff
+}
+
+.check-box {
+  background: #23272A
 }
 </style>

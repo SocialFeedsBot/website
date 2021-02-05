@@ -6,11 +6,11 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'DiscordFeeds',
+    title: 'SocialFeeds',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'DiscordFeeds is a Discord bot with a web dashboard to automatically post new items from a RSS/twitter/twitch feed.' }
+      { hid: 'description', name: 'description', content: 'SocialFeeds is a Discord bot with a web dashboard to automatically post new items from a RSS/twitter/twitch feed.' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '~/assets/logo.png' }
@@ -24,12 +24,14 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    '@fortawesome/fontawesome-svg-core/styles.css'
   ],
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~/plugins/axios'
+    '~/plugins/axios',
+    '~/plugins/fontawesome'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -47,6 +49,14 @@ module.exports = {
     'nuxt-fontawesome',
     '@nuxtjs/axios'
   ],
+
+  fontawesome: {
+    component: 'fa',
+    icons: {
+      solid: true,
+      brands: true
+    }
+  },
   /*
   ** Axios Config
   */

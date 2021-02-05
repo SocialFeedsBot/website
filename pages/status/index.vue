@@ -1,12 +1,37 @@
 <template>
-  <div>
-    <div class="center p-5">
-      <h1>Status</h1>
-      <h6>Monitor the status of DiscordFeeds services. Refreshes every 5 seconds.</h6>
-    </div>
+  <div class="center">
+    <div class="pb-3 pt-4 mt-4 mb-5">
+      <b-container id="statusbox" class="bv-example-row pt-4">
+        <div class="d-block">
+          <h3>Status</h3><br>
+        </div>
 
-    <div class="center">
-      <b-container class="bv-example-row">
+        <div v-for="(w) in status.shards.sort((a,b) => a.id - b.id)" :key="w" class="d-inline-block mx-1 my-1">
+          <div v-b-tooltip.hover :title="w.status" class="d-flex align-items-center" :class="{ status: true, statusok: w.status === 'ready', statusamber: w.status !== 'ready', statusred: w.status === 'disconnected' }">
+            {{ w.id }}
+          </div>
+        </div><br><br>
+
+        <div>
+          <h4 class="mt-4 pt-4 pb-2">
+            Background Services
+          </h4>
+          <div class="d-inline-block mx-1 my-1">
+            <div v-b-tooltip.hover title="Adds/removes feeds and gives the feed handler data." class="d-flex align-items-center" :class="{ status: true, statusok: status.api, statusred: !status.api }">
+              API
+            </div>
+          </div>
+
+          <div class="d-inline-block mx-1 my-1">
+            <div v-b-tooltip.hover title="Handles posting feeds to your server." class="d-flex align-items-center" :class="{ status: true, statusok: status.feeds && status.feeds.uptime > 0, statusred: !status.feeds || status.feeds.uptime === 0 }">
+              Feed Handler
+            </div>
+          </div>
+        </div>
+
+        <br>
+
+        <!--
         <b-row>
           <b-col>
             <h5>API</h5><h5 :style="{ color: colours[status.api ? 'operational' : 'major_outage'] }">
@@ -14,39 +39,13 @@
             </h5>
           </b-col>
           <b-col>
-            <h5>Feed Handler</h5><h5 :style="{ color: colours[status.feeds && status.feeds.uptime > 0 ? 'operational' : 'unknown'] }">
-              <strong>{{ status.feeds && status.feeds.uptime > 0 ? 'Operational' : 'Unknown' }}</strong>
+            <h5>Feed Handler</h5><h5 :style="{ color: colours[status.feeds && status.feeds.uptime > 0 ? 'operational' : 'major_outage'] }">
+              <strong>{{ status.feeds && status.feeds.uptime > 0 ? 'Operational' : 'Offline' }}</strong>
             </h5>
           </b-col>
-        </b-row>
+        </b-row> -->
       </b-container>
     </div>
-
-    <b-container class="bv-example-row">
-      <b-row>
-        <b-col>
-          <h4>Clusters</h4>
-          <div v-for="(w, index) in status.clusters" :key="w">
-            <div v-b-tooltip.hover :title="w.problemShards + ' problematic shard(s)'" class="d-flex align-items-center" :class="{ status: true, statusok: w.status === 'operational', statusamber: w.status === 'minor_outage' }">
-              {{ index }}
-            </div>
-          </div>
-        </b-col>
-      </b-row>
-    </b-container>
-
-    <b-container class="bv-example-row">
-      <b-row>
-        <b-col>
-          <h4>Shards</h4>
-          <div v-for="(w, index) in status.shards" :key="w">
-            <div v-b-tooltip.hover :title="'[ Cluster ' + w.cluster + ' ] ' + w.status.charAt(0).toUpperCase() + w.status.substring(1) + ' in ' + w.guilds.toLocaleString() + ' servers'" class="d-flex align-items-center" :class="{ status: true, statusok: w.status === 'ready', statusamber: w.status === 'resuming', statusred: w.status === 'disconnected' }">
-              {{ index }}
-            </div>
-          </div>
-        </b-col>
-      </b-row>
-    </b-container>
   </div>
 </template>
 
@@ -57,29 +56,30 @@
 }
 
 .status {
-  border-radius: 3px;
-  margin: 12px 0;
+  border-radius: .25rem;
+  margin: 0.25rem;
   padding: 12px;
-  width: flex;
-  height: 40px;
-  float: left;
   font-weight: 500;
   font-size: 20px;
   -webkit-text-stroke: 0.1px black;
+  display: flex;
+  height: 40px;
+  width: inherit;
 }
 
 .statusok {
-  border: 1px solid #009b22;
-  background: #21ff513d;
+  border: 1px solid #4cc767;
 }
 .statusamber {
   border: 1px solid #ff6721;
-  background: #ff672136;
 }
 
 .statusred {
   border: 1px solid #ff2121;
-  background: #ff212117
+}
+#statusbox  {
+  background-color: #23272A;
+  border-radius: 5px;
 }
 
 </style>
@@ -105,9 +105,13 @@ export default {
     }
   },
 
+  beforeDestroy () {
+    clearInterval(this.interval)
+  },
+
   async mounted () {
     await this.updateStatus()
-    setInterval(() => this.updateStatus(), 5 * 1000)
+    this.interval = setInterval(() => this.updateStatus(), 10 * 1000)
   },
 
   methods: {
@@ -120,8 +124,11 @@ export default {
 
         const clusters = {}
         data.shards.forEach((shard) => {
-          if (!clusters[shard.cluster]) { clusters[shard.cluster] = { status: 'operational', guilds: 0, shards: 0, id: shard.cluster, problemShards: 0 } }
-          if (shard.status !== 'ready') { clusters[shard.cluster].status = 'minor_outage'; clusters[shard.cluster].problemShards++ }
+          if (!clusters[shard.cluster]) { clusters[shard.cluster] = { status: 'operational', guilds: 0, shards: 0, id: shard.cluster, problemShards: [] } }
+          if (shard.status !== 'ready') {
+            clusters[shard.cluster].status = 'minor_outage'
+            clusters[shard.cluster].problemShards.push({ id: shard.id, status: shard.status })
+          }
           clusters[shard.cluster].guilds += shard.guilds
           clusters[shard.cluster].shards += 1
         })
