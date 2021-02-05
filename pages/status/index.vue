@@ -121,28 +121,11 @@ export default {
         this.status.shards = data.shards
         this.status.api = data.api
         this.status.feeds = data.feeds
-
-        const clusters = {}
-        data.shards.forEach((shard) => {
-          if (!clusters[shard.cluster]) { clusters[shard.cluster] = { status: 'operational', guilds: 0, shards: 0, id: shard.cluster, problemShards: [] } }
-          if (shard.status !== 'ready') {
-            clusters[shard.cluster].status = 'minor_outage'
-            clusters[shard.cluster].problemShards.push({ id: shard.id, status: shard.status })
-          }
-          clusters[shard.cluster].guilds += shard.guilds
-          clusters[shard.cluster].shards += 1
-        })
-
-        this.status.clusters = Object.values(clusters)
       } catch (e) {
         this.status.api = null
         this.status.feeds = null
         this.status.shards = []
       }
-    },
-
-    parseUptime (ms) {
-      return ms
     }
   }
 }
