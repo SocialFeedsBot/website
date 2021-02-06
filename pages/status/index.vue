@@ -6,7 +6,7 @@
           <h3>Status</h3><br>
         </div>
 
-        <div v-for="(w) in status.shards.sort((a,b) => a.id - b.id)" :key="w" class="d-inline-block mx-1 my-1">
+        <div v-for="(w) in status.shards" :key="w" class="d-inline-block mx-1 my-1">
           <div v-b-tooltip.hover :title="w.status" class="d-flex align-items-center" :class="{ status: true, statusok: w.status === 'ready', statusamber: w.status !== 'ready', statusred: w.status === 'disconnected' }">
             {{ w.id }}
           </div>
@@ -28,22 +28,6 @@
             </div>
           </div>
         </div>
-
-        <br>
-
-        <!--
-        <b-row>
-          <b-col>
-            <h5>API</h5><h5 :style="{ color: colours[status.api ? 'operational' : 'major_outage'] }">
-              <strong>{{ status.api ? 'Operational' : 'Major Outage' }}</strong>
-            </h5>
-          </b-col>
-          <b-col>
-            <h5>Feed Handler</h5><h5 :style="{ color: colours[status.feeds && status.feeds.uptime > 0 ? 'operational' : 'major_outage'] }">
-              <strong>{{ status.feeds && status.feeds.uptime > 0 ? 'Operational' : 'Offline' }}</strong>
-            </h5>
-          </b-col>
-        </b-row> -->
       </b-container>
     </div>
   </div>
@@ -118,7 +102,7 @@ export default {
     async updateStatus () {
       try {
         const { data } = await this.$axios.get('/status')
-        this.status.shards = data.shards
+        this.status.shards = data.shards.sort((a, b) => a.id - b.id)
         this.status.api = data.api
         this.status.feeds = data.feeds
       } catch (e) {
