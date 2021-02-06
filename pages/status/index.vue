@@ -17,13 +17,13 @@
             Background Services
           </h4>
           <div class="d-inline-block mx-1 my-1">
-            <div v-b-tooltip.hover title="Adds/removes feeds and gives the feed handler data." class="d-flex align-items-center" :class="{ status: true, statusok: status.api, statusred: !status.api }">
+            <div v-b-tooltip.hover :title="status.api && (status.api.uptime / 1000) > 60 ? `Uptime: ${formatUptime(status.api ? status.api.uptime / 1000 / 60 : 0) } | Memory: ${formatMemory(status.api ? status.api.memory : 0)}` : 'Starting'" class="d-flex align-items-center" :class="{ status: true, statusamber: status.api && status.api.uptime / 1000 < 60, statusok: status.api, statusred: !status.api }">
               API
             </div>
           </div>
 
           <div class="d-inline-block mx-1 my-1">
-            <div v-b-tooltip.hover title="Handles posting feeds to your server." class="d-flex align-items-center" :class="{ status: true, statusok: status.feeds && status.feeds.uptime > 0, statusred: !status.feeds || status.feeds.uptime === 0 }">
+            <div v-b-tooltip.hover :title="status.feeds && (status.feeds.uptime / 1000) > 60 ? `Uptime: ${formatUptime(status.feeds ? status.feeds.uptime / 1000 / 60 : 0) } | Memory: ${formatMemory(status.feeds ? status.feeds.memory : 0)}` : 'Starting'" class="d-flex align-items-center" :class="{ status: true, statusamber: status.feeds && status.feeds.uptime / 1000 < 60, statusok: status.feeds && status.feeds.uptime > 0, statusred: !status.feeds || status.feeds.uptime === 0 }">
               Feed Handler
             </div>
           </div>
@@ -110,6 +110,44 @@ export default {
         this.status.feeds = null
         this.status.shards = []
       }
+    },
+
+    formatMemory (bytes) {
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+      if (bytes === 0) { return 'n/a' }
+      const by = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)))
+      if (by === 0) { return `${bytes} ${sizes[by]}` }
+      return `${(bytes / 1024 ** by).toFixed(1)} ${sizes[by]}`
+    },
+
+    formatUptime (i) {
+      const d = Math.floor(i / (24 * 60))
+      const h = Math.floor((i / 60) - (24 * d))
+      const m = Math.round(i - 60 * (24 * d + h))
+      let result = ''
+
+      // days
+      if (d > 0) {
+        result = result + `${d}d`
+      }
+
+      // hours
+      if (h > 0) {
+        if (result !== '') {
+          result = result + ' '
+        }
+        result = result + `${h}h`
+      }
+
+      // minutes
+      if (m > 0) {
+        if (result !== '') {
+          result = result + ' '
+        }
+        result = result + `${m}m`
+      }
+
+      return result
     }
   }
 }
