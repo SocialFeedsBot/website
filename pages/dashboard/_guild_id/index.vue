@@ -136,7 +136,7 @@ export default {
       const feedInfo = (await this.$axios.get(`/feeds/${this.$route.params.guild_id}`)).data
       const feeds = []
 
-      for (let i = 0; i < feedInfo.pages; i++) {
+      for (let i = 1; i < feedInfo.pages; i++) {
         const data = (await this.$axios.get(`/feeds/${this.$route.params.guild_id}?page=${i + 1}`)).data
         feeds.push(...data.feeds)
       }
