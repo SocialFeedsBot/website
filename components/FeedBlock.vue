@@ -15,6 +15,9 @@
                 <div class="feed-url">
                   {{ getURL(data) }}
                 </div>
+                <div v-if="data.type === 'twitter' && data.options && data.options.replies" class="feed-url">
+                  Replies included
+                </div>
               </div>
             </div>
           </div>
