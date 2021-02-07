@@ -30,7 +30,6 @@ html, body {
 #content {
   height: 100%;
   min-height: 100vh;
-  padding-bottom: 6rem;
 }
 
 .page-enter-active,

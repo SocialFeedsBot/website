@@ -1,0 +1,9 @@
+.mt-8, .my-8 {
+  margin-top: 10.5rem !important;
+}
+
+.button-big {
+  height: 40px;
+  width: 150px;
+  font-size: 15px;
+}

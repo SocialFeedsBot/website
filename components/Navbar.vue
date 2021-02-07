@@ -1,16 +1,14 @@
 <template>
   <b-navbar toggleable="lg" type="dark" variant="dark" sticky>
-    <b-navbar-brand href="/">
-      <b-img src="@/assets/logo.png" class="logo" alt="feeds" />
+    <b-img src="@/assets/logo.png" class="logo" alt="feeds" />
+    <b-navbar-brand :to="{ path: '/' }">
       SocialFeeds
     </b-navbar-brand>
+
     <b-navbar-toggle target="nav-text-collapse" />
 
     <b-collapse id="nav-text-collapse" is-nav>
       <b-navbar-nav>
-        <b-nav-item :to="{ name: 'index' }" exact>
-          Home
-        </b-nav-item>
         <b-nav-item :to="{ name: 'invite' }" exact>
           Invite
         </b-nav-item>
@@ -81,6 +79,7 @@ export default {
   .logo {
     height: 56px;
     width: 56px;
+    margin-right: 8px;
   }
 
   .btn {
