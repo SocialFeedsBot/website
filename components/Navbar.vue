@@ -18,6 +18,9 @@
         <b-nav-item :to="{ name: 'status' }" exact>
           Status
         </b-nav-item>
+        <b-nav-item :to="{ name: 'datadog' }" exact>
+          Stats
+        </b-nav-item>
       </b-navbar-nav>
 
       <b-navbar-nav class="ml-auto">
