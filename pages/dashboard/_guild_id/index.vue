@@ -52,6 +52,9 @@
                     <b-dropdown-item-button @click="addData.type = 'Twitter'">
                       <fa :icon="['fab', 'twitter']" /> Twitter
                     </b-dropdown-item-button>
+                    <b-dropdown-item-button @click="addData.type = 'Twitch'">
+                      <fa :icon="['fab', 'twitch']" /> Twitch
+                    </b-dropdown-item-button>
                     <b-dropdown-item-button @click="addData.type = 'YouTube'">
                       <fa :icon="['fab', 'youtube']" /> YouTube
                     </b-dropdown-item-button>
