@@ -8,7 +8,7 @@
           </div>
           <div class="flex" style="flex-direction: column;">
             <h3 class="feed-name">
-              {{ data.url }} <strong>{{ (data.type === 'twitter' && data.options && data.options.replies) ? '' : '(with replies)' }}</strong>
+              {{ data.url }} <strong v-if="data.type === 'twitter'">{{ (data.options ? data.options.replies : false) ? '' : '(with replies)' }}</strong>
             </h3>
             <div class="flex">
               <div class="feed-details">
@@ -34,6 +34,10 @@
 <script>
 export default {
   props: ['data'],
+
+  mounted () {
+    console.log(this.data)
+  },
 
   methods: {
     getURL ({ type, url }) {
