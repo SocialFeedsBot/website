@@ -58,6 +58,9 @@
                     <b-dropdown-item-button @click="addData.type = 'YouTube'">
                       <fa :icon="['fab', 'youtube']" /> YouTube
                     </b-dropdown-item-button>
+                    <b-dropdown-item-button @click="addData.type = 'StatusPage'">
+                      <fa :icon="['fas', 'exclamation-circle']" /> Status Page
+                    </b-dropdown-item-button>
                   </b-dropdown>
 
                   <b-form-input id="url" v-model="addData.url" placeholder="Channel/account name or feed URL" />
@@ -214,7 +217,7 @@ export default {
         })
         await this.update()
       } catch (e) {
-        this.$bvToast.toast(`Try again later, error message: ${e.response.body.message}`, {
+        this.$bvToast.toast(`Try again later, error message: ${e.response.data.error}`, {
           title: 'Unable to add feed at this time.',
           autoHideDelay: 6000,
           appendToast: false,

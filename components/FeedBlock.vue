@@ -35,10 +35,6 @@
 export default {
   props: ['data'],
 
-  mounted () {
-    console.log(this.data)
-  },
-
   methods: {
     getURL ({ type, url }) {
       if (type === 'youtube') {
@@ -47,8 +43,8 @@ export default {
         return `https://twitter.com/${url}`
       } else if (type === 'twitch') {
         return `https://twitch.tv/${url}`
-      } else if (type === 'discordstatus') {
-        return `https://status.discordapp.com`
+      } else if (type === 'statuspage') {
+        return new URL(url).origin
       } else if (type === 'reddit') {
         return `https://reddit.com/r/${url}`
       } else if (type === 'rss') {
