@@ -34,6 +34,7 @@
                 <div class="d-inline-block ml-2">{{ user.username }}</div>
               </template>
               <!-- dropdown list -->
+              <b-dropdown-item v-if="admin" :to="{ name: 'admin' }">Admin Panel</b-dropdown-item>
               <b-dropdown-item :to="{ name: 'dashboard' }">Servers</b-dropdown-item>
               <b-dropdown-item :to="{ name: 'logout' }">Logout</b-dropdown-item>
             </b-dropdown>
@@ -51,6 +52,10 @@
 <script>
 export default {
 
+  data () {
+    return { admin: false }
+  },
+
   computed: {
     user () {
       return this.$store.getters['user/user']
@@ -64,6 +69,14 @@ export default {
 
   async mounted () {
     await this.$store.dispatch('user/GET_USER')
+    try {
+      const { data } = await this.$axios.get('/gateway/auth')
+      if (data.auth) {
+        this.admin = true
+      }
+    } catch (e) {
+
+    }
   }
 
 }
