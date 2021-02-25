@@ -4,10 +4,20 @@
       <b-container id="statusbox" class="bv-example-row pt-4">
         <div class="d-block">
           <h3>Admin Panel</h3><br>
+          <b-button class="blurple" @click="restart({ name: 'gateway' })">
+            Restart gateway
+          </b-button>
+          <b-button class="blurple" @click="restart({ name: 'all' })">
+            Restart all connections
+          </b-button>
         </div>
 
-        <b-row class="pb-2" v-for="(a) in services" :key="a.type + '-' + a.id">
-          <b-col><h5 style="align-items: left;">{{ a.type }}-{{ a.id }}</h5></b-col>
+        <b-row v-for="(a) in services" :key="a.type + '-' + a.id" class="pb-2">
+          <b-col>
+            <h5 style="align-items: left;">
+              {{ a.type }}-{{ a.id }}
+            </h5>
+          </b-col>
           <b-col>
             <b-button class="blurple" @click="restart({ name: a.type, id: a.id })">
               Restart
