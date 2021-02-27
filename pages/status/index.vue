@@ -22,8 +22,8 @@
             </div>
           </div>
 
-          <div v-for="feed in status.feeds" :key="feed" class="d-inline-block mx-1 my-1">
-            <div v-b-tooltip.hover :title="feeds && (feeds.uptime / 1000) > 60 ? `Uptime: ${formatUptime(feeds ? feeds.uptime / 1000 / 60 : 0) } | Memory: ${formatMemory(feeds ? feeds.memory : 0)}` : 'Starting'" class="d-flex align-items-center" :class="{ status: true, statusamber: feeds && feeds.uptime / 1000 < 60, statusok: status.feeds && feeds.uptime > 0, statusred: !feeds || feeds.uptime === 0 }">
+          <div class="d-inline-block mx-1 my-1">
+            <div v-b-tooltip.hover :title="status.feeds && (status.feeds.uptime / 1000) > 60 ? `Uptime: ${formatUptime(status.feeds ? status.feeds.uptime / 1000 / 60 : 0) } | Memory: ${formatMemory(status.feeds ? status.feeds.memory : 0)}` : 'Starting'" class="d-flex align-items-center" :class="{ status: true, statusamber: feeds && status.feeds.uptime / 1000 < 60, statusok: status.status.feeds && status.feeds.uptime > 0, statusred: !status.feeds || status.feeds.uptime === 0 }">
               Feed Handler
             </div>
           </div>
@@ -104,7 +104,7 @@ export default {
         const { data } = await this.$axios.get('/status')
         this.status.shards = data.shards.sort((a, b) => a.id - b.id)
         this.status.api = data.api
-        this.status.feeds = data.feeds
+        this.status.feeds = data.feeds[0]
       } catch (e) {
         this.status.api = null
         this.status.feeds = null
