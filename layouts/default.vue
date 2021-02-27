@@ -21,6 +21,7 @@ html, body {
   height: 100%;
   color: white;
   background-color: #36393f;
+  font-family: 'Roboto', sans-serif;
 }
 
 #app {

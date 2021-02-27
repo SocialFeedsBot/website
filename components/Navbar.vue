@@ -63,7 +63,7 @@ export default {
 
     avatarURL () {
       return this.user.avatar ? `https://cdn.discordapp.com/avatars/${this.user.id}/${this.user.avatar}.png`
-        : `https://cdn.discordapp.com/embed/avatars/${this.user.discriminator % 5}.png`
+       : `https://cdn.discordapp.com/embed/avatars/${this.user.discriminator % 5}.png`
     }
   },
 
@@ -85,7 +85,7 @@ export default {
 <style>
   .navbar {
     padding: 0px;
-    background-color: #23272A !important;
+    background-color: #0c0e0f !important;
   }
 
   .navbar-brand {
