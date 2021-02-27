@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="lg" type="dark" variant="dark" sticky>
-    <b-img src="@/assets/logo.png" class="logo" alt="feeds" />
+    <b-img src="@/assets/animated_logo.gif" class="logo" alt="feeds" />
     <b-navbar-brand :to="{ path: '/' }">
       SocialFeeds
     </b-navbar-brand>
