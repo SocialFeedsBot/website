@@ -85,7 +85,7 @@ export default {
 <style>
   .navbar {
     padding: 0px;
-    background-color: #0c0e0f !important;
+    background-color: #23272A !important;
   }
 
   .navbar-brand {
