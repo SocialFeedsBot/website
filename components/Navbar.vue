@@ -18,7 +18,7 @@
         <b-nav-item :to="{ name: 'status' }" exact>
           Status
         </b-nav-item>
-        <b-nav-item :to="{ name: 'datadog' }" exact>
+        <b-nav-item :to="{ name: 'stats' }" exact>
           Stats
         </b-nav-item>
       </b-navbar-nav>
