@@ -138,7 +138,7 @@ export default {
         query.type = this.searchData.type.toLowerCase()
       }
       if (this.searchData.url !== '') {
-        query.type = this.searchData.url
+        query.url = this.searchData.url
       }
       if (this.searchData.guildID !== '') {
         guildID = this.searchData.guildID
