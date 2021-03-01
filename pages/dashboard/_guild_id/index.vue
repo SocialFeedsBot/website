@@ -106,8 +106,8 @@
 </template>
 
 <script>
-import SwitchButton from '../../../components/SwitchButton'
 import FeedBlock from '@/components/FeedBlock.vue'
+import SwitchButton from '../../../components/SwitchButton'
 
 export default {
 
@@ -173,7 +173,7 @@ export default {
             guildID: this.$route.params.guild_id
           }
         })
-        this.$bvToast.toast(`Feed removed successfully!`, {
+        this.$bvToast.toast('Feed removed successfully!', {
           title: 'Success',
           autoHideDelay: 6000,
           appendToast: false,
@@ -209,7 +209,7 @@ export default {
           nsfw: this.channels[this.addData.channel].nsfw,
           options: { replies: this.addData.replies }
         })
-        this.$bvToast.toast(`Created new feed!`, {
+        this.$bvToast.toast('Created new feed!', {
           title: 'Success',
           autoHideDelay: 6000,
           appendToast: false,

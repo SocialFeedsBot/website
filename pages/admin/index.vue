@@ -4,10 +4,10 @@
       <b-container id="statusbox" class="bv-example-row pt-4">
         <div class="d-block">
           <h3>Admin Panel</h3><br>
-          <b-button class="blurple" @click="restart({ name: 'gateway' })">
+          <b-button class="btn-blurple" @click="restart({ name: 'gateway' })">
             Restart gateway
           </b-button>
-          <b-button class="blurple" @click="restart({ name: 'all' })">
+          <b-button class="btn-blurple" @click="restart({ name: 'all' })">
             Restart all connections
           </b-button>
         </div>
@@ -19,49 +19,86 @@
             </h5>
           </b-col>
           <b-col>
-            <b-button class="blurple" @click="restart({ name: a.type, id: a.id })">
+            <b-button class="btn-blurple" @click="restart({ name: a.type, id: a.id })">
               Restart
             </b-button>
-            <b-button class="blurple" @click="restart({ name: a.type, id: 'all' })">
+            <b-button class="btn-blurple" @click="restart({ name: a.type, id: 'all' })">
               Restart all of Type
             </b-button>
           </b-col>
         </b-row>
       </b-container>
     </div>
+
+    <div class="pb-3 pt-4 mt-4 mb-5">
+      <b-container id="statusbox" class="bv-example-row pt-4">
+        <div class="d-block">
+          <h4>Manage Feeds {{ searchResults.length > 0 ? `(listing ${searchResults.length} feeds)` : '' }}</h4><br>
+          <b-input-group>
+            <template>
+              <b-dropdown v-model="searchData.type" :text="searchData.type ? searchData.type : 'Type'">
+                <b-dropdown-item-button @click="searchData.type = 'Reddit'">
+                  <fa :icon="['fab', 'reddit']" /> Reddit
+                </b-dropdown-item-button>
+                <b-dropdown-item-button @click="searchData.type = 'RSS'">
+                  <fa icon="rss" /> RSS
+                </b-dropdown-item-button>
+                <b-dropdown-item-button @click="searchData.type = 'Twitter'">
+                  <fa :icon="['fab', 'twitter']" /> Twitter
+                </b-dropdown-item-button>
+                <b-dropdown-item-button @click="searchData.type = 'Twitch'">
+                  <fa :icon="['fab', 'twitch']" /> Twitch
+                </b-dropdown-item-button>
+                <b-dropdown-item-button @click="searchData.type = 'YouTube'">
+                  <fa :icon="['fab', 'youtube']" /> YouTube
+                </b-dropdown-item-button>
+                <b-dropdown-item-button @click="searchData.type = 'StatusPage'">
+                  <fa :icon="['fas', 'exclamation-circle']" /> Status Page
+                </b-dropdown-item-button>
+                <b-dropdown-item-button @click="searchData.type = 'None'">
+                  None
+                </b-dropdown-item-button>
+              </b-dropdown>
+
+              <b-form-input id="url" v-model="searchData.url" placeholder="Channel/account name or feed URL" /><br>
+              <b-form-input id="guildID" v-model="searchData.guildID" placeholder="Guild ID" />
+
+              <b-button class="btn-blurple" @click="getFeeds()">
+                Search
+              </b-button>
+            </template>
+          </b-input-group><br>
+
+          <b-row v-if="searchResults.length > 0">
+            <b-col>Type</b-col>
+            <b-col>URL</b-col>
+            <b-col>Guild</b-col>
+            <b-col>Actions</b-col>
+          </b-row>
+          <b-row v-for="feed in searchResults" :key="feed">
+            <b-col>{{ feed.type }}</b-col>
+            <b-col>{{ feed.url }}</b-col>
+            <b-col>{{ feed.guildID }}</b-col>
+            <b-col>
+              <b-button class="btn-red" @click="deleteFeed(feed)">
+                Delete
+              </b-button>
+            </b-col>
+          </b-row>
+        </div>
+      </b-container>
+    </div>
   </div>
 </template>
-
-<style>
-.center {
-  width: 100%;
-  text-align: center;
-}
-
-.status {
-  border-radius: .25rem;
-  margin: 0.25rem;
-  padding: 12px;
-  font-weight: 500;
-  font-size: 20px;
-  -webkit-text-stroke: 0.1px black;
-  display: flex;
-  height: 40px;
-  width: 40;
-}
-#statusbox  {
-  background-color: #23272A;
-  border-radius: 5px;
-}
-
-</style>
 
 <script>
 export default {
   data () {
     return {
       services: [],
-      auth: false
+      auth: false,
+      searchData: { type: '', url: '', guildID: '' },
+      searchResults: []
     }
   },
 
@@ -92,6 +129,61 @@ export default {
   },
 
   methods: {
+    async getFeeds () {
+      this.searchResults = []
+
+      let guildID = null
+      const query = {}
+      if (this.searchData.type !== '' || this.searchData.type === 'None') {
+        query.type = this.searchData.type.toLowerCase()
+      }
+      if (this.searchData.url !== '') {
+        query.type = this.searchData.url
+      }
+      if (this.searchData.guildID !== '') {
+        guildID = this.searchData.guildID
+      }
+      const feedInfo = (await this.$axios.get(`/feeds${guildID ? `/${guildID}` : ''}`, { params: query })).data
+
+      this.searchResults.push(...feedInfo.feeds)
+      for (let i = 1; i < feedInfo.pages; i++) {
+        const data = (await this.$axios.get(`/feeds/${guildID ? `/${guildID}` : ''}`, {
+          params: {
+            page: i + 1,
+            ...query
+          }
+        })).data
+        this.searchResults.push(...data.feeds)
+      }
+    },
+
+    async deleteFeed (feed) {
+      try {
+        await this.$axios.delete('/feeds', {
+          data: {
+            url: feed.url,
+            type: feed.type,
+            webhookID: feed.webhook.id,
+            guildID: feed.guildID
+          }
+        })
+        this.$bvToast.toast('Feed removed successfully!', {
+          title: 'Success',
+          autoHideDelay: 6000,
+          appendToast: false,
+          variant: 'success'
+        })
+        await this.getFeeds()
+      } catch (e) {
+        this.$bvToast.toast(e.message, {
+          title: 'Error removing feed',
+          autoHideDelay: 6000,
+          appendToast: false,
+          variant: 'danger'
+        })
+      }
+    },
+
     async updateStatus () {
       try {
         const { data } = await this.$axios.get('/status/services')
@@ -124,3 +216,27 @@ export default {
   }
 }
 </script>
+
+<style>
+.center {
+  width: 100%;
+  text-align: center;
+}
+
+.status {
+  border-radius: .25rem;
+  margin: 0.25rem;
+  padding: 12px;
+  font-weight: 500;
+  font-size: 20px;
+  -webkit-text-stroke: 0.1px black;
+  display: flex;
+  height: 40px;
+  width: 40;
+}
+#statusbox  {
+  background-color: #23272A;
+  border-radius: 5px;
+}
+
+</style>

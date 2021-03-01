@@ -13,7 +13,7 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'SocialFeeds is a Discord bot with a web dashboard to automatically post new items from a RSS/twitter/twitch feed.' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '~/assets/logo.png' },
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap' },
       { rel: 'preconnect', href: 'https://fonts.gstatic.com' }
     ]
@@ -26,8 +26,7 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    '@fortawesome/fontawesome-svg-core/styles.css',
-    '~assets/css/styles.css'
+    '@fortawesome/fontawesome-svg-core/styles.css'
   ],
   /*
   ** Plugins to load before mounting the App
@@ -50,8 +49,15 @@ module.exports = {
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt',
     'nuxt-fontawesome',
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/style-resources'
   ],
+
+  styleResources: {
+    scss: [
+      '~/assets/css/styles.scss'
+    ]
+  },
 
   fontawesome: {
     component: 'fa',

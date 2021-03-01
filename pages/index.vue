@@ -8,10 +8,10 @@
         Scroll down for more info!
       </h5><br>
 
-      <b-button large class="blurple" :to="{ name: 'invite' }">
+      <b-button large class="btn-blurple" :to="{ name: 'invite' }">
         Invite Me
       </b-button>
-      <b-button large class="blurple" :to="{ name: 'dashboard' }">
+      <b-button large class="btn-blurple" :to="{ name: 'dashboard' }">
         Dashboard
       </b-button>
     </div>
@@ -67,13 +67,6 @@
   text-align: center;
 }
 
-.blurple {
-  background: #7289DA;
-}
-.blurple:hover {
-  background: rgb(137, 163, 255);
-}
-
 .outline-blurple {
   border-color: #7289DA;
   color: #7289DA;
@@ -109,6 +102,21 @@
 
 .align-middle {
   margin: auto;
+}
+
+.btn-blurple {
+  background: #7289DA !important;
+}
+.btn-blurple:hover {
+  background: rgb(137, 163, 255) !important;
+}
+
+.btn-red {
+  background: #f54242;
+}
+.btn-red:hover {
+  border: transparent;
+  color: #c91b1b;
 }
 
 </style>
