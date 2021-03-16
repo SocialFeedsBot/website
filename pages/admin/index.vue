@@ -1,13 +1,13 @@
 <template>
   <div class="center">
     <div class="pb-3 pt-4 mt-4 mb-5">
-      <b-container id="statusbox" class="bv-example-row pt-4">
-        <div class="d-block">
+      <b-container id="adminbox" class="bv-example-row pt-4">
+        <div class="d-block mb-4">
           <h3>Admin Panel</h3><br>
-          <b-button class="btn-blurple" @click="restart({ name: 'gateway' })">
+          <b-button class="cbtn cbtn-blurple" @click="restart({ name: 'gateway' })">
             Restart gateway
           </b-button>
-          <b-button class="btn-blurple" @click="restart({ name: 'all' })">
+          <b-button class="cbtn cbtn-dark" @click="restart({ name: 'all' })">
             Restart all connections
           </b-button>
         </div>
@@ -19,10 +19,10 @@
             </h5>
           </b-col>
           <b-col>
-            <b-button class="btn-blurple" @click="restart({ name: a.type, id: a.id })">
+            <b-button class="cbtn cbtn-blurple" @click="restart({ name: a.type, id: a.id })">
               Restart
             </b-button>
-            <b-button class="btn-blurple" @click="restart({ name: a.type, id: 'all' })">
+            <b-button class="cbtn cbtn-dark" @click="restart({ name: a.type, id: 'all' })">
               Restart all of Type
             </b-button>
           </b-col>
@@ -31,7 +31,7 @@
     </div>
 
     <div class="pb-3 pt-4 mt-4 mb-5">
-      <b-container id="statusbox" class="bv-example-row pt-4">
+      <b-container id="adminbox" class="bv-example-row pt-4">
         <div class="d-block">
           <h4>Manage Feeds {{ searchResults.length > 0 ? `(listing ${searchResults.length} feeds)` : '' }}</h4><br>
           <b-input-group>
@@ -63,7 +63,7 @@
               <b-form-input id="url" v-model="searchData.url" placeholder="Channel/account name or feed URL" /><br>
               <b-form-input id="guildID" v-model="searchData.guildID" placeholder="Guild ID" />
 
-              <b-button class="btn-blurple" @click="getFeeds()">
+              <b-button class="cbtn cbtn-blurple" @click="getFeeds()">
                 Search
               </b-button>
             </template>
@@ -134,8 +134,11 @@ export default {
 
       let guildID = null
       const query = {}
-      if (this.searchData.type !== '' || this.searchData.type === 'None') {
+      if (this.searchData.type !== '') {
         query.type = this.searchData.type.toLowerCase()
+      }
+      if (this.searchData.type === 'None') {
+        query.type = ''
       }
       if (this.searchData.url !== '') {
         query.url = this.searchData.url
@@ -223,20 +226,15 @@ export default {
   text-align: center;
 }
 
-.status {
-  border-radius: .25rem;
-  margin: 0.25rem;
-  padding: 12px;
-  font-weight: 500;
-  font-size: 20px;
-  -webkit-text-stroke: 0.1px black;
-  display: flex;
-  height: 40px;
-  width: 40;
-}
-#statusbox  {
-  background-color: #23272A;
+#adminbox {
+  background-color: rgb(23, 24, 27) !important;
   border-radius: 5px;
 }
 
+#guildID, #url {
+  background-color: #23272A;
+  border-color: #1b1b1b;
+  border-radius: 1px;
+  color: #ffffff
+}
 </style>

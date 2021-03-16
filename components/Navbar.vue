@@ -1,7 +1,7 @@
 <template>
   <b-navbar toggleable="lg" type="dark" variant="dark" sticky>
-    <b-img src="@/assets/animated_logo.gif" class="logo" alt="feeds" />
-    <b-navbar-brand :to="{ path: '/' }">
+    <b-img src="@/assets/logo-outline.png" class="navbar-logo" alt="feeds" />
+    <b-navbar-brand style="font-weight: 600; font-style: bold;" :to="{ path: '/' }">
       SocialFeeds
     </b-navbar-brand>
 
@@ -62,8 +62,9 @@ export default {
     },
 
     avatarURL () {
-      return this.user.avatar ? `https://cdn.discordapp.com/avatars/${this.user.id}/${this.user.avatar}.png`
-       : `https://cdn.discordapp.com/embed/avatars/${this.user.discriminator % 5}.png`
+      return this.user.avatar
+        ? `https://cdn.discordapp.com/avatars/${this.user.id}/${this.user.avatar}.png`
+        : `https://cdn.discordapp.com/embed/avatars/${this.user.discriminator % 5}.png`
     }
   },
 
@@ -82,43 +83,57 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
   .navbar {
     padding: 0px;
-    background-color: #23272A !important;
+    background-color: rgb(23, 24, 27) !important;
   }
 
   .navbar-brand {
     padding: 0px;
   }
 
-  .logo {
+  .navbar-logo {
     height: 56px;
     width: 56px;
     margin-right: 8px;
   }
 
-  .btn {
+  .dropdown-toggle {
     background: transparent;
     border: 0px;
+  }
+  .dropdown-toggle:hover {
+    background-color: rgb(39, 41, 46);
+  }
+  .dropdown-toggle:active {
+    background: transparent;
+    border: 0;
   }
 
   .dropdown-menu {
     width: 100%;
-    background-color: #23272b;
-    border: 0.5px solid #111214;
-    border-radius: 1px;
+    background-color: #16191b;
+    border: 0px;
+    box-shadow: #111314 0px 2px 2px;
+    border-radius: 4px;
     padding: 0;
     margin: 0;
+    margin-top: 10px;
+  }
+  .dropdown-toggle:focus .dropdown-menu {
+    transform: translateY(0%);
+    transition-delay: 0s, 0s, 0.3s;
   }
   .dropdown-item {
     background-color: transparent;
     color: #fff;
     outline: none;
-    padding: 6px 12px
+    padding: 6px 12px;
+    font-weight: 300;
   }
   .dropdown-item:hover {
     color: #fff;
-    background-color: rgba(0,0,0,.1);
+    background-color: rgba(15, 15, 15, 0.1);
   }
 </style>

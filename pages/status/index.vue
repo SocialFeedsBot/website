@@ -3,17 +3,19 @@
     <div class="pb-3 pt-4 mt-4 mb-5">
       <b-container id="statusbox" class="bv-example-row pt-4">
         <div class="d-block">
-          <h3>Status</h3><br>
+          <h3 style="font-weight: 500;">
+            Shard Status
+          </h3><br>
         </div>
 
         <div v-for="(w) in status.shards" :key="w" class="d-inline-block mx-1 my-1">
           <div v-b-tooltip.hover :title="w.status" class="d-flex align-items-center" :class="{ status: true, statusok: w.status === 'ready', statusamber: w.status !== 'ready', statusred: w.status === 'disconnected' }">
-            {{ w.id }}
+            Shard {{ w.id }}
           </div>
         </div><br><br>
 
         <div>
-          <h4 class="mt-4 pt-4 pb-2">
+          <h4 class="mt-4 pt-4 pb-2" style="font-weight: 500;">
             Background Services
           </h4>
           <div class="d-inline-block mx-1 my-1">
@@ -62,7 +64,7 @@
   border: 1px solid #ff2121;
 }
 #statusbox  {
-  background-color: #23272A;
+  background-color: rgb(23, 24, 27) !important;
   border-radius: 5px;
 }
 

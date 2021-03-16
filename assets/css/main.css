@@ -1,0 +1,98 @@
+.center {
+  width: 100%;
+  text-align: center;
+}
+
+.outline-blurple {
+  border-color: #7289DA;
+  color: #7289DA;
+  background: transparent;
+}
+.outline-blurple:hover {
+  border-color: #7289DA;
+  color: #7289DA;
+  background: #3f454d;
+}
+
+.section {
+  height: 550px;
+  background: #23272b;
+  width: 100%;
+}
+
+.card {
+  background: transparent;
+  border: transparent;
+}
+.card-body {
+  height: 100%;
+  text-align: center;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  align-content: center;
+}
+
+.example-image {
+  box-shadow: 0 0 10px 1px #000;
+}
+
+.align-middle {
+  margin: auto;
+}
+
+.btn:active {
+  background: transparent;
+}
+
+.cbtn-blurple {
+  background: #7f97ec !important;
+  border: 0px;
+  border-radius: 2px;
+}
+.cbtn-blurple:hover {
+  background: #94a8f3 !important;
+  border: 0px;
+}
+
+.cbtn-dark {
+  background: #000000 !important;
+  border: 0px;
+  border-radius: 2px;
+}
+.cbtn-dark:hover {
+  background: #1d1d1d !important;
+  border: 0px;
+}
+
+.cbtn {
+  justify-content: center;
+  -webkit-box-align: center;
+  text-align: center;
+  vertical-align: middle;
+  padding-top: 10px;
+  font-weight: 400;
+}
+.cbtn:hover,
+.cbtn:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em #1a1a1a;
+  transform: translateY(-0.05em);
+}
+.cbtn.large {
+  height: 60px;
+  width: 10%;
+  width: 300px;
+  font-weight: 400;
+  font-size: 24px;
+}
+
+.cbtn-red {
+  background: #f54242;
+}
+.cbtn-red:hover {
+  border: transparent;
+  color: #c91b1b;
+}
+
+.mt-8, .my-8 {
+  margin-top: 10.5rem !important;
+}

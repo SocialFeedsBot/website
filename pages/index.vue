@@ -8,10 +8,10 @@
         Scroll down for more info!
       </h5><br>
 
-      <b-button large class="btn-blurple" :to="{ name: 'invite' }">
-        Invite Me
+      <b-button class="cbtn cbtn-blurple large" :to="{ name: 'invite' }">
+        <fa :icon="['fab', 'discord']" /> Add to Discord
       </b-button>
-      <b-button large class="btn-blurple" :to="{ name: 'dashboard' }">
+      <b-button class="cbtn cbtn-dark large" :to="{ name: 'dashboard' }">
         Dashboard
       </b-button>
     </div>
@@ -60,63 +60,3 @@
     </b-row><br>
   </b-container>
 </template>
-
-<style>
-.center {
-  width: 100%;
-  text-align: center;
-}
-
-.outline-blurple {
-  border-color: #7289DA;
-  color: #7289DA;
-  background: transparent;
-}
-.outline-blurple:hover {
-  border-color: #7289DA;
-  color: #7289DA;
-  background: #3f454d;
-}
-
-.section {
-  height: 550px;
-  background: #23272b;
-  width: 100%;
-}
-
-.card {
-  background: transparent;
-  border: transparent;
-}
-.card-body {
-  height: 100%;
-  text-align: center;
-  line-height: 1.2;
-  margin-bottom: 0.5rem;
-  align-content: center;
-}
-
-.example-image {
-  box-shadow: 0 0 10px 1px #000;
-}
-
-.align-middle {
-  margin: auto;
-}
-
-.btn-blurple {
-  background: #7289DA !important;
-}
-.btn-blurple:hover {
-  background: rgb(137, 163, 255) !important;
-}
-
-.btn-red {
-  background: #f54242;
-}
-.btn-red:hover {
-  border: transparent;
-  color: #c91b1b;
-}
-
-</style>

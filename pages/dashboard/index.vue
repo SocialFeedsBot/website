@@ -20,8 +20,15 @@
           style="cursor:pointer"
           @click="manage(guild)"
         >
-          <div v-b-tooltip.hover :title="guild.name" class="d-inline-block p-2">
-            <img class="guild-icon rounded-circle ml-auto" :src="getGuildIcon(guild)" height="100" width="100">
+          <div>
+            <div v-b-tooltip.hover :title="guild.name" class="d-inline-block p-2">
+              <img v-if="guild.icon" class="guild-icon rounded-circle ml-auto" :src="getGuildIcon(guild)" height="100" width="100">
+              <div v-else class="guild-icon blankGuild">
+                <div class="blankGuildName">
+                  {{ acronym(guild.name) }}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -49,6 +56,12 @@ export default {
 
     manage (guild) {
       this.$router.push({ name: 'dashboard-guild_id', params: { guild_id: guild.id } })
+    },
+
+    acronym (name) {
+      return name.split(/\s/).reduce((accumulator, word) => {
+        return accumulator + word.charAt(0)
+      }, '')
     }
 
   }
@@ -59,5 +72,16 @@ export default {
 <style>
 .guild-icon {
   background-color: #2e3338
+}
+.blankGuild {
+  background-color: #2e3338;
+  width: 100px;
+  height: 100px;
+  border-radius: 50% !important;
+}
+.blankGuildName {
+  font-weight: 400;
+  width: 100%;
+  line-height: 96px;
 }
 </style>

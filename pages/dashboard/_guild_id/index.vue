@@ -16,10 +16,10 @@
           </div>
 
           <div class="col-5 ml-5 mt-3 text-left">
-            <div class="h3 d-inline-block">
+            <div class="h3 d-inline-block" style="font-weight: 700;">
               {{ guild.name }}
             </div>
-            <div class="p">
+            <div class="p" style="font-weight: 100;">
               Total feeds: {{ feedCount }}
             </div>
           </div>
@@ -30,11 +30,11 @@
       <b-container class="mb-3 pb-3 pt-3 guild-info">
         <div class="row">
           <div class="col-12 mt-1 text-left">
-            <div class="h3 d-inline-block">
+            <div class="h3 d-inline-block" style="font-weight: 700;">
               Add a new feed
             </div>
             <div class="p">
-              Here you can add feeds right from the dashboard to be posted. You only need to type the username, however a whole link is accepted. For example, you could use <strong>memes</strong> for reddit instead of <strong>/r/memes</strong>.
+              Here you can add feeds right from the dashboard to be posted. You only need to type the username, however a whole link is accepted. For example, you could use <span style="font-weight: 700;">memes</span> for reddit instead of <span style="font-weight: 700;">/r/memes</span>.
             </div>
           </div>
 
@@ -63,7 +63,7 @@
                     </b-dropdown-item-button>
                   </b-dropdown>
 
-                  <b-form-input id="url" v-model="addData.url" placeholder="Channel/account name or feed URL" />
+                  <b-form-input autocomplete="off" id="url" v-model="addData.url" placeholder="Channel/account name or feed URL" />
 
                   <b-dropdown v-model="addData.channel" :text="addData.channel ? `#${channels[addData.channel].name}` : 'Channel'">
                     <b-dropdown-item v-for="channel in Object.values(channels).filter(c => c.type === 0)" :key="channel.id" @click="addData.channel = channel.id">
@@ -71,7 +71,7 @@
                     </b-dropdown-item>
                   </b-dropdown>
 
-                  <b-button class="discord-button-blue" @click="addFeed()">
+                  <b-button class="cbtn cbtn-blurple" @click="addFeed()">
                     Add feed
                   </b-button>
                 </template>
@@ -243,48 +243,16 @@ export default {
 }
 
 .guild-info {
-  background: rgba(32,34,37,0.5);
+  background: rgb(23, 24, 27);
   border-radius: 10px;
   border-width: 5px;
   box-shadow: 0 0 5px 2px #23272A;
 }
 
-.discord-button-blue {
-  background: #7289DA;
-  color: #fff;
-  border-radius: 3px;
-  width: 120px;
-  border: none;
-  padding: 2px 16px;
-  box-sizing: border-box;
-  box-shadow: 0 0 5px 2px #23272A;
-}
-.discord-button-blue:hover {
-  background: #5c73bd;
-  color: #fff;
-  box-sizing: border-box;
-}
-
-.button-transparent {
-  border: transparent;
-  color: #fff;
-  border-radius: 3px;
-  border: none;
-  padding: 2px 16px;
-  box-sizing: border-box;
-}
-.button-transparent:hover {
-  border: transparent;
-  color: #d1d1d1;
-}
-.button-transparent, .button-transparent:hover {
-  background: transparent
-}
-
 #url {
   background-color: #23272A;
-  border-color: #000000;
-  border-size: 1px;
+  border-color: #1b1b1b;
+  border-radius: 1px;
   color: #ffffff
 }
 

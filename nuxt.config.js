@@ -14,7 +14,7 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;800&display=swap' },
       { rel: 'preconnect', href: 'https://fonts.gstatic.com' }
     ]
   },
@@ -22,12 +22,6 @@ module.exports = {
   ** Customize the progress-bar color
   */
   loading: { color: '#ffffff', throttle: 0 },
-  /*
-  ** Global CSS
-  */
-  css: [
-    '@fortawesome/fontawesome-svg-core/styles.css'
-  ],
   /*
   ** Plugins to load before mounting the App
   */
@@ -53,11 +47,10 @@ module.exports = {
     '@nuxtjs/style-resources'
   ],
 
-  styleResources: {
-    scss: [
-      '~/assets/css/styles.scss'
-    ]
-  },
+  css: [
+    '@fortawesome/fontawesome-svg-core/styles.css',
+    { src: '@/assets/css/main.css' }
+  ],
 
   fontawesome: {
     component: 'fa',

@@ -20,8 +20,9 @@ export default {
 html, body {
   height: 100%;
   color: white;
-  background-color: #36393f;
-  font-family: 'Roboto', sans-serif;
+  background-color: rgb(35, 36, 43);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
 }
 
 #app {
