@@ -2,7 +2,7 @@
   <div>
     <div v-if="!guild.id && !channels">
       <div style="text-align: center;">
-        <img src="@/assets/loading.svg" width="100px" height="100px" alt="loading">
+        <img src="@/assets/loading.gif" width="100px" height="100px" alt="loading">
       </div>
     </div>
 

@@ -24,7 +24,7 @@
       </b-navbar-nav>
 
       <b-navbar-nav class="ml-auto">
-        <img v-if="user && !user.id" src="@/assets/loading.svg" width="40px" height="40px" alt="loading">
+        <img v-if="user && !user.id" src="@/assets/loading.gif" width="40px" height="40px" alt="loading">
 
         <li v-else-if="user" class="nav-item">
           <a href="#" target="_self" class="nav-link p-md-2">

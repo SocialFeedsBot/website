@@ -1,117 +1,88 @@
 <template>
-  <div class="center">
-    <div class="pb-3 pt-4 mt-4 mb-5">
-      <b-container id="statusbox" class="bv-example-row pt-4">
-        <div class="d-block">
-          <h3 style="font-weight: 500;">
-            Shard Status
-          </h3><br>
+  <div>
+    <br>
+    <div class="center mb-4">
+      <h1>Status</h1>
+      <p1>Monitor the status of SocialFeeds services.</p1>
+    </div>
+
+    <div class="container">
+      <div class="row row-cols-4">
+        <div v-for="service in services" :key="service.name + service.id || 'uk'" class="col">
+          <b-card
+            style="height: 12rem; width: 15rem;"
+            class="mb-4 d-inline-block mr-4 mt-0"
+          >
+            <b-card-title style="text-align: left; font-size: 20px">
+              <div class="mr-2 status-indicator" :class="{ green: service.status === 'ready', amber: service.status === 'resuming', red: service.status === 'disconnected' }" /> {{ service.name }}
+            </b-card-title>
+            <b-card-text style="text-align: left; font-weight: 100; line-height: 25px">
+              Status: {{ service.status }}<br>
+              Uptime: {{ service.uptime }}<br>
+              Memory: {{ service.memory }}<br>
+              <span v-if="service.guilds">Servers: {{ service.guilds.toLocaleString() }}<br></span>
+              <span v-if="service.cluster">Cluster: {{ service.cluster }}<br></span><br>
+            </b-card-text>
+          </b-card>
         </div>
-
-        <div v-for="(w) in status.shards" :key="w" class="d-inline-block mx-1 my-1">
-          <div v-b-tooltip.hover :title="w.status" class="d-flex align-items-center" :class="{ status: true, statusok: w.status === 'ready', statusamber: w.status !== 'ready', statusred: w.status === 'disconnected' }">
-            Shard {{ w.id }}
-          </div>
-        </div><br><br>
-
-        <div>
-          <h4 class="mt-4 pt-4 pb-2" style="font-weight: 500;">
-            Background Services
-          </h4>
-          <div class="d-inline-block mx-1 my-1">
-            <div v-b-tooltip.hover :title="status.api && (status.api.uptime / 1000) > 60 ? `Uptime: ${formatUptime(status.api ? status.api.uptime / 1000 / 60 : 0) } | Memory: ${formatMemory(status.api ? status.api.memory : 0)}` : 'Starting'" class="d-flex align-items-center" :class="{ status: true, statusamber: status.api && status.api.uptime / 1000 < 60, statusok: status.api, statusred: !status.api }">
-              API
-            </div>
-          </div>
-
-          <div class="d-inline-block mx-1 my-1">
-            <div v-b-tooltip.hover :title="status.feeds && (status.feeds.uptime / 1000) > 60 ? `Uptime: ${formatUptime(status.feeds ? status.feeds.uptime / 1000 / 60 : 0) } | Memory: ${formatMemory(status.feeds ? status.feeds.memory : 0)}` : 'Starting'" class="d-flex align-items-center" :class="{ status: true, statusamber: status.feeds && status.feeds.uptime / 1000 < 60, statusok: status.feeds && status.feeds.uptime > 0, statusred: !status.feeds || status.feeds.uptime === 0 }">
-              Feed Handler
-            </div>
-          </div>
-        </div>
-      </b-container>
+      </div>
     </div>
   </div>
 </template>
 
-<style>
-.center {
-  width: 100%;
-  text-align: center;
-}
-
-.status {
-  border-radius: .25rem;
-  margin: 0.25rem;
-  padding: 12px;
-  font-weight: 500;
-  font-size: 20px;
-  -webkit-text-stroke: 0.1px black;
-  display: flex;
-  height: 40px;
-  width: inherit;
-}
-
-.statusok {
-  border: 1px solid #4cc767;
-}
-.statusamber {
-  border: 1px solid #ff6721;
-}
-
-.statusred {
-  border: 1px solid #ff2121;
-}
-#statusbox  {
-  background-color: rgb(23, 24, 27) !important;
-  border-radius: 5px;
-}
-
-</style>
-
 <script>
 export default {
+
   data () {
     return {
-      shards: [],
-      api: false,
-      status: {
-        shards: [],
-        clusters: [],
-        feeds: null,
-        api: null
-      },
-      colours: {
-        unknown: '#969696',
-        partial_outage: '#ffae00',
-        major_outage: '#ff2f00',
-        operational: '#55eb34'
-      }
+      services: []
     }
+  },
+
+  mounted () {
+    this.update()
+    this.interval = setInterval(() => this.update(), 5000)
   },
 
   beforeDestroy () {
     clearInterval(this.interval)
   },
 
-  async mounted () {
-    await this.updateStatus()
-    this.interval = setInterval(() => this.updateStatus(), 10 * 1000)
-  },
-
   methods: {
-    async updateStatus () {
-      try {
-        const { data } = await this.$axios.get('/status')
-        this.status.shards = data.shards.sort((a, b) => a.id - b.id)
-        this.status.api = data.api
-        this.status.feeds = data.feeds[0]
-      } catch (e) {
-        this.status.api = null
-        this.status.feeds = null
-        this.status.shards = []
-      }
+    async update () {
+      const { data: services } = await this.$axios.get('/status/')
+      this.services = []
+
+      Object.keys(services).forEach((serviceKey) => {
+        let newServiceKey = serviceKey.charAt(0).toUpperCase() + serviceKey.substring(1)
+        if (serviceKey === 'api') { newServiceKey = 'API' }
+
+        if (Array.isArray(services[serviceKey])) {
+          services[serviceKey].forEach((service) => {
+            let status
+            if (service.status) {
+              status = service.status
+            } else {
+              status = service.uptime > 10 ? 'ready' : 'resuming'
+            }
+            this.services.push({
+              name: `${newServiceKey === 'Shards' ? 'Shard' : newServiceKey}${service.id !== undefined ? ` ${service.id}` : ''}`,
+              uptime: this.formatUptime(service.uptime / 60000),
+              memory: this.formatMemory(service.memory),
+              status,
+              guilds: service.guilds,
+              cluster: service.cluster
+            })
+          })
+        } else {
+          this.services.push({
+            name: `${newServiceKey}${services[serviceKey].id ? ` ${services[serviceKey].id}` : ''}`,
+            uptime: this.formatUptime(services[serviceKey].uptime / 60000),
+            memory: this.formatMemory(services[serviceKey].memory),
+            status: services[serviceKey].uptime > 10 ? 'ready' : 'resuming'
+          })
+        }
+      })
     },
 
     formatMemory (bytes) {
@@ -121,18 +92,15 @@ export default {
       if (by === 0) { return `${bytes} ${sizes[by]}` }
       return `${(bytes / 1024 ** by).toFixed(1)} ${sizes[by]}`
     },
-
     formatUptime (i) {
       const d = Math.floor(i / (24 * 60))
       const h = Math.floor((i / 60) - (24 * d))
       const m = Math.round(i - 60 * (24 * d + h))
       let result = ''
-
       // days
       if (d > 0) {
         result = result + `${d}d`
       }
-
       // hours
       if (h > 0) {
         if (result !== '') {
@@ -140,7 +108,6 @@ export default {
         }
         result = result + `${h}h`
       }
-
       // minutes
       if (m > 0) {
         if (result !== '') {
@@ -148,9 +115,24 @@ export default {
         }
         result = result + `${m}m`
       }
-
-      return result
+      return result === '' ? '<1m' : result
     }
   }
+
 }
 </script>
+
+<style scoped>
+
+  .status-indicator {
+    border-radius: 10px;
+    border: 0px;
+    height: 20px;
+    width: 20px;
+    float: left;
+  }
+  .status-indicator.green { background-color: #81e968; }
+  .status-indicator.amber { background-color: #e9a668; }
+  .status-indicator.red { background-color: rgb(233, 104, 104); }
+
+</style>

@@ -5,7 +5,8 @@
       <h1>SocialFeeds</h1>
       <h5>
         Get your favourite updates posted quickly from a range of supported sites.
-        Scroll down for more info!
+        Scroll down for more info!<br><br>
+        Currently in <span style="font-weight: 600;"><AnimatedNumber :number="guildCount" /></span> servers and sending <span style="font-weight: 600;"><AnimatedNumber :number="feedCount" /></span> feeds.
       </h5><br>
 
       <b-button class="cbtn cbtn-blurple large" :to="{ name: 'invite' }">
@@ -60,3 +61,38 @@
     </b-row><br>
   </b-container>
 </template>
+
+<script>
+import AnimatedNumber from '../components/AnimatedNumber'
+
+export default {
+
+  components: { AnimatedNumber },
+
+  data: () => ({
+    interval: false,
+    guildCount: 0,
+    feedCount: 0
+  }),
+
+  mounted () {
+    this.update()
+    this.interval = setInterval(() => this.update(), 60000)
+  },
+
+  beforeDestroy () {
+    clearInterval(this.interval)
+  },
+
+  methods: {
+    async update () {
+      const { data: { shards } } = await this.$axios.get('/status')
+      const { data: { feedCount } } = await this.$axios.get('/feeds/counts/')
+
+      this.guildCount = shards.reduce((a, b) => a + b.guilds, 0)
+      this.feedCount = feedCount
+    }
+  }
+
+}
+</script>

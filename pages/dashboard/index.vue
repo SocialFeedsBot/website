@@ -10,7 +10,7 @@
         </p>
         <br>
 
-        <img v-if="guilds && !guilds.length" src="@/assets/loading.svg" width="100px" height="100px" alt="loading">
+        <img v-if="guilds && !guilds.length" src="@/assets/loading.gif" width="100px" height="100px" alt="loading">
 
         <div
           v-for="(guild, index) in guilds"
@@ -72,6 +72,10 @@ export default {
 <style>
 .guild-icon {
   background-color: #2e3338
+}
+.guild-icon:hover {
+  box-shadow: 0 0 5px 2px #000;
+  border: 0px;
 }
 .blankGuild {
   background-color: #2e3338;
