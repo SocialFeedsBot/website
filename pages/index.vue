@@ -86,10 +86,10 @@ export default {
 
   methods: {
     async update () {
-      const { data: { shards } } = await this.$axios.get('/status')
+      const { data: { clusters } } = await this.$axios.get('/status')
       const { data: { feedCount } } = await this.$axios.get('/feeds/counts/')
 
-      this.guildCount = shards.reduce((a, b) => a + b.guilds, 0)
+      this.guildCount = clusters.reduce((a, b) => a + b.guilds, 0)
       this.feedCount = feedCount
     }
   }
