@@ -7,6 +7,11 @@
     </div>
 
     <div class="container">
+      <div :class="{ green: messagebox.status === 'ok', amber: messagebox.status === 'warn', red: messagebox.status === 'critical' }" class="status-message mt-4 mb-5 p-2">
+        <h4>{{ messagebox.title }}</h4>
+        <p>{{ messagebox.body }}</p>
+      </div>
+
       <div class="row row-cols-4">
         <div v-for="service in services" :key="service.name + service.id || 'uk'" class="col">
           <b-card
@@ -18,10 +23,9 @@
             </b-card-title>
             <b-card-text style="text-align: left; font-weight: 100; line-height: 25px">
               Status: {{ service.status }}<br>
-              Uptime: {{ service.uptime }}<br>
-              Memory: {{ service.memory }}<br>
-              <span v-if="service.guilds">Servers: {{ service.guilds.toLocaleString() }}<br></span>
-              <span v-if="service.cluster">Cluster: {{ service.cluster }}<br></span><br>
+              <span v-if="service.uptime">Uptime: {{ service.uptime }}</span><br>
+              <span v-if="service.memory">Memory: {{ service.memory }}</span><br>
+              <span v-if="service.guilds !== undefined">Servers: {{ service.guilds.toLocaleString() }} (shards {{ service.shards }})<br></span>
             </b-card-text>
           </b-card>
         </div>
@@ -35,13 +39,18 @@ export default {
 
   data () {
     return {
-      services: []
+      services: [],
+      messagebox: {
+        status: 'ok',
+        title: 'All systems operational',
+        body: 'No issues have been reported, please go to our support server if you are encountering any issues.'
+      }
     }
   },
 
   mounted () {
     this.update()
-    this.interval = setInterval(() => this.update(), 5000)
+    this.interval = setInterval(() => this.update(), 4000)
   },
 
   beforeDestroy () {
@@ -51,38 +60,59 @@ export default {
   methods: {
     async update () {
       const { data: services } = await this.$axios.get('/status/')
+      const { data: outageMessage } = await this.$axios.get('/status/messages')
       this.services = []
 
-      Object.keys(services).forEach((serviceKey) => {
-        let newServiceKey = serviceKey.charAt(0).toUpperCase() + serviceKey.substring(1)
-        if (serviceKey === 'api') { newServiceKey = 'API' }
-
-        if (Array.isArray(services[serviceKey])) {
-          services[serviceKey].forEach((service) => {
-            let status
-            if (service.status) {
-              status = service.status
-            } else {
-              status = service.uptime > 10 ? 'ready' : 'resuming'
-            }
-            this.services.push({
-              name: `${newServiceKey === 'Shards' ? 'Shard' : newServiceKey}${service.id !== undefined ? ` ${service.id}` : ''}`,
-              uptime: this.formatUptime(service.uptime / 60000),
-              memory: this.formatMemory(service.memory),
-              status,
-              guilds: service.guilds,
-              cluster: service.cluster
-            })
-          })
-        } else {
-          this.services.push({
-            name: `${newServiceKey}${services[serviceKey].id ? ` ${services[serviceKey].id}` : ''}`,
-            uptime: this.formatUptime(services[serviceKey].uptime / 60000),
-            memory: this.formatMemory(services[serviceKey].memory),
-            status: services[serviceKey].uptime > 10 ? 'ready' : 'resuming'
-          })
+      services.clusters.sort((a, b) => a.clusterID - b.clusterID).forEach((cluster) => {
+        let status = 'ready'
+        if (cluster.shards.filter(s => s.status !== 'ready').length > 0) {
+          status = 'resuming'
+        } else if (cluster.uptime < 10000) {
+          status = 'resuming'
         }
+
+        this.services.push({
+          name: `Cluster ${cluster.clusterID}`,
+          status,
+          uptime: this.formatUptime(cluster.uptime / 60000),
+          memory: this.formatMemory(cluster.memory),
+          guilds: cluster.guilds,
+          shards: cluster.shards.map(s => s.id).sort((a, b) => a - b).join(', ')
+        })
       })
+
+      services.interactions.sort((a, b) => a.interactionsID - b.interactionsID).forEach((interactions) => {
+        this.services.push({
+          name: `Interactions ${interactions.interactionsID}`,
+          status: interactions.uptime < 10000 ? 'resuming' : 'ready',
+          uptime: this.formatUptime(interactions.uptime / 60000),
+          memory: this.formatMemory(interactions.memory)
+        })
+      })
+
+      this.services.push({
+        name: 'API',
+        status: services.api ? (services.api.uptime < 10000 ? 'resuming' : 'ready') : 'disconnected',
+        uptime: services.api ? this.formatUptime(services.api.uptime / 60000) : undefined,
+        memory: services.api ? this.formatMemory(services.api.memory) : undefined
+      })
+
+      this.services.push({
+        name: 'Feed Handler',
+        status: services.feeds ? (services.feeds.uptime < 10000 ? 'resuming' : 'ready') : 'disconnected',
+        uptime: services.feeds ? this.formatUptime(services.feeds.uptime / 60000) : undefined,
+        memory: services.feeds ? this.formatMemory(services.feeds.memory) : undefined
+      })
+
+      if (outageMessage.status !== 'ok') {
+        this.messagebox.title = outageMessage.head
+        this.messagebox.body = outageMessage.body
+        this.messagebox.status = outageMessage.status
+      } else {
+        this.messagebox.title = 'All services operational'
+        this.messagebox.body = 'No issues have been reported, please go to our support server if you are encountering any issues.'
+        this.messagebox.status = 'ok'
+      }
     },
 
     formatMemory (bytes) {
@@ -134,5 +164,14 @@ export default {
   .status-indicator.green { background-color: #81e968; }
   .status-indicator.amber { background-color: #e9a668; }
   .status-indicator.red { background-color: rgb(233, 104, 104); }
+
+  .status-message {
+    border-radius: 5px;
+    width: 100%;
+    height: 100px;
+  }
+  .status-message.green { border: 1px solid #81e968; background-color: rgb(129, 233, 104, 0.04) }
+  .status-message.amber { border: 1px solid #e9a668; background-color: rgb(233, 166, 104, 0.04) }
+  .status-message.red { border: 1px solid rgb(233, 104, 104); background-color: rgb(233, 104, 104, 0.04) }
 
 </style>
