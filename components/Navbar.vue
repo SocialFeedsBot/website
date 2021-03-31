@@ -18,8 +18,8 @@
         <b-nav-item :to="{ name: 'status' }" exact>
           Status
         </b-nav-item>
-        <b-nav-item :to="{ name: 'stats' }" exact>
-          Stats
+        <b-nav-item :to="{ name: 'faq' }" exact>
+          FAQ
         </b-nav-item>
       </b-navbar-nav>
 

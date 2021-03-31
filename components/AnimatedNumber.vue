@@ -41,7 +41,7 @@ export default {
           change = change >= 0 ? Math.ceil(change) : Math.floor(change)
           this.displayNumber = this.displayNumber + change
         }
-      }, 50)
+      }, 15)
     }
   }
 
@@ -51,7 +51,6 @@ export default {
 <style scoped>
 .slide-enter {
   top: 10px;
-  opacity: 0.8;
 }
 
 .slide-enter-active, .slide-leave-active {
