@@ -28,7 +28,7 @@
     "superagent": "^5.3.1"
   },
   "devDependencies": {
-    "@fortawesome/free-brands-svg-icons": "^5.15.2",
+    "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@nuxt/types": "^0.5.9",
     "@nuxtjs/eslint-config": "^5.0.0",
