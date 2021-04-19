@@ -84,6 +84,13 @@
                   Include replies
                 </SwitchButton>
               </div>
+
+              <div v-if="addData.type === 'RSS'">
+                <p3><strong>RSS feed options</strong></p3>
+                <SwitchButton :is-enabled="addData.excludeRSSDesc" @toggle="toggleRSSDesc">
+                  Exclude brief description (just send an embedded link)
+                </SwitchButton>
+              </div>
             </div>
           </div>
         </div>
@@ -118,7 +125,7 @@ export default {
       guild: {},
       feeds: [],
       channels: null,
-      addData: { replies: false, type: '', channel: '', url: '' }
+      addData: { replies: false, excludeRSSDesc: false, type: '', channel: '', url: '' }
     }
   },
 
@@ -161,6 +168,10 @@ export default {
 
     toggleReplies (val) {
       this.addData.replies = val
+    },
+
+    toggleRSSDesc (val) {
+      this.addData.excludeRSSDesc = val
     },
 
     async remove (data) {
@@ -207,7 +218,7 @@ export default {
           type: this.addData.type.toLowerCase(),
           channelID: this.addData.channel,
           nsfw: this.channels[this.addData.channel].nsfw,
-          options: { replies: this.addData.replies }
+          options: { replies: this.addData.replies, excludeDesc: this.addData.excludeRSSDesc }
         })
         this.$bvToast.toast('Created new feed!', {
           title: 'Success',
