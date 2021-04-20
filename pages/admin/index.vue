@@ -1,7 +1,7 @@
 <template>
   <div class="center">
     <div class="pb-3 pt-4 mt-4 mb-5">
-      <b-container id="adminbox" class="bv-example-row pt-4">
+      <b-container v-if="auth > 0" id="adminbox" class="bv-example-row pt-4">
         <div class="d-block mb-4">
           <h3>Admin Panel</h3><br>
           <b-button class="cbtn cbtn-blurple" @click="restart({ name: 'gateway' })">
