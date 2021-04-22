@@ -42,8 +42,8 @@ export default {
       services: [],
       messagebox: {
         status: 'ok',
-        title: 'All systems operational',
-        body: 'No issues have been reported, please go to our support server if you are encountering any issues.'
+        title: '',
+        body: ''
       }
     }
   },
