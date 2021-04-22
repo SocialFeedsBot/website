@@ -63,7 +63,7 @@
                     </b-dropdown-item-button>
                   </b-dropdown>
 
-                  <b-form-input autocomplete="off" id="url" v-model="addData.url" placeholder="Channel/account name or feed URL" />
+                  <b-form-input id="url" v-model="addData.url" autocomplete="off" placeholder="Channel/account name or feed URL" />
 
                   <b-dropdown v-model="addData.channel" :text="addData.channel ? `#${channels[addData.channel].name}` : 'Channel'">
                     <b-dropdown-item v-for="channel in Object.values(channels).filter(c => c.type === 0)" :key="channel.id" @click="addData.channel = channel.id">
@@ -78,19 +78,19 @@
               </b-input-group>
 
               <br>
-              <div v-if="addData.type === 'Twitter'">
-                <p3><strong>Twitter feed options</strong></p3>
-                <SwitchButton :is-enabled="addData.replies" @toggle="toggleReplies">
-                  Include replies
-                </SwitchButton>
-              </div>
+              <p3>Feed options</p3>
+              <SwitchButton :is-enabled="addData.includeMessage" @toggle="toggleMessage">
+                Include a custom message
+              </SwitchButton>
+              <SwitchButton v-if="addData.type === 'Twitter'" :is-enabled="addData.replies" @toggle="toggleReplies">
+                Include replies
+              </SwitchButton>
+              <SwitchButton v-if="addData.type === 'RSS'" :is-enabled="addData.excludeRSSDesc" @toggle="toggleRSSDesc">
+                Exclude brief description (just send an embedded link)
+              </SwitchButton>
 
-              <div v-if="addData.type === 'RSS'">
-                <p3><strong>RSS feed options</strong></p3>
-                <SwitchButton :is-enabled="addData.excludeRSSDesc" @toggle="toggleRSSDesc">
-                  Exclude brief description (just send an embedded link)
-                </SwitchButton>
-              </div>
+              <br>
+              <b-form-input v-if="addData.includeMessage" id="url" v-model="addData.message" autocomplete="off" placeholder="Custom message" />
             </div>
           </div>
         </div>
@@ -125,7 +125,7 @@ export default {
       guild: {},
       feeds: [],
       channels: null,
-      addData: { replies: false, excludeRSSDesc: false, type: '', channel: '', url: '' }
+      addData: { replies: false, excludeRSSDesc: false, includeMessage: false, type: '', channel: '', url: '', message: '' }
     }
   },
 
@@ -166,6 +166,10 @@ export default {
       this.feedCount = feeds.length
     },
 
+    toggleMessage (val) {
+      this.addData.includeMessage = val
+    },
+
     toggleReplies (val) {
       this.addData.replies = val
     },
@@ -202,7 +206,7 @@ export default {
     },
 
     async addFeed () {
-      if (this.addData.url === '' || this.addData.type === '' || this.addData.channel === '') {
+      if (this.addData.url === '' || this.addData.type === '' || this.addData.channel === '' || (this.addData.includeMessage && this.addData.message === '')) {
         this.$bvToast.toast('Please ensure you fill in the feed type, url and the channel.', {
           title: 'Error',
           autoHideDelay: 6000,
@@ -218,7 +222,7 @@ export default {
           type: this.addData.type.toLowerCase(),
           channelID: this.addData.channel,
           nsfw: this.channels[this.addData.channel].nsfw,
-          options: { replies: this.addData.replies, excludeDesc: this.addData.excludeRSSDesc }
+          options: { replies: this.addData.replies, excludeDesc: this.addData.excludeRSSDesc, message: this.addData.message || null }
         })
         this.$bvToast.toast('Created new feed!', {
           title: 'Success',

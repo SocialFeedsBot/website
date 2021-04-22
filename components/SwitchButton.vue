@@ -30,7 +30,7 @@ export default {
     $switch-button-height: 1.4em;
     $switch-button-color: #7289DA;
     $switch-button-border-thickness: 2px;
-    $switch-transition: all 0.3s ease-in-out;
+    $switch-transition: all 0.2s ease-in-out;
     $switch-is-rounded: true;
 
     $button-side-length: calc(
@@ -38,9 +38,9 @@ export default {
     );
 
     height: $switch-button-height;
-    width: calc(#{$switch-button-height} * 2);
+    width: 2.5em;
     border: $switch-button-border-thickness solid $switch-button-color;
-    box-shadow: inset 0px 0px $switch-button-border-thickness 0px rgba(0, 0, 0, 0.33);
+    box-shadow: inset 0px 0px $switch-button-border-thickness 0px rgba(0, 0, 0, 0.4);
     border-radius: if($switch-is-rounded, $switch-button-height, 0);
 
     transition: $switch-transition;
@@ -64,7 +64,7 @@ export default {
       .button {
         background: white;
         transform: translateX(
-            calc(#{$button-side-length} + (2 * #{$switch-button-border-thickness}))
+            calc(#{$button-side-length} + (0.9 * #{$switch-button-border-thickness}))
         );
       }
     }
