@@ -26,7 +26,7 @@
       <b-navbar-nav class="ml-auto">
         <img v-if="user && !user.id" src="@/assets/loading.gif" width="40px" height="40px" alt="loading">
 
-        <li v-else-if="user" class="nav-item">
+        <li v-else-if="user" class="nav-item user-dropdown">
           <a href="#" target="_self" class="nav-link p-md-2">
             <b-dropdown right size="sm">
               <template slot="button-content">
@@ -98,42 +98,7 @@ export default {
     width: 56px;
     margin-right: 8px;
   }
-
-  .dropdown-toggle {
+  .user-dropdown {
     background: transparent;
-    border: 0px;
-  }
-  .dropdown-toggle:hover {
-    background-color: rgb(39, 41, 46);
-  }
-  .dropdown-toggle:active {
-    background: transparent;
-    border: 0;
-  }
-
-  .dropdown-menu {
-    width: 100%;
-    background-color: #16191b;
-    border: 0px;
-    box-shadow: #111314 0px 2px 2px;
-    border-radius: 4px;
-    padding: 0;
-    margin: 0;
-    margin-top: 10px;
-  }
-  .dropdown-toggle:focus .dropdown-menu {
-    transform: translateY(0%);
-    transition-delay: 0s, 0s, 0.3s;
-  }
-  .dropdown-item {
-    background-color: transparent;
-    color: #fff;
-    outline: none;
-    padding: 6px 12px;
-    font-weight: 300;
-  }
-  .dropdown-item:hover {
-    color: #fff;
-    background-color: rgba(15, 15, 15, 0.1);
   }
 </style>

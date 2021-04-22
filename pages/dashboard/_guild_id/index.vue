@@ -7,7 +7,7 @@
     </div>
 
     <div v-else>
-      <b-container class="mt-4 mb-5 pb-3 pt-2 guild-info">
+      <b-container class="mt-4 mb-3 pb-3 pt-2 guild-info">
         <div class="row">
           <div class="col-1 mr-5 text-right">
             <div class="d-inline-block">
@@ -15,7 +15,7 @@
             </div>
           </div>
 
-          <div class="col-5 ml-5 mt-3 text-left">
+          <div class="col-6 ml-5 mt-3 text-left">
             <div class="h3 d-inline-block" style="font-weight: 700;">
               {{ guild.name }}
             </div>
@@ -23,75 +23,9 @@
               Total feeds: {{ feedCount }}
             </div>
           </div>
-        </div>
-      </b-container>
 
-      <!-- adding new feeds -->
-      <b-container class="mb-3 pb-3 pt-3 guild-info">
-        <div class="row">
-          <div class="col-12 mt-1 text-left">
-            <div class="h3 d-inline-block" style="font-weight: 700;">
-              Add a new feed
-            </div>
-            <div class="p">
-              Here you can add feeds right from the dashboard to be posted. You only need to type the username, however a whole link is accepted. For example, you could use <span style="font-weight: 700;">memes</span> for reddit instead of <span style="font-weight: 700;">/r/memes</span>.
-            </div>
-          </div>
-
-          <div class="col-12 mt-4 mb-3">
-            <div>
-              <b-input-group>
-                <template>
-                  <b-dropdown v-model="addData.type" :text="addData.type ? addData.type : 'Type'">
-                    <b-dropdown-item-button @click="addData.type = 'Reddit'">
-                      <fa :icon="['fab', 'reddit']" /> Reddit
-                    </b-dropdown-item-button>
-                    <b-dropdown-item-button @click="addData.type = 'RSS'">
-                      <fa icon="rss" /> RSS
-                    </b-dropdown-item-button>
-                    <b-dropdown-item-button @click="addData.type = 'Twitter'">
-                      <fa :icon="['fab', 'twitter']" /> Twitter
-                    </b-dropdown-item-button>
-                    <b-dropdown-item-button @click="addData.type = 'Twitch'">
-                      <fa :icon="['fab', 'twitch']" /> Twitch
-                    </b-dropdown-item-button>
-                    <b-dropdown-item-button @click="addData.type = 'YouTube'">
-                      <fa :icon="['fab', 'youtube']" /> YouTube
-                    </b-dropdown-item-button>
-                    <b-dropdown-item-button @click="addData.type = 'StatusPage'">
-                      <fa :icon="['fas', 'exclamation-circle']" /> Status Page
-                    </b-dropdown-item-button>
-                  </b-dropdown>
-
-                  <b-form-input id="url" v-model="addData.url" autocomplete="off" placeholder="Channel/account name or feed URL" />
-
-                  <b-dropdown v-model="addData.channel" :text="addData.channel ? `#${channels[addData.channel].name}` : 'Channel'">
-                    <b-dropdown-item v-for="channel in Object.values(channels).filter(c => c.type === 0)" :key="channel.id" @click="addData.channel = channel.id">
-                      #{{ channel.name }}
-                    </b-dropdown-item>
-                  </b-dropdown>
-
-                  <b-button class="cbtn cbtn-blurple" @click="addFeed()">
-                    Add feed
-                  </b-button>
-                </template>
-              </b-input-group>
-
-              <br>
-              <p3>Feed options</p3>
-              <SwitchButton :is-enabled="addData.includeMessage" @toggle="toggleMessage">
-                Include a custom message
-              </SwitchButton>
-              <SwitchButton v-if="addData.type === 'Twitter'" :is-enabled="addData.replies" @toggle="toggleReplies">
-                Include replies
-              </SwitchButton>
-              <SwitchButton v-if="addData.type === 'RSS'" :is-enabled="addData.excludeRSSDesc" @toggle="toggleRSSDesc">
-                Exclude brief description (just send an embedded link)
-              </SwitchButton>
-
-              <br>
-              <b-form-input v-if="addData.includeMessage" id="url" v-model="addData.message" autocomplete="off" placeholder="Custom message" />
-            </div>
+          <div class="col-2 ml-5 mt-3">
+            <AddFeedModal :channels="channels" @addFeed="addFeed" />
           </div>
         </div>
       </b-container>
@@ -99,12 +33,12 @@
       <!-- feeds -->
       <br>
       <b-container class="mb-3">
-        <div v-for="(feeds, channelID) in feeds" :key="channelID">
+        <div v-for="(fs, channelID) in feeds" :key="channelID">
           <br><h4 class="channel-header">
-            #{{ channels[channelID].name.toUpperCase() }} ({{ feeds.length }})
+            #{{ channels[channelID].name.toUpperCase() }} ({{ fs.length }})
           </h4><br>
           <b-row>
-            <FeedBlock v-for="(feed, i) in feeds" :key="channelID + '-' + i" :data="feed" @remove="remove(feed)" />
+            <FeedBlock v-for="(feed, i) in fs" :key="channelID + '-' + i" :data="feed" @remove="remove(feed)" />
           </b-row>
         </div>
       </b-container>
@@ -114,18 +48,17 @@
 
 <script>
 import FeedBlock from '@/components/FeedBlock.vue'
-import SwitchButton from '../../../components/SwitchButton'
+import AddFeedModal from '../../../components/AddFeedModal'
 
 export default {
 
-  components: { SwitchButton, FeedBlock },
+  components: { FeedBlock, AddFeedModal },
 
   data () {
     return {
       guild: {},
       feeds: [],
-      channels: null,
-      addData: { replies: false, excludeRSSDesc: false, includeMessage: false, type: '', channel: '', url: '', message: '' }
+      channels: null
     }
   },
 
@@ -205,8 +138,8 @@ export default {
       }
     },
 
-    async addFeed () {
-      if (this.addData.url === '' || this.addData.type === '' || this.addData.channel === '' || (this.addData.includeMessage && this.addData.message === '')) {
+    async addFeed (data) {
+      if (data.url === '' || data.type === '' || data.channel === '' || (data.includeMessage && data.message === '')) {
         this.$bvToast.toast('Please ensure you fill in the feed type, url and the channel.', {
           title: 'Error',
           autoHideDelay: 6000,
@@ -218,11 +151,11 @@ export default {
       try {
         await this.$axios.post('/feeds', {
           guildID: this.$route.params.guild_id,
-          url: this.addData.url,
-          type: this.addData.type.toLowerCase(),
-          channelID: this.addData.channel,
-          nsfw: this.channels[this.addData.channel].nsfw,
-          options: { replies: this.addData.replies, excludeDesc: this.addData.excludeRSSDesc, message: this.addData.message || null }
+          url: data.url,
+          type: data.type.toLowerCase(),
+          channelID: data.channel,
+          nsfw: this.channels[data.channel].nsfw,
+          options: { replies: data.replies, excludeDesc: data.excludeRSSDesc, message: data.message || null }
         })
         this.$bvToast.toast('Created new feed!', {
           title: 'Success',

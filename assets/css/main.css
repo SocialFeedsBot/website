@@ -54,6 +54,15 @@
   border: 0px;
 }
 
+.cbtn-green {
+  background: #77dd77 !important;
+  border: 0px;
+  border-radius: 2px;
+}
+.cbtn-green:hover {
+  background: #5cbb5c !important;
+  border: 0px;
+}
 .cbtn-dark {
   background: #000000 !important;
   border: 0px;
@@ -125,4 +134,50 @@
 .card {
   background-color: rgb(26 28 30);
   box-shadow: 0 1em 1em -1em #1a1a1a;
+}
+
+
+
+.dropdown.full-length {
+  width: 100%;
+  text-align: left;
+  align-items: left;
+}
+.dropdown-toggle {
+  background: #23272A;
+  border: 0px;
+  text-align: left;
+}
+.dropdown-toggle:hover {
+  background-color: rgb(39, 41, 46);
+}
+.dropdown-toggle:active {
+  background: transparent;
+  border: 0;
+}
+
+.dropdown-menu {
+  width: 100%;
+  background-color: #16191b;
+  border: 0px;
+  box-shadow: #111314 0px 2px 2px;
+  border-radius: 4px;
+  padding: 0;
+  margin: 0;
+  margin-top: 10px;
+}
+.dropdown-toggle:focus .dropdown-menu {
+  transform: translateY(0%);
+  transition-delay: 0s, 0s, 0.3s;
+}
+.dropdown-item {
+  background-color: transparent;
+  color: #fff;
+  outline: none;
+  padding: 6px 12px;
+  font-weight: 300;
+}
+.dropdown-item:hover {
+  color: #fff;
+  background-color: rgba(15, 15, 15, 0.1);
 }
