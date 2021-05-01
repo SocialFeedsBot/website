@@ -1,7 +1,7 @@
 <template>
   <div class="center">
     <div class="pb-3 pt-4 mt-4 mb-5">
-      <b-container v-if="auth > 0" id="adminbox" class="bv-example-row pt-4">
+      <b-container v-if="user && user.isAdmin > 0" id="adminbox" class="bv-example-row pt-4">
         <div class="d-block mb-4">
           <h3>Admin Panel</h3><br>
           <b-button class="cbtn cbtn-blurple" @click="restart({ name: 'gateway' })">
@@ -102,28 +102,17 @@ export default {
     }
   },
 
+  computed: {
+    user () {
+      return this.$store.getters['user/user']
+    }
+  },
+
   beforeDestroy () {
     clearInterval(this.interval)
   },
 
-  async beforeMount () {
-    try {
-      const { data } = await this.$axios.get('/gateway/auth')
-      if (!data.auth) {
-        window.location = '/'
-      } else {
-        this.auth = true
-      }
-    } catch (e) {
-      window.location = '/'
-    }
-  },
-
   async mounted () {
-    while (!this.auth) {
-      await new Promise(resolve => setTimeout(resolve, 500))
-    }
-
     await this.updateStatus()
     this.interval = setInterval(() => this.updateStatus(), 10 * 1000)
   },
