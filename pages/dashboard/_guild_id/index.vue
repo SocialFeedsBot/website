@@ -7,28 +7,32 @@
     </div>
 
     <div v-else>
+      <AddFeedModal :channels="channels" @addFeed="addFeed" @update="update()" />
+
       <b-container class="mt-4 mb-3 pb-3 pt-2 guild-info">
-        <div class="row">
-          <div class="col-1 text-right">
+        <div class="row p-2">
+          <div class="col-3 col-md-1">
             <div class="d-inline-block">
-              <img :src="'https://cdn.discordapp.com/icons/' + guild.id + '/' + guild.icon + '.png'" class="rounded-circle" height="100" width="100" alt="guild icon">
+              <img :src="'https://cdn.discordapp.com/icons/' + guild.id + '/' + guild.icon + '.png'" class="rounded-circle" height="100%" width="100%" alt="guild icon">
             </div>
           </div>
 
-          <div class="col-7 ml-5 mt-3 text-left">
-            <div class="h3 d-inline-block" style="font-weight: 700;">
+          <div class="col-9 col-md-7">
+            <div class="h4 d-inline-block" style="font-weight: 700;">
               {{ guild.name }}
             </div>
-            <div class="p" style="font-weight: 100;">
+            <p style="font-weight: 100;">
               Total feeds: {{ feedCount }}
-            </div>
+            </p>
           </div>
 
-          <div class="col-2 ml-5 mt-3">
-            <b-button class="cbtn cbtn-dark my-2 w-100" :to="{ name: 'dashboard' }">
+          <div class="col-12 col-md-4 d-inline-block">
+            <b-button class="cbtn cbtn-dark my-2 w-90" :to="{ name: 'dashboard' }">
               Switch Server
-            </b-button><br>
-            <AddFeedModal :channels="channels" @addFeed="addFeed" @update="update()" />
+            </b-button>
+            <b-button v-b-modal.add-feed-modal class="cbtn cbtn-green w-90">
+              Add new feed
+            </b-button>
           </div>
         </div>
       </b-container>

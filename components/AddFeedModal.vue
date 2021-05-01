@@ -1,9 +1,5 @@
 <template>
   <div>
-    <b-button class="cbtn cbtn-green w-100" v-b-modal.add-feed-modal>
-      Add new feed
-    </b-button>
-
     <b-modal
       id="add-feed-modal"
       centered
@@ -12,9 +8,11 @@
       body-class="modal-cont"
       footer-class="modal-foot"
       modal-class="modal"
-      hide-header-close="true"
+      hide-header-close
     >
-      <p1 v-if="errorMessage !== ''" class="mb-4" style="color: #f54242">{{ errorMessage }}<br></p1>
+      <p1 v-if="errorMessage !== ''" class="mb-4" style="color: #f54242">
+        {{ errorMessage }}<br>
+      </p1>
 
       <p3>Select the type of feed to add:</p3><br>
       <b-dropdown v-model="addData.type" :text="addData.type ? addData.type : 'Feed type'" class="full-length">
@@ -45,8 +43,8 @@
       <br>
       <p3>Channel</p3>
       <b-dropdown v-model="addData.channel" :text="addData.channel ? `#${channels[addData.channel].name}` : 'Channel'" class="full-length">
-        <b-dropdown-item v-for="channel in Object.values(channels).filter(c => c.type === 0)" :key="channel.id" @click="addData.channel = channel.id">
-          #{{ channel.name }}
+        <b-dropdown-item v-for="ch in Object.values(channels).filter(c => c.type === 0)" :key="ch.id" @click="addData.channel = ch.id">
+          #{{ ch.name }}
         </b-dropdown-item>
       </b-dropdown>
 
@@ -89,7 +87,7 @@ export default {
   components: { SwitchButton },
 
   props: {
-    channels: { default: {} }
+    channels: { default: () => {} }
   },
 
   data: () => ({
@@ -148,7 +146,7 @@ export default {
         this.$emit('update')
         return 0
       } catch (e) {
-        return e.response.data.error
+        return e.response ? e.response.data.error : e.message
       }
     }
   }

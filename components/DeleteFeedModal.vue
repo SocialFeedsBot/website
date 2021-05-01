@@ -7,7 +7,7 @@
     body-class="modal-cont"
     footer-class="modal-foot"
     modal-class="modal"
-    hide-header-close="true"
+    hide-header-close
   >
     <p>Are you sure you would like to remove this feed?</p>
 
