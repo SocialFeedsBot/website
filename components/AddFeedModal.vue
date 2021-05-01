@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button class="cbtn cbtn-green" v-b-modal.add-feed-modal>
+    <b-button class="cbtn cbtn-green w-100" v-b-modal.add-feed-modal>
       Add new feed
     </b-button>
 
@@ -14,6 +14,8 @@
       modal-class="modal"
       hide-header-close="true"
     >
+      <p1 v-if="errorMessage !== ''" class="mb-4" style="color: #f54242">{{ errorMessage }}<br></p1>
+
       <p3>Select the type of feed to add:</p3><br>
       <b-dropdown v-model="addData.type" :text="addData.type ? addData.type : 'Feed type'" class="full-length">
         <b-dropdown-item-button @click="addData.type = 'Reddit'">
@@ -68,7 +70,8 @@
 
       <template #modal-footer>
         <b-button class="cbtn cbtn-green" @click="add()">
-          Add feed
+          <span v-if="!loading">Add feed</span>
+          <img v-else src="@/assets/loading.gif" width="20px" height="20px">
         </b-button>
 
         <b-button class="cbtn cbtn-dark" @click="close()">
@@ -90,6 +93,8 @@ export default {
   },
 
   data: () => ({
+    loading: false,
+    errorMessage: '',
     channel: '',
     addData: { replies: false, excludeRSSDesc: false, includeMessage: false, type: '', channel: '', url: '', message: '' },
     defaultAddData: { replies: false, excludeRSSDesc: false, includeMessage: false, type: '', channel: '', url: '', message: '' }
@@ -100,10 +105,18 @@ export default {
     close () {
       this.$bvModal.hide('add-feed-modal')
       this.addData = JSON.parse(JSON.stringify(this.defaultAddData))
+      this.errorMessage = ''
     },
-    add () {
-      this.$emit('addFeed', this.addData)
-      this.close()
+    async add () {
+      this.loading = true
+      this.errorMessage = ''
+      const result = await this.addFeed()
+      this.loading = false
+      if (typeof result === 'string') {
+        this.errorMessage = `Error: ${result}`
+      } else {
+        this.close()
+      }
     },
 
     toggleMessage (val) {
@@ -117,6 +130,26 @@ export default {
 
     toggleRSSDesc (val) {
       this.addData.excludeRSSDesc = val
+    },
+
+    async addFeed () {
+      if (this.addData.url === '' || this.addData.type === '' || this.addData.channel === '' || (this.addData.includeMessage && this.addData.message === '')) {
+        return 'Please ensure you fill in all fields.'
+      }
+      try {
+        await this.$axios.post('/feeds', {
+          guildID: this.$route.params.guild_id,
+          url: this.addData.url,
+          type: this.addData.type.toLowerCase(),
+          channelID: this.addData.channel,
+          nsfw: this.channels[this.addData.channel].nsfw,
+          options: { replies: this.addData.replies, excludeDesc: this.addData.excludeRSSDesc, message: this.addData.message || null }
+        })
+        this.$emit('update')
+        return 0
+      } catch (e) {
+        return e.response.data.error
+      }
     }
   }
 

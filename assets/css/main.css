@@ -55,12 +55,12 @@
 }
 
 .cbtn-green {
-  background: #77dd77 !important;
+  background: #43B581 !important;
   border: 0px;
   border-radius: 2px;
 }
 .cbtn-green:hover {
-  background: #5cbb5c !important;
+  background: #4bbd8a !important;
   border: 0px;
 }
 .cbtn-dark {
@@ -96,10 +96,12 @@
 
 .cbtn-red {
   background: #f54242;
+  border: 0px;
+  border-radius: 2px;
 }
 .cbtn-red:hover {
-  border: transparent;
-  color: #c91b1b;
+  border: 0px;
+  background: #c91b1b;
 }
 
 .mt-8, .my-8 {

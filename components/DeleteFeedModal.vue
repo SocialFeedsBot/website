@@ -1,21 +1,41 @@
 <template>
-  <b-modal id="delete-feed-modal" centered title="DeleteFeed">
-    <template v-slot:modal-title>
-      Are you sure you want to delete this feed?
+  <b-modal
+    id="remove-feed-modal"
+    centered
+    title="Removing feed"
+    header-class="modal-head"
+    body-class="modal-cont"
+    footer-class="modal-foot"
+    modal-class="modal"
+    hide-header-close="true"
+  >
+    <p>Are you sure you would like to remove this feed?</p>
+
+    <template #modal-footer>
+      <b-button class="cbtn cbtn-red" @click="remove()">
+        Remove feed
+      </b-button>
+
+      <b-button class="cbtn cbtn-dark" @click="close()">
+        Cancel
+      </b-button>
     </template>
-    <b-button class="mt-3" block @click="remove(feed)">
-      Yes
-    </b-button>
-    <b-button class="mt-3" block @click="$bvModal.hide('delete-feed-modal')">
-      No
-    </b-button>
   </b-modal>
 </template>
 
 <script>
 export default {
+  methods: {
 
-  props: ['feed']
+    remove () {
+      this.$emit('removeFeed')
+      this.close()
+    },
 
+    close () {
+      this.$bvModal.hide('remove-feed-modal')
+    }
+
+  }
 }
 </script>

@@ -9,13 +9,13 @@
     <div v-else>
       <b-container class="mt-4 mb-3 pb-3 pt-2 guild-info">
         <div class="row">
-          <div class="col-1 mr-5 text-right">
+          <div class="col-1 text-right">
             <div class="d-inline-block">
               <img :src="'https://cdn.discordapp.com/icons/' + guild.id + '/' + guild.icon + '.png'" class="rounded-circle" height="100" width="100" alt="guild icon">
             </div>
           </div>
 
-          <div class="col-6 ml-5 mt-3 text-left">
+          <div class="col-7 ml-5 mt-3 text-left">
             <div class="h3 d-inline-block" style="font-weight: 700;">
               {{ guild.name }}
             </div>
@@ -25,7 +25,10 @@
           </div>
 
           <div class="col-2 ml-5 mt-3">
-            <AddFeedModal :channels="channels" @addFeed="addFeed" />
+            <b-button class="cbtn cbtn-dark my-2 w-100" :to="{ name: 'dashboard' }">
+              Switch Server
+            </b-button><br>
+            <AddFeedModal :channels="channels" @addFeed="addFeed" @update="update()" />
           </div>
         </div>
       </b-container>
@@ -38,10 +41,12 @@
             #{{ channels[channelID].name.toUpperCase() }} ({{ fs.length }})
           </h4><br>
           <b-row>
-            <FeedBlock v-for="(feed, i) in fs" :key="channelID + '-' + i" :data="feed" @remove="remove(feed)" />
+            <FeedBlock v-for="(feed, i) in fs" :key="channelID + '-' + i" :data="feed" @setPrompt="setPrompt(feed)" />
           </b-row>
         </div>
       </b-container>
+
+      <DeleteFeedModal @removeFeed="remove(deletePrompt)" />
     </div>
   </div>
 </template>
@@ -49,15 +54,17 @@
 <script>
 import FeedBlock from '@/components/FeedBlock.vue'
 import AddFeedModal from '../../../components/AddFeedModal'
+import DeleteFeedModal from '../../../components/DeleteFeedModal'
 
 export default {
 
-  components: { FeedBlock, AddFeedModal },
+  components: { FeedBlock, AddFeedModal, DeleteFeedModal },
 
   data () {
     return {
       guild: {},
       feeds: [],
+      deletePrompt: {},
       channels: null
     }
   },
@@ -111,6 +118,11 @@ export default {
       this.addData.excludeRSSDesc = val
     },
 
+    setPrompt (feed) {
+      this.deletePrompt = feed
+      this.$bvModal.show('remove-feed-modal')
+    },
+
     async remove (data) {
       try {
         await this.$axios.delete('/feeds', {
@@ -121,52 +133,11 @@ export default {
             guildID: this.$route.params.guild_id
           }
         })
-        this.$bvToast.toast('Feed removed successfully!', {
-          title: 'Success',
-          autoHideDelay: 6000,
-          appendToast: false,
-          variant: 'success'
-        })
-        await this.update()
+
+        this.update()
       } catch (e) {
         this.$bvToast.toast('Try again later.', {
           title: 'Error removing feed',
-          autoHideDelay: 6000,
-          appendToast: false,
-          variant: 'danger'
-        })
-      }
-    },
-
-    async addFeed (data) {
-      if (data.url === '' || data.type === '' || data.channel === '' || (data.includeMessage && data.message === '')) {
-        this.$bvToast.toast('Please ensure you fill in the feed type, url and the channel.', {
-          title: 'Error',
-          autoHideDelay: 6000,
-          appendToast: false,
-          variant: 'warning'
-        })
-        return
-      }
-      try {
-        await this.$axios.post('/feeds', {
-          guildID: this.$route.params.guild_id,
-          url: data.url,
-          type: data.type.toLowerCase(),
-          channelID: data.channel,
-          nsfw: this.channels[data.channel].nsfw,
-          options: { replies: data.replies, excludeDesc: data.excludeRSSDesc, message: data.message || null }
-        })
-        this.$bvToast.toast('Created new feed!', {
-          title: 'Success',
-          autoHideDelay: 6000,
-          appendToast: false,
-          variant: 'success'
-        })
-        await this.update()
-      } catch (e) {
-        this.$bvToast.toast(`Try again later, error message: ${e.response.data.error}`, {
-          title: 'Unable to add feed at this time.',
           autoHideDelay: 6000,
           appendToast: false,
           variant: 'danger'
