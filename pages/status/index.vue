@@ -12,8 +12,8 @@
         <p>{{ messagebox.body }}</p>
       </div>
 
-      <div class="row row-cols-4">
-        <div v-for="service in services" :key="service.name + service.id || 'uk'" class="col">
+      <b-row>
+        <div v-for="service in services" :key="service.name + service.id || 'uk'" class="cols-3 cols-sm-12">
           <b-card
             style="height: 12rem; width: 15rem;"
             class="mb-4 d-inline-block mr-4 mt-0"
@@ -29,7 +29,7 @@
             </b-card-text>
           </b-card>
         </div>
-      </div>
+      </b-row>
     </div>
   </div>
 </template>
@@ -104,7 +104,7 @@ export default {
         memory: services.feeds ? this.formatMemory(services.feeds.memory) : undefined
       })
 
-      if (outageMessage.status !== 'ok') {
+      if (outageMessage.outage !== false && outageMessage.status !== 'ok') {
         this.messagebox.title = outageMessage.head
         this.messagebox.body = outageMessage.body
         this.messagebox.status = outageMessage.status
@@ -168,7 +168,7 @@ export default {
   .status-message {
     border-radius: 5px;
     width: 100%;
-    height: 100px;
+    max-height: 200px;
   }
   .status-message.green { border: 1px solid #81e968; background-color: rgb(129, 233, 104, 0.04) }
   .status-message.amber { border: 1px solid #e9a668; background-color: rgb(233, 166, 104, 0.04) }
