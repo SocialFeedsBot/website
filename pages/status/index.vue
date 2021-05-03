@@ -90,19 +90,37 @@ export default {
         })
       })
 
-      this.services.push({
-        name: 'API',
-        status: services.api ? (services.api.uptime < 10000 ? 'resuming' : 'ready') : 'disconnected',
-        uptime: services.api ? this.formatUptime(services.api.uptime / 60000) : undefined,
-        memory: services.api ? this.formatMemory(services.api.memory) : undefined
-      })
+      if (!services.apis.length) {
+        this.services.push({
+          name: 'API',
+          status: 'disconnected'
+        })
+      } else {
+        services.apis.sort((a, b) => a.uptime - b.uptime).forEach((api) => {
+          this.services.push({
+            name: `API ${api.id}`,
+            status: api.uptime < 10000 ? 'resuming' : 'ready',
+            uptime: this.formatUptime(api.uptime / 60000),
+            memory: this.formatMemory(api.memory)
+          })
+        })
+      }
 
-      this.services.push({
-        name: 'Feed Handler',
-        status: services.feeds ? (services.feeds.uptime < 10000 ? 'resuming' : 'ready') : 'disconnected',
-        uptime: services.feeds ? this.formatUptime(services.feeds.uptime / 60000) : undefined,
-        memory: services.feeds ? this.formatMemory(services.feeds.memory) : undefined
-      })
+      if (!services.feeds.length) {
+        this.services.push({
+          name: 'Feeds',
+          status: 'disconnected'
+        })
+      } else {
+        services.feeds.sort((a, b) => a.uptime - b.uptime).forEach((feeds) => {
+          this.services.push({
+            name: `Feeds ${feeds.id}`,
+            status: feeds.uptime < 10000 ? 'resuming' : 'ready',
+            uptime: this.formatUptime(feeds.uptime / 60000),
+            memory: this.formatMemory(feeds.memory)
+          })
+        })
+      }
 
       if (outageMessage.outage !== false && outageMessage.status !== 'ok') {
         this.messagebox.title = outageMessage.head
