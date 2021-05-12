@@ -1,32 +1,27 @@
 <template>
-  <b-col md="6">
+  <b-col sm="10" lg="4" md="6" class="mb-2">
     <div class="block">
-      <div class="flex">
-        <div class="flex">
-          <div class="icon-wrapper">
-            <img :src="'/' + data.type + '.png'" class="feed-icon">
-          </div>
-          <div class="flex" style="flex-direction: column;">
-            <h3 class="feed-name">
-              {{ data.url }} <strong v-if="data.type === 'twitter'">{{ data.options.replies ? '(with replies)' : '' }}</strong>
-            </h3>
-            <div class="flex">
-              <div class="feed-details">
-                <div class="feed-url">
-                  {{ getURL(data) }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="flex" style="flex: 0 0 auto; justify-content: flex-end;">
-          <b-button class="feed-button-delete" @click="remove()">
-            <div class="feed-delete">
-              <fa icon="trash" style="color: #fff" />
-            </div>
+      <b-row class="p-2">
+        <b-col sm="2" md="2" lg="2">
+          <img :src="'/' + data.type + '.png'" class="feed-icon">
+        </b-col>
+
+        <b-col sm="10" md="10" lg="10">
+          <h6>{{ data.display ? data.display.title : data.url }}</h6>
+          <a class="feed-url" target="_blank" :href="getURL(data)">View website</a>
+        </b-col>
+      </b-row>
+
+      <b-row class="p-2">
+        <b-col sm="12" md="12" lg="12">
+          <b-button class="cbtn cbtn-red" @click="remove()">
+            <fa icon="trash" style="color: #fff" /> Remove
           </b-button>
-        </div>
-      </div>
+          <b-button class="cbtn cbtn-dark" @click="modify()">
+            <fa icon="edit" style="color: #fff" /> Modify
+          </b-button>
+        </b-col>
+      </b-row>
     </div>
   </b-col>
 </template>
@@ -54,109 +49,34 @@ export default {
 
     remove () {
       this.$emit('setPrompt')
+    },
+
+    modify () {
+      this.$emit('setModify')
     }
   }
 
 }
 </script>
-<style>
+<style scoped>
 .block {
-  padding: 20px 16px;
-  margin-bottom: 16px;
-  border-color: #000000;
-  background-color: rgba(32,34,37,0.3);
-  position: relative;
-  border-width: 1px;
-  border-style: solid;
+  background-color: rgb(23, 24, 27);
   border-radius: 5px;
-  box-sizing: border-box;
-  width: 100%;
+  border: 0.1px solid black;
 }
 
-.flex {
-  line-height: 1;
-  user-select: none;
-  text-rendering: optimizeLegibility;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-weight: inherit;
-  font-style: inherit;
-  font-family: inherit;
-  font-size: 100%;
-  vertical-align: baseline;
-  outline: 0;
-  display: flex;
-  align-items: stretch;
-  justify-content: flex-start;
-  flex-wrap: nowrap;
-  flex-direction: row;
-  box-sizing: border-box;
-  flex: 1 1 auto;
-}
-
-.feed-name {
-  user-select: none;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 16px;
-  line-height: 20px;
-  box-sizing: border-box;
-  word-break: break-word;
-  font-weight: 500;
-  vertical-align: baseline;
-  flex-direction: row;
-}
 .feed-icon {
-  width: 50px !important;
-  height: 50px !important;
-  border-radius: 50%
-}
-.icon-wrapper {
+  max-height: 50px;
+  max-width: 50px;
   border-radius: 50%;
-  width: 75px;
-  height: 50px;
 }
-.feed-button-delete {
-  border: transparent;
-  background: #f54242;
-}
-.feed-button-delete:hover {
-  border: transparent;
-  color: #c91b1b;
-}
-.feed-button-delete:hover {
-  background: #f23030
-}
+
 .feed-url {
   font-size: 12px;
   color: #ffffffbb;
   flex-wrap: wrap;
   display: flex;
+  overflow: hidden;
+  width: 100%;
 }
-.feed-details {
-  line-height: 1;
-  user-select: none;
-  text-rendering: optimizeLegibility;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-weight: inherit;
-  font-style: inherit;
-  font-family: inherit;
-  font-size: 100%;
-  vertical-align: baseline;
-  outline: 0;
-  box-sizing: border-box;
-  display: flex;
-  flex-grow: 0;
-  justify-content: flex-start;
-  margin-top: 8px;
-  -webkit-user-select: all;
-  -moz-user-select: all;
-  -ms-user-select: all;
-  user-select: all;
-}
-
-</style>
+</style>>

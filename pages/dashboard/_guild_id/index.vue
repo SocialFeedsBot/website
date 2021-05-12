@@ -7,28 +7,30 @@
     </div>
 
     <div v-else>
-      <AddFeedModal :channels="channels" @addFeed="addFeed" @update="update()" />
+      <AddFeedModal :channels="channels" @update="update()" />
+      <ModifyFeedModal :channels="channels" :feed="toModify" @update="update()" />
 
       <b-container class="mt-4 mb-3 pb-3 pt-2 guild-info">
         <div class="row p-2">
-          <div class="col-3 col-md-1">
+          <div class="col-3 col-lg-2 col-md-2 col-sm-3">
             <div class="d-inline-block">
               <img :src="'https://cdn.discordapp.com/icons/' + guild.id + '/' + guild.icon + '.png'" class="rounded-circle" height="100%" width="100%" alt="guild icon">
             </div>
           </div>
 
-          <div class="col-9 col-md-7">
+          <div class="col-9 col-lg-10 col-md-7">
             <div class="h4 d-inline-block" style="font-weight: 700;">
               {{ guild.name }}
             </div>
             <p style="font-weight: 100;">
               Total feeds: {{ feedCount }}
             </p>
-          </div>
 
-          <div class="col-12 col-md-4 d-inline-block">
             <b-button class="cbtn cbtn-dark my-2 w-90" :to="{ name: 'dashboard' }">
               Switch Server
+            </b-button>
+            <b-button class="cbtn cbtn-dark my-2 w-90" @click="update()">
+              Refresh feeds
             </b-button>
             <b-button v-b-modal.add-feed-modal class="cbtn cbtn-green w-90">
               Add new feed
@@ -39,16 +41,21 @@
 
       <!-- feeds -->
       <br>
-      <b-container class="mb-3">
+      <b-container v-if="feedCount > 0" class="mb-3">
         <div v-for="(fs, channelID) in feeds" :key="channelID">
           <br><h4 class="channel-header">
-            #{{ channels[channelID].name.toUpperCase() }} ({{ fs.length }})
+            #{{ channels.find(ch => ch.id === channelID).name.toUpperCase() }} ({{ fs.length }})
           </h4><br>
           <b-row>
-            <FeedBlock v-for="(feed, i) in fs" :key="channelID + '-' + i" :data="feed" @setPrompt="setPrompt(feed)" />
+            <FeedBlock v-for="(feed, i) in fs" :key="channelID + '-' + i" :data="feed" @setPrompt="toggleData('prompt', feed)" @setModify="toggleData('modify', feed)" />
           </b-row>
         </div>
       </b-container>
+
+      <div v-else class="center">
+        <h1>No feeds added yet.</h1>
+        <p>Press the <code>Add new feed</code> button at the top of the page to start.</p>
+      </div>
 
       <DeleteFeedModal @removeFeed="remove(deletePrompt)" />
     </div>
@@ -58,15 +65,17 @@
 <script>
 import FeedBlock from '@/components/FeedBlock.vue'
 import AddFeedModal from '../../../components/AddFeedModal'
+import ModifyFeedModal from '../../../components/ModifyFeedModal'
 import DeleteFeedModal from '../../../components/DeleteFeedModal'
 
 export default {
 
-  components: { FeedBlock, AddFeedModal, DeleteFeedModal },
+  components: { FeedBlock, AddFeedModal, ModifyFeedModal, DeleteFeedModal },
 
   data () {
     return {
       guild: {},
+      toModify: {},
       feeds: [],
       deletePrompt: {},
       channels: null
@@ -96,17 +105,18 @@ export default {
         feeds.push(...data.feeds)
       }
 
-      this.channels = channels
+      this.channels = Object.values(channels).sort((a, b) => a.position - b.position)
       this.guild = guild
 
-      const groups = {}
-      feeds.forEach((doc) => {
-        if (channels[doc.channelID]) {
-          if (!groups[doc.channelID]) { groups[doc.channelID] = [] }
-          groups[doc.channelID].push({ ...doc, channelName: channels[doc.channelID].name })
+      const orderedFeeds = {}
+      this.channels.forEach((channel) => {
+        const channelFeeds = feeds.filter(doc => doc.channelID === channel.id)
+        if (channelFeeds.length > 0) {
+          orderedFeeds[channel.id] = channelFeeds
         }
       })
-      this.feeds = groups
+
+      this.feeds = orderedFeeds
       this.feedCount = feeds.length
     },
 
@@ -122,9 +132,14 @@ export default {
       this.addData.excludeRSSDesc = val
     },
 
-    setPrompt (feed) {
-      this.deletePrompt = feed
-      this.$bvModal.show('remove-feed-modal')
+    toggleData (type, feed) {
+      if (type === 'prompt') {
+        this.deletePrompt = feed
+        this.$bvModal.show('remove-feed-modal')
+      } else if (type === 'modify') {
+        this.toModify = feed
+        this.$bvModal.show('modify-feed-modal')
+      }
     },
 
     async remove (data) {

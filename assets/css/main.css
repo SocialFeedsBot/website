@@ -73,18 +73,20 @@
   border: 0px;
 }
 
-.cbtn {
+button, .cbtn, .cbtn:active {
   justify-content: center;
   -webkit-box-align: center;
   text-align: center;
   vertical-align: middle;
   padding-top: 10px;
   font-weight: 400;
+  background: rgb(39, 41, 46);
 }
-.cbtn:hover,
-.cbtn:focus {
+.cbtn:hover, .cbtn:focus {
   box-shadow: 0 0.5em 0.5em -0.4em #1a1a1a;
   transform: translateY(-0.05em);
+  border: 0px;
+  background: rgb(39, 41, 46)
 }
 .cbtn.large {
   height: 60px;
@@ -155,12 +157,12 @@
 }
 .dropdown-toggle:active {
   background: transparent;
-  border: 0;
+  border: 0px !important;
 }
 
 .dropdown-menu {
   width: 100%;
-  background-color: #16191b;
+  background-color: rgb(18, 19, 21);
   border: 0px;
   box-shadow: #111314 0px 2px 2px;
   border-radius: 4px;
@@ -173,6 +175,7 @@
 .dropdown-toggle:focus .dropdown-menu {
   transform: translateY(0%);
   transition-delay: 0s, 0s, 0.3s;
+  border: 0px;
 }
 .dropdown-item {
   background-color: transparent;
@@ -184,4 +187,13 @@
 .dropdown-item:hover {
   color: #fff;
   background-color: rgba(15, 15, 15, 0.1);
+}
+
+
+.modal-fade-enter, .modal-fade-leave-to {
+  opacity: 0;
+}
+
+.modal-fade-enter-active,.modal-fade-leave-active {
+  transition: opacity .5s ease;
 }

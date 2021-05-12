@@ -28,7 +28,7 @@
 
         <li v-else-if="user" class="nav-item user-dropdown">
           <a href="#" target="_self" class="nav-link p-md-2">
-            <b-dropdown right size="sm">
+            <b-dropdown right size="sm" toggle-class="cbtn">
               <template slot="button-content">
                 <img class="rounded-circle" width="30" :src="avatarURL">
                 <div class="d-inline-block ml-2">{{ user.username }}</div>

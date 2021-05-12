@@ -15,7 +15,7 @@
       </p1>
 
       <p3>Select the type of feed to add:</p3><br>
-      <b-dropdown v-model="addData.type" :text="addData.type ? addData.type : 'Feed type'" class="full-length">
+      <b-dropdown v-model="addData.type" :text="addData.type ? addData.type : 'Feed type'" class="full-length" toggle-class="cbtn">
         <b-dropdown-item-button @click="addData.type = 'Reddit'">
           <fa :icon="['fab', 'reddit']" /> Reddit
         </b-dropdown-item-button>
@@ -42,8 +42,8 @@
 
       <br>
       <p3>Channel</p3>
-      <b-dropdown v-model="addData.channel" :text="addData.channel ? `#${channels[addData.channel].name}` : 'Channel'" class="full-length">
-        <b-dropdown-item v-for="ch in Object.values(channels).filter(c => c.type === 0)" :key="ch.id" @click="addData.channel = ch.id">
+      <b-dropdown v-model="addData.channel" :text="addData.channel ? `#${channels.find(ch => ch.id === addData.channel).name}` : 'Channel'" toggle-class="cbtn" class="full-length">
+        <b-dropdown-item v-for="ch in channels.filter(c => c.type === 0)" :key="ch.id" @click="addData.channel = ch.id">
           #{{ ch.name }}
         </b-dropdown-item>
       </b-dropdown>
@@ -69,7 +69,7 @@
       <template #modal-footer>
         <b-button class="cbtn cbtn-green" @click="add()">
           <span v-if="!loading">Add feed</span>
-          <img v-else src="@/assets/loading.gif" width="20px" height="20px">
+          <img v-else src="@/assets/ellipsis.gif" width="20px" height="20px">
         </b-button>
 
         <b-button class="cbtn cbtn-dark" @click="close()">
@@ -140,7 +140,7 @@ export default {
           url: this.addData.url,
           type: this.addData.type.toLowerCase(),
           channelID: this.addData.channel,
-          nsfw: this.channels[this.addData.channel].nsfw,
+          nsfw: this.channels.find(ch => ch.id === this.addData.channel).nsfw,
           options: { replies: this.addData.replies, excludeDesc: this.addData.excludeRSSDesc, message: this.addData.message || null }
         })
         this.$emit('update')

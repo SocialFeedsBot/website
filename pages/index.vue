@@ -19,13 +19,13 @@
 
     <b-row cols="2" class="ml-2 mr-2 mb-4">
       <b-col lg="6">
-        <b-img class="example-image" src="~assets/examples/discord-outage.png" w-100 fluid />
+        <b-img alt="discord outage feed" class="example-image" src="~assets/examples/discord-outage.png" w-100 fluid />
       </b-col>
       <b-col lg="4" class="align-middle">
         <h4>Monitor a range of sources.</h4>
         <p2>
           SocialFeeds offers a wide range of sources that you can keep track of. These consist of Reddit, RSS, Twitch,
-          Twitter, Twitch, Reddit and even monitor Discord status updates in case of an outage.
+          Twitter, Twitch, Reddit and even monitor status pages from various popular sites.
         </p2>
       </b-col>
     </b-row><br>
@@ -40,22 +40,22 @@
         </p2>
       </b-col>
       <b-col lg="6">
-        <b-img class="example-image" src="~assets/examples/dashboard.png" w-100 fluid />
+        <b-img alt="dashboard example" class="example-image" src="~assets/examples/dashboard.png" w-100 fluid />
       </b-col>
     </b-row><br>
 
     <b-row cols="2" class="ml-2 mr-2 mb-4">
       <b-col lg="6">
-        <b-img class="example-image" src="~assets/examples/rss.png" w-100 fluid />
+        <b-img alt="rss feed example" class="example-image" src="~assets/examples/rss.png" w-100 fluid />
       </b-col>
       <b-col lg="4" class="align-middle">
         <h4>Always online</h4>
         <p2>
           We try to keep SocialFeeds online as much as possible and we ensure you will never miss a feed. If the bot is
-          ever down, it will automatically catch up wit all the feeds you missed instantly and you can use the dashboard.
-          You can check out the status of the services <b-link href="/status">
+          ever down, it will automatically catch up with all the feeds you missed instantly and the dashboard is always available.
+          You can check out the status of the services <strong><b-link href="/status" style="color: white;">
             here.
-          </b-link>
+          </b-link></strong>
         </p2>
       </b-col>
     </b-row><br>
