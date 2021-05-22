@@ -14,30 +14,32 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/vue-fontawesome": "^2.0.2",
-    "@nuxtjs/axios": "^5.13.1",
+    "@nuxtjs/axios": "^5.13.4",
     "@nuxtjs/style-resources": "^1.0.0",
     "bootstrap": "^4.6.0",
-    "bootstrap-icons": "^1.4.1",
+    "bootstrap-icons": "^1.5.0",
     "bootstrap-vue": "^2.21.2",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "express": "^4.16.4",
-    "ioredis": "^4.26.0",
-    "nuxt": "^2.15.4",
+    "ioredis": "^4.27.2",
+    "nuxt": "^2.15.6",
     "nuxt-fontawesome": "^0.4.0",
     "superagent": "^6.1.0"
   },
   "devDependencies": {
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@nuxt/types": "^2.15.4",
+    "@nuxt/types": "^2.15.6",
     "@nuxtjs/eslint-config": "^6.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.24.0",
+    "eslint": "^7.0.0",
+    "eslint-ast-utils": "^1.1.0",
+    "eslint-plugin-jest": "^24.3.6",
     "eslint-plugin-nuxt": "^2.0.0",
     "nodemon": "^2.0.7",
-    "sass": "^1.32.8",
-    "sass-loader": "^10.1.1"
+    "sass": "^1.33.0",
+    "sass-loader": "^10.2.0"
   }
 }

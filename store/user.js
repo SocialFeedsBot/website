@@ -59,11 +59,11 @@ export const getters = {
   },
 
   manageableGuilds: (state) => {
-    return state.guilds ? state.guilds.filter(g => g.permissions & 1 << 3 || g.permissions & 1 << 5) : null
+    return state.guilds ? state.guilds.filter(g => BigInt(g.permissions) & 1n << 3n || BigInt(g.permissions) & 1n << 5n) : []
   },
 
   allGuilds: (state) => {
-    return state.guilds || null
+    return state.guilds || []
   }
 
 }

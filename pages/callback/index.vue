@@ -15,7 +15,8 @@ export default {
 
     if (token) {
       localStorage.setItem('token', token)
-      const user = await this.$axios.$get(`/users/@me`) // add auth header and add this endpoint
+      this.$ws.connect()
+      const user = await this.$axios.$get('/users/@me')
       this.$store.commit('user/SET_USER', { token, ...user })
     }
 

@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div v-if="!guild.id && !channels">
+    <div v-if="ready === false">
       <div style="text-align: center;">
         <img src="@/assets/loading.gif" width="100px" height="100px" alt="loading">
       </div>
     </div>
 
-    <div v-else>
+    <div v-else-if="ready === true">
       <AddFeedModal :channels="channels" @update="update()" />
       <ModifyFeedModal :channels="channels" :feed="toModify" @update="update()" />
 
@@ -14,7 +14,7 @@
         <div class="row p-2">
           <div class="col-3 col-lg-2 col-md-2 col-sm-3">
             <div class="d-inline-block">
-              <img :src="'https://cdn.discordapp.com/icons/' + guild.id + '/' + guild.icon + '.png'" class="rounded-circle" height="100%" width="100%" alt="guild icon">
+              <img :src="getGuildIcon(guild)" class="rounded-circle" height="100%" width="100%" alt="guild icon">
             </div>
           </div>
 
@@ -28,9 +28,6 @@
 
             <b-button class="cbtn cbtn-dark my-2 w-90" :to="{ name: 'dashboard' }">
               Switch Server
-            </b-button>
-            <b-button class="cbtn cbtn-dark my-2 w-90" @click="update()">
-              Refresh feeds
             </b-button>
             <b-button v-b-modal.add-feed-modal class="cbtn cbtn-green w-90">
               Add new feed
@@ -74,50 +71,49 @@ export default {
 
   data () {
     return {
-      guild: {},
+      ready: false,
       toModify: {},
-      feeds: [],
-      deletePrompt: {},
-      channels: null
+      deletePrompt: {}
+    }
+  },
+
+  computed: {
+    feeds () {
+      return this.$store.getters['feeds/feeds']
+    },
+
+    feedCount () {
+      return this.$store.getters['feeds/count']
+    },
+
+    guild () {
+      return this.$store.getters['guild/guild']
+    },
+
+    channels () {
+      return this.$store.getters['guild/channels']
     }
   },
 
   async mounted () {
     await this.update()
+    this.$ws.connect()
   },
 
   methods: {
     async update () {
-      let guild
-      try {
-        guild = (await this.$axios.get(`/guilds/${this.$route.params.guild_id}`)).data
-      } catch (e) {
-        window.location = '/dashboard'
+      this.ready = false
+      await this.$store.dispatch('guild/GET_GUILD', this.$route.params.guild_id)
+      await this.$store.dispatch('feeds/GET_FEEDS', this.$route.params.guild_id)
+      this.ready = true
+    },
+
+    getGuildIcon (guild) {
+      if (guild && guild.icon) {
+        return `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`
+      } else {
+        return '/static/blank-server.png'
       }
-
-      const channels = (await this.$axios.get(`/guilds/${this.$route.params.guild_id}/channels`)).data
-      const feedInfo = (await this.$axios.get(`/feeds/${this.$route.params.guild_id}`)).data
-      const feeds = []
-
-      feeds.push(...feedInfo.feeds)
-      for (let i = 1; i < feedInfo.pages; i++) {
-        const data = (await this.$axios.get(`/feeds/${this.$route.params.guild_id}?page=${i + 1}`)).data
-        feeds.push(...data.feeds)
-      }
-
-      this.channels = Object.values(channels).sort((a, b) => a.position - b.position)
-      this.guild = guild
-
-      const orderedFeeds = {}
-      this.channels.forEach((channel) => {
-        const channelFeeds = feeds.filter(doc => doc.channelID === channel.id)
-        if (channelFeeds.length > 0) {
-          orderedFeeds[channel.id] = channelFeeds
-        }
-      })
-
-      this.feeds = orderedFeeds
-      this.feedCount = feeds.length
     },
 
     toggleMessage (val) {
@@ -153,7 +149,7 @@ export default {
           }
         })
 
-        this.update()
+        // this.update()
       } catch (e) {
         this.$bvToast.toast('Try again later.', {
           title: 'Error removing feed',

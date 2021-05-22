@@ -70,10 +70,18 @@ export default {
   components: { AnimatedNumber },
 
   data: () => ({
-    interval: false,
-    guildCount: 0,
-    feedCount: 0
+    interval: false
   }),
+
+  computed: {
+    feedCount () {
+      return this.$store.getters['feeds/totalFeeds']
+    },
+
+    guildCount () {
+      return this.$store.getters['stats/guildCount']
+    }
+  },
 
   mounted () {
     this.update()
@@ -86,11 +94,8 @@ export default {
 
   methods: {
     async update () {
-      const { data: { clusters } } = await this.$axios.get('/status')
-      const { data: { feedCount } } = await this.$axios.get('/feeds/counts/')
-
-      this.guildCount = clusters.reduce((a, b) => a + b.guilds, 0)
-      this.feedCount = feedCount
+      await this.$store.dispatch('feeds/GET_TOTAL_FEEDS')
+      await this.$store.dispatch('stats/GET_GUILD_COUNT')
     }
   }
 

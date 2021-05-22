@@ -27,7 +27,8 @@ module.exports = {
   */
   plugins: [
     '~/plugins/axios',
-    '~/plugins/fontawesome'
+    '~/plugins/fontawesome',
+    '~/plugins/ws'
   ],
   /*
   ** Nuxt.js dev-modules
