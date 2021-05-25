@@ -16,6 +16,15 @@ export default {
 }
 </script>
 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-863GLKMHD7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-863GLKMHD7');
+</script>
+
 <style>
 html, body {
   height: 100%;
