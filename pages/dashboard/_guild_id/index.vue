@@ -97,7 +97,6 @@ export default {
 
   async mounted () {
     await this.update()
-    this.$ws.connect()
   },
 
   methods: {
