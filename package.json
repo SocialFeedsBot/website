@@ -14,7 +14,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/vue-fontawesome": "^2.0.2",
-    "@nuxtjs/axios": "^5.13.1",
+    "@nuxtjs/axios": "^5.13.5",
     "@nuxtjs/style-resources": "^1.0.0",
     "bootstrap": "^4.6.0",
     "bootstrap-icons": "^1.4.1",
