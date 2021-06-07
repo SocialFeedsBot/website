@@ -28,19 +28,16 @@ module.exports = {
   plugins: [
     '~/plugins/axios',
     '~/plugins/fontawesome',
-    '~/plugins/ws'
+    '~/plugins/ws',
+    '~/plugins/gtag'
   ],
   /*
   ** Nuxt.js dev-modules
   */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
-    '@nuxtjs/google-analytics'
+    '@nuxtjs/eslint-module'
   ],
-  googleAnalytics: {
-    id: 'G-863GLKMHD7'
-  },
 
   /*
   ** Nuxt.js modules
