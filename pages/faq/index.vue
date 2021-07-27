@@ -16,7 +16,8 @@
         <span class="pl-4" style="font-weight: 600">Slash commands:</span> You can use a new feature called slash commands which all you have to do
         is type a slash (/) and type add. A list of feed types will come up and will guide you in adding a feed.<br><br>
 
-        <span class="pl-4" style="font-weight: 600">Bot commands:</span> The bot prefix is <code>sf!</code>, so to add a feed you can use the <code>sf!add</code>
+        <span class="pl-4" style="font-weight: 600">Bot commands:</span> <span style="font-weight: 600; color: orange;">WARNING:</span>This option will soon not work, please use the dashboard or slash commands.
+        <br>The bot prefix is <code>sf!</code>, so to add a feed you can use the <code>sf!add</code>
         command. To follow you state the feed type which can be <code>youtube</code>, <code>reddit</code>, <code>rss</code>, <code>twitch</code>,
         <code>twitter</code> or <code>statuspage</code>. Next is the account name/subreddit or url. After that, mention the channel
         you want to add the feed to and you're done!
