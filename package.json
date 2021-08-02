@@ -1,7 +1,7 @@
 {
-  "name": "SocialFeeds-Website",
+  "name": "socialfeeds-website",
   "version": "1.0.0",
-  "description": "DiscordFeeds website.",
+  "description": "SocialFeeds website.",
   "author": "Jacob Bond",
   "private": true,
   "scripts": {

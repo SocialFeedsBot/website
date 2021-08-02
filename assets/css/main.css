@@ -3,6 +3,13 @@
   text-align: center;
 }
 
+.subheading {
+  color: rgb(190, 190, 190);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 25px;
+}
+
 .outline-blurple {
   border-color: #7289DA;
   color: #7289DA;
@@ -33,7 +40,7 @@
 }
 
 .example-image {
-  box-shadow: 0 0 10px 1px #000;
+  box-shadow: 0 0 10px 2px rgb(22, 22, 22);
 }
 
 .align-middle {
@@ -45,31 +52,31 @@
 }
 
 .cbtn-blurple {
-  background: #7f97ec !important;
+  background: #5865F2 !important;
   border: 0px;
   border-radius: 2px;
 }
 .cbtn-blurple:hover {
-  background: #94a8f3 !important;
+  background: #6f79ee !important;
   border: 0px;
 }
 
 .cbtn-green {
-  background: #43B581 !important;
+  background: #4fdd7c !important;
   border: 0px;
   border-radius: 2px;
 }
 .cbtn-green:hover {
-  background: #4bbd8a !important;
+  background: #5cff8f !important;
   border: 0px;
 }
 .cbtn-dark {
-  background: #000000 !important;
+  background: #141414 !important;
   border: 0px;
   border-radius: 2px;
 }
 .cbtn-dark:hover {
-  background: #1d1d1d !important;
+  background: rgb(31, 31, 31) !important;
   border: 0px;
 }
 
@@ -83,8 +90,8 @@ button, .cbtn, .cbtn:active {
   background: rgb(39, 41, 46);
 }
 .cbtn:hover, .cbtn:focus {
-  box-shadow: 0 0.5em 0.5em -0.4em #1a1a1a;
-  transform: translateY(-0.05em);
+  box-shadow: 0 0.2em 0.5em -0.4em #1a1a1a;
+  transform: translateY(-0.04em);
   border: 0px;
   background: rgb(39, 41, 46)
 }
@@ -197,3 +204,14 @@ button, .cbtn, .cbtn:active {
 .modal-fade-enter-active,.modal-fade-leave-active {
   transition: opacity .5s ease;
 }
+
+
+.alert-box {
+  border-radius: 5px;
+  width: 100%;
+  max-height: 200px;
+  padding: 5px;
+}
+.alert-box.green { border: 1px solid #81e968; background-color: rgb(129, 233, 104, 0.04) }
+.alert-box.amber { border: 1px solid #e9a668; background-color: rgb(233, 166, 104, 0.04) }
+.alert-box.red { border: 1px solid rgb(233, 104, 104); background-color: rgb(233, 104, 104, 0.04) }

@@ -1,7 +1,7 @@
 export const state = () => ({
   guildCount: 0,
   outageMessage: { title: '', body: '', status: '' },
-  clusters: [],
+  shards: [],
   interactions: [],
   apis: [],
   feeds: []
@@ -17,8 +17,8 @@ export const mutations = {
     state.outageMessage = message
   },
 
-  SET_CLUSTERS (state, clusters) {
-    state.clusters = clusters
+  SET_SHARDS (state, shards) {
+    state.shards = shards
   },
 
   SET_INTERACTIONS (state, interactions) {
@@ -45,21 +45,19 @@ export const actions = {
 
   GET_STATUS ({ commit }) {
     this.$axios.get('/status/').then(({ data: services }) => {
-      commit('SET_CLUSTERS', services.clusters.sort((a, b) => a.clusterID - b.clusterID).map((cluster) => {
+      commit('SET_SHARDS', services.shards.sort((a, b) => a.uptime - b.uptime).map((shards) => {
         let status = 'ready'
-        if (cluster.shards.filter(s => s.status !== 'ready').length > 0) {
-          status = 'resuming'
-        } else if (cluster.uptime < 10000) {
+        if (shards.uptime < 10000) {
           status = 'resuming'
         }
 
         return {
-          name: `Cluster ${cluster.clusterID}`,
+          name: `Shards ${shards.id}`,
           status,
-          uptime: cluster.uptime / 60000,
-          memory: cluster.memory,
-          guilds: cluster.guilds,
-          shards: cluster.shards.map(s => s.id).sort((a, b) => a - b).join(', ')
+          uptime: shards.uptime / 60000,
+          memory: shards.memory,
+          guilds: shards.guilds,
+          shards: shards.shards.map(s => s.id).sort((a, b) => a - b).join(', ')
         }
       }))
 
@@ -114,7 +112,7 @@ export const getters = {
 
   allServices (state) {
     return {
-      cluster: state.clusters,
+      shards: state.shards,
       interactions: state.interactions,
       apis: state.apis,
       feeds: state.feeds

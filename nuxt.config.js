@@ -10,7 +10,7 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'SocialFeeds is a Discord bot with a web dashboard to automatically post new items from a RSS/twitter/twitch feed.' }
+      { hid: 'description', name: 'description', content: 'SocialFeeds is a Discord bot with a web dashboard to automatically post new items from a variety of sources.' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },

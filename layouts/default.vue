@@ -20,7 +20,7 @@ export default {
 html, body {
   height: 100%;
   color: white;
-  background-color: rgb(35, 36, 43);
+  background-color: rgb(28, 32, 41);
   font-family: 'Poppins', sans-serif;
   font-weight: 300;
 }
