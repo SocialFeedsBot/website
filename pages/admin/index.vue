@@ -30,7 +30,29 @@
       </b-container>
     </div>
 
-    <div class="pb-3 pt-4 mt-4 mb-5">
+    <div class="pb-3 pt-4 mt-4 mb-1">
+      <b-container id="adminbox" class="bv-example-row pt-4">
+        <div class="d-block mb-4">
+          <h3>Toggle commands</h3><br>
+          <b-input-group>
+            <template>
+              <b-form-input id="url" v-model="commandToggle.name" placeholder="Command name" /><br>
+              <b-form-input id="url" v-model="commandToggle.reason" placeholder="Reason for disabling" /><br>
+
+              <b-button class="cbtn cbtn-blurple" @click="toggleCommand(false)">
+                Enable
+              </b-button>
+
+              <b-button class="cbtn cbtn-blurple" @click="toggleCommand(true)">
+                Disable
+              </b-button>
+            </template>
+          </b-input-group>
+        </div>
+      </b-container>
+    </div>
+
+    <div class="pb-3 pt-4 mt-2 mb-5">
       <b-container id="adminbox" class="bv-example-row pt-4">
         <div class="d-block">
           <h4>Manage Feeds {{ searchResults.length > 0 ? `(listing ${searchResults.length} feeds)` : '' }}</h4><br>
@@ -98,7 +120,12 @@ export default {
       services: [],
       auth: false,
       searchData: { type: '', url: '', guildID: '' },
-      searchResults: []
+      searchResults: [],
+      commandToggle: {
+        name: '',
+        disabled: false,
+        reason: ''
+      }
     }
   },
 
@@ -203,6 +230,14 @@ export default {
           variant: 'danger'
         })
       }
+    },
+
+    async toggleCommand (disabled) {
+      await this.$axios.post('/commands/toggle', {
+        name: this.commandToggle.name,
+        disabled,
+        reason: this.commandToggle.reason
+      })
     }
 
   }

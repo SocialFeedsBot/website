@@ -6,14 +6,20 @@
       <p1>Monitor the status of SocialFeeds services.</p1>
     </div>
 
-    <div class="container">
-      <div :class="{ green: messagebox.status === 'ok', amber: messagebox.status === 'warn', red: messagebox.status === 'critical' }" class="status-message mt-4 mb-5 p-2">
-        <h4>{{ messagebox.title }}</h4>
-        <p>{{ messagebox.body }}</p>
+    <div v-if="ready === false">
+      <div style="text-align: center;">
+        <img src="@/assets/loading.gif" width="100px" height="100px" alt="loading">
+      </div>
+    </div>
+
+    <div v-if="ready" class="container">
+      <div :class="{ green: messageBox.status === 'ok', amber: messageBox.status === 'warn', red: messageBox.status === 'critical' }" class="status-message mt-4 mb-5 p-2">
+        <h4>{{ messageBox.title }}</h4>
+        <p>{{ messageBox.body }}</p>
       </div>
 
       <b-row>
-        <div v-for="service in services" :key="service.name + service.id || 'uk'" class="cols-3 cols-sm-12">
+        <div v-for="service in Object.values(services).flat()" :key="service.name + service.id || 'uk'" class="cols-3 cols-sm-12">
           <b-card
             style="height: 12rem; width: 15rem;"
             class="mb-4 d-inline-block mr-4 mt-0"
@@ -23,8 +29,8 @@
             </b-card-title>
             <b-card-text style="text-align: left; font-weight: 100; line-height: 25px">
               Status: {{ service.status }}<br>
-              <span v-if="service.uptime">Uptime: {{ service.uptime }}</span><br>
-              <span v-if="service.memory">Memory: {{ service.memory }}</span><br>
+              <span v-if="service.uptime">Uptime: {{ formatUptime(service.uptime) }}</span><br>
+              <span v-if="service.memory">Memory: {{ formatMemory(service.memory) }}</span><br>
               <span v-if="service.guilds !== undefined">Servers: {{ service.guilds.toLocaleString() }} (shards {{ service.shards }})<br></span>
             </b-card-text>
           </b-card>
@@ -37,14 +43,17 @@
 <script>
 export default {
 
-  data () {
-    return {
-      services: [],
-      messagebox: {
-        status: 'ok',
-        title: '',
-        body: ''
-      }
+  data: () => ({
+    ready: false
+  }),
+
+  computed: {
+    services () {
+      return this.$store.getters['stats/allServices']
+    },
+
+    messageBox () {
+      return this.$store.getters['stats/outageMessage']
     }
   },
 
@@ -59,78 +68,9 @@ export default {
 
   methods: {
     async update () {
-      const { data: services } = await this.$axios.get('/status/')
-      const { data: outageMessage } = await this.$axios.get('/status/messages')
-      this.services = []
-
-      services.clusters.sort((a, b) => a.clusterID - b.clusterID).forEach((cluster) => {
-        let status = 'ready'
-        if (cluster.shards.filter(s => s.status !== 'ready').length > 0) {
-          status = 'resuming'
-        } else if (cluster.uptime < 10000) {
-          status = 'resuming'
-        }
-
-        this.services.push({
-          name: `Cluster ${cluster.clusterID}`,
-          status,
-          uptime: this.formatUptime(cluster.uptime / 60000),
-          memory: this.formatMemory(cluster.memory),
-          guilds: cluster.guilds,
-          shards: cluster.shards.map(s => s.id).sort((a, b) => a - b).join(', ')
-        })
-      })
-
-      services.interactions.sort((a, b) => a.interactionsID - b.interactionsID).forEach((interactions) => {
-        this.services.push({
-          name: `Interactions ${interactions.interactionsID}`,
-          status: interactions.uptime < 10000 ? 'resuming' : 'ready',
-          uptime: this.formatUptime(interactions.uptime / 60000),
-          memory: this.formatMemory(interactions.memory)
-        })
-      })
-
-      if (!services.apis.length) {
-        this.services.push({
-          name: 'API',
-          status: 'disconnected'
-        })
-      } else {
-        services.apis.sort((a, b) => a.uptime - b.uptime).forEach((api) => {
-          this.services.push({
-            name: `API ${api.id}`,
-            status: api.uptime < 10000 ? 'resuming' : 'ready',
-            uptime: this.formatUptime(api.uptime / 60000),
-            memory: this.formatMemory(api.memory)
-          })
-        })
-      }
-
-      if (!services.feeds.length) {
-        this.services.push({
-          name: 'Feeds',
-          status: 'disconnected'
-        })
-      } else {
-        services.feeds.sort((a, b) => a.uptime - b.uptime).forEach((feeds) => {
-          this.services.push({
-            name: `Feeds ${feeds.id}`,
-            status: feeds.uptime < 10000 ? 'resuming' : 'ready',
-            uptime: this.formatUptime(feeds.uptime / 60000),
-            memory: this.formatMemory(feeds.memory)
-          })
-        })
-      }
-
-      if (outageMessage.outage !== false && outageMessage.status !== 'ok') {
-        this.messagebox.title = outageMessage.head
-        this.messagebox.body = outageMessage.body
-        this.messagebox.status = outageMessage.status
-      } else {
-        this.messagebox.title = 'All services operational'
-        this.messagebox.body = 'No issues have been reported, please go to our support server if you are encountering any issues.'
-        this.messagebox.status = 'ok'
-      }
+      await this.$store.dispatch('stats/GET_STATUS')
+      await this.$store.dispatch('stats/GET_STATUS_MESSAGE')
+      this.ready = true
     },
 
     formatMemory (bytes) {

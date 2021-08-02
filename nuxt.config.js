@@ -27,7 +27,9 @@ module.exports = {
   */
   plugins: [
     '~/plugins/axios',
-    '~/plugins/fontawesome'
+    '~/plugins/fontawesome',
+    '~/plugins/ws',
+    '~/plugins/gtag'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -36,6 +38,7 @@ module.exports = {
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module'
   ],
+
   /*
   ** Nuxt.js modules
   */

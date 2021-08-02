@@ -10,22 +10,28 @@
         </p>
         <br>
 
-        <img v-if="guilds && !guilds.length" src="@/assets/loading.gif" width="100px" height="100px" alt="loading">
+        <img v-if="!ready" src="@/assets/loading.gif" width="100px" height="100px" alt="loading">
 
-        <div
-          v-for="(guild, index) in guilds"
-          v-else
-          :key="index"
-          class="d-inline-block mx-2 transition"
-          style="cursor:pointer"
-          @click="manage(guild)"
-        >
-          <div>
-            <div v-b-tooltip.hover :title="guild.name" class="d-inline-block p-2">
-              <img v-if="guild.icon" class="guild-icon rounded-circle ml-auto" :src="getGuildIcon(guild)" height="100" width="100">
-              <div v-else class="guild-icon blankGuild">
-                <div class="blankGuildName">
-                  {{ acronym(guild.name) }}
+        <div v-if="ready && guilds.length === 0">
+          <h4>You do not have permission to manage any servers.</h4>
+          <p>Please ensure you have the <code>Manage Server</code> permission and the bot is invited in your server.</p>
+        </div>
+
+        <div v-if="ready && guilds.length > 0">
+          <div
+            v-for="(guild, index) in guilds"
+            :key="index"
+            class="d-inline-block mx-2 transition"
+            style="cursor:pointer"
+            @click="manage(guild)"
+          >
+            <div>
+              <div v-b-tooltip.hover :title="guild.name" class="d-inline-block p-2">
+                <img v-if="guild.icon" class="guild-icon rounded-circle ml-auto" :src="getGuildIcon(guild)" height="100" width="100">
+                <div v-else class="guild-icon blankGuild">
+                  <div class="blankGuildName">
+                    {{ acronym(guild.name) }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -39,6 +45,10 @@
 <script>
 export default {
 
+  data: () => ({
+    ready: false
+  }),
+
   computed: {
     guilds () {
       return this.$store.getters['user/manageableGuilds']
@@ -47,11 +57,12 @@ export default {
 
   async mounted () {
     await this.$store.dispatch('user/GET_USER_GUILDS')
+    this.ready = true
   },
 
   methods: {
     getGuildIcon (guild) {
-      if (guild.icon) { return `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png` } else { return '/static/blank-server.png' }
+      if (guild && guild.icon) { return `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png` } else { return '/static/blank-server.png' }
     },
 
     manage (guild) {
@@ -85,6 +96,7 @@ export default {
 }
 .blankGuildName {
   font-weight: 400;
+  font-size: 20px;
   width: 100%;
   line-height: 96px;
 }
