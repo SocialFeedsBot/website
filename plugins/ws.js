@@ -7,7 +7,7 @@ export default function ({ store }, inject) {
   }
 
   const ws = new WS()
-  ws.on('event', (type, data) => {
+  ws.on('event', async (type, data) => {
     if (!data.guildID === store.state.guild.guild.id) {
       return
     }
@@ -16,7 +16,11 @@ export default function ({ store }, inject) {
 
     switch (type) {
       case 'FEED_CREATE': {
-        feeds[data.channelID].push(data)
+        if (feeds[data.channelID]) {
+          feeds[data.channelID].push(data)
+        } else {
+          feeds[data.channelID] = [data]
+        }
         break
       }
 
@@ -50,7 +54,7 @@ export default function ({ store }, inject) {
         break
     }
 
-    store.commit('feeds/SET_FEEDS', feeds)
+    await store.commit('feeds/SET_FEEDS', feeds)
   })
 
   if (localStorage.token) {

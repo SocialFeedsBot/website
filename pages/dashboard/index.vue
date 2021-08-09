@@ -13,7 +13,7 @@
         <img v-if="!ready" src="@/assets/loading.gif" width="100px" height="100px" alt="loading">
 
         <div v-if="ready && guilds.length === 0">
-          <h4>You do not have permission to manage any servers.</h4>
+          <h4>No servers found.</h4>
           <p>Please ensure you have the <code>Manage Server</code> permission and the bot is invited in your server.</p>
         </div>
 
@@ -56,6 +56,7 @@ export default {
   },
 
   async mounted () {
+    this.ready = false
     await this.$store.dispatch('user/GET_USER_GUILDS')
     this.ready = true
   },

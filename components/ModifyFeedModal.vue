@@ -14,7 +14,7 @@
         {{ errorMessage }}<br>
       </p1>
       <img :src="'/' + feed.type + '.png'" class="rounded-circle" height="25" width="25">
-      <p3>{{ feed.display ? feed.display.title : feed.url }}</p3><br>
+      <p3>{{ feed.display && feed.display.title ? feed.display.title : feed.url }}</p3><br>
 
       <br>
       <p3>Channel</p3>

@@ -39,7 +39,7 @@ export const actions = {
 
   GET_GUILD_COUNT ({ commit }) {
     this.$axios.get('/status/').then(({ data }) => {
-      commit('SET_GUILD_COUNT', data.clusters.reduce((a, b) => a + b.guilds, 0))
+      commit('SET_GUILD_COUNT', data.shards.reduce((a, b) => a + b.guilds, 0))
     }).catch((e) => { /* ignore */ })
   },
 

@@ -60,10 +60,10 @@
 </template>
 
 <script>
-import FeedBlock from '@/components/FeedBlock.vue'
 import AddFeedModal from '../../../components/AddFeedModal'
 import ModifyFeedModal from '../../../components/ModifyFeedModal'
 import DeleteFeedModal from '../../../components/DeleteFeedModal'
+import FeedBlock from '@/components/FeedBlock.vue'
 
 export default {
 
@@ -73,12 +73,13 @@ export default {
     return {
       ready: false,
       toModify: {},
-      deletePrompt: {}
+      deletePrompt: {},
+      feeds: []
     }
   },
 
   computed: {
-    feeds () {
+    getFeeds () {
       return this.$store.getters['feeds/feeds']
     },
 
@@ -92,6 +93,12 @@ export default {
 
     channels () {
       return this.$store.getters['guild/channels']
+    }
+  },
+
+  watch: {
+    getFeeds () {
+      this.feeds = this.getFeeds
     }
   },
 

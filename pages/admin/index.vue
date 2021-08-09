@@ -153,8 +153,8 @@ export default {
       if (this.searchData.type !== '') {
         query.type = this.searchData.type.toLowerCase()
       }
-      if (this.searchData.type === 'None') {
-        query.type = ''
+      if (this.searchData.type === 'None' || this.searchData.type === '') {
+        query.type = undefined
       }
       if (this.searchData.url !== '') {
         query.url = this.searchData.url

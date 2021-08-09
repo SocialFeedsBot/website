@@ -36,7 +36,7 @@
           <b-button class="cbtn cbtn-blurple large m-2" :to="{ name: 'invite' }">
             <fa :icon="['fab', 'discord']" /> Add to Discord
           </b-button>
-          <b-button class="cbtn cbtn-dark large m-2" :to="{ name: 'dashboard' }">
+          <b-button class="cbtn cbtn-dark large m-2" :to="{ name: user ? 'dashboard' : 'oauth' }">
             Dashboard
           </b-button>
         </b-col>
@@ -67,11 +67,15 @@ export default {
 
     guildCount () {
       return this.$store.getters['stats/guildCount']
+    },
+
+    user () {
+      return this.$store.getters['user/user']
     }
   },
 
-  mounted () {
-    this.update()
+  async mounted () {
+    await this.update()
     this.interval = setInterval(() => this.update(), 60000)
   },
 

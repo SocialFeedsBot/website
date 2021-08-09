@@ -24,7 +24,7 @@ export const actions = {
 
   GET_FEEDS ({ rootGetters, commit }, guildID) {
     commit('SET_FEEDS', {})
-    this.$axios.get(`/feeds/${guildID || ''}`).then(async ({ data }) => {
+    return this.$axios.get(`/feeds/${guildID || ''}`).then(async ({ data }) => {
       const feeds = []
       feeds.push(...data.feeds)
 
@@ -54,7 +54,7 @@ export const actions = {
   },
 
   GET_TOTAL_FEEDS ({ commit }) {
-    this.$axios.get('/feeds/counts').then(({ data }) => {
+    return this.$axios.get('/feeds/counts').then(({ data }) => {
       commit('SET_TOTAL_FEEDS_COUNT', data.feedCount)
     }).catch((e) => { /* ignore */ })
   }
