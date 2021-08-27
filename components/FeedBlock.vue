@@ -7,7 +7,7 @@
         </b-col>
 
         <b-col sm="10" md="10" lg="10">
-          <h6>{{ data.display && data.display.name ? data.display.name : data.url }}</h6>
+          <h6 class="text-truncate">{{ data.display && data.display.name ? data.display.name : data.url }}</h6>
           <a class="feed-url" target="_blank" :href="getURL(data)">View website</a>
         </b-col>
       </b-row>

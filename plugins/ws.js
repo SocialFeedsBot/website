@@ -25,10 +25,12 @@ export default function ({ store }, inject) {
       }
 
       case 'FEED_DELETE': {
+        // TODO: debug this
+        console.log('FEEDS', feeds)
         Object.values(feeds).forEach((channel, key) => {
           feeds[key] = channel.filter((feed) => {
-            if (feed.url === data.url && feed.type === data.type && feed.webhookID === data.webhook_id) {
-              return null
+            if (feed.url === data.url && feed.type === data.type && feed.webhook.id === data.webhook_id) {
+              return undefined
             } else {
               return feed
             }

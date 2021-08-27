@@ -10,6 +10,8 @@ export const mutations = {
   },
 
   SET_GUILD_CHANNELS (state, channels) {
+    // TODO: debug this
+    console.log(channels)
     state.channels = channels
   }
 
