@@ -62,12 +62,12 @@
 }
 
 .cbtn-green {
-  background: #4fdd7c !important;
+  background: #49cc73 !important;
   border: 0px;
   border-radius: 2px;
 }
 .cbtn-green:hover {
-  background: #5cff8f !important;
+  background: #43b969 !important;
   border: 0px;
 }
 .cbtn-dark {
@@ -147,7 +147,12 @@ button, .cbtn, .cbtn:active {
   box-shadow: 0 1em 1em -1em #1a1a1a;
 }
 
-
+.block {
+  background-color: rgb(39, 44, 53);
+  border-radius: 4px;
+  box-shadow: rgb(20, 22, 27) 2px 2px 2px;
+  padding: 10px;
+}
 
 .dropdown.full-length {
   width: 100%;
@@ -207,11 +212,13 @@ button, .cbtn, .cbtn:active {
 
 
 .alert-box {
+  margin: 20px 0;
+  padding: 10px;
   border-radius: 5px;
-  width: 100%;
-  max-height: 200px;
-  padding: 5px;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 22px;
 }
-.alert-box.green { border: 1px solid #81e968; background-color: rgb(129, 233, 104, 0.04) }
-.alert-box.amber { border: 1px solid #e9a668; background-color: rgb(233, 166, 104, 0.04) }
-.alert-box.red { border: 1px solid rgb(233, 104, 104); background-color: rgb(233, 104, 104, 0.04) }
+.alert-box.green { border: 2px solid #81e968; background-color: rgb(129, 233, 104, 0.1) }
+.alert-box.amber { border: 2px solid #e9a668; background-color: rgb(233, 166, 104, 0.1) }
+.alert-box.red { border: 2px solid rgb(233, 104, 104); background-color: rgb(233, 104, 104, 0.1) }

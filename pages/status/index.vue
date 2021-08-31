@@ -13,16 +13,16 @@
     </div>
 
     <div v-if="ready" class="container">
-      <div :class="{ green: messageBox.status === 'ok', amber: messageBox.status === 'warn', red: messageBox.status === 'critical' }" class="status-message mt-4 mb-5 p-2">
+      <div :class="{ green: messageBox.status === 'ok', amber: messageBox.status === 'warn', red: messageBox.status === 'critical' }" class="alert-box mt-4 mb-5 p-2">
         <h4>{{ messageBox.title }}</h4>
-        <p>{{ messageBox.body }}</p>
+        {{ messageBox.body }}
       </div>
 
       <b-row>
         <div v-for="service in Object.values(services).flat()" :key="service.name + service.id || 'uk'" class="cols-3 cols-sm-12">
           <b-card
             style="height: 12rem; width: 15rem;"
-            class="mb-4 d-inline-block mr-4 mt-0"
+            class="block mb-4 mr-4"
           >
             <b-card-title style="text-align: left; font-size: 20px">
               <div class="mr-2 status-indicator" :class="{ green: service.status === 'ready', amber: service.status === 'resuming', red: service.status === 'disconnected' }" /> {{ service.name }}
@@ -113,23 +113,14 @@ export default {
 <style scoped>
 
   .status-indicator {
-    border-radius: 10px;
+    border-radius: 12px;
     border: 0px;
-    height: 20px;
-    width: 20px;
+    height: 18px;
+    width: 18px;
     float: left;
   }
   .status-indicator.green { background-color: #81e968; }
   .status-indicator.amber { background-color: #e9a668; }
   .status-indicator.red { background-color: rgb(233, 104, 104); }
-
-  .status-message {
-    border-radius: 5px;
-    width: 100%;
-    max-height: 200px;
-  }
-  .status-message.green { border: 1px solid #81e968; background-color: rgb(129, 233, 104, 0.04) }
-  .status-message.amber { border: 1px solid #e9a668; background-color: rgb(233, 166, 104, 0.04) }
-  .status-message.red { border: 1px solid rgb(233, 104, 104); background-color: rgb(233, 104, 104, 0.04) }
 
 </style>

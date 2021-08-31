@@ -183,10 +183,10 @@ export default {
 }
 
 .guild-info {
-  background: rgb(23, 24, 27);
+  background: rgb(39, 44, 53);
   border-radius: 10px;
   border-width: 5px;
-  box-shadow: 0 0 5px 2px #23272A;
+  box-shadow: rgb(20, 22, 27) 2px 2px 2px;
 }
 
 #url {

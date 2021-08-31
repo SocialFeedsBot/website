@@ -8,24 +8,17 @@
 
     <div class="container mt-2">
       <h4>How do I add a feed?</h4>
+      <div class="alert-box amber">
+        Bot commands are no longer supported, meaning any command you would usually use with the <code>sf!</code> prefix will no longer work.
+      </div>
       <p>
-        To add a feed, you can use any one of 3 options:<br><br>
+        To add a feed, you can use any one of 2 options:<br><br>
         <span class="pl-4" style="font-weight: 600">Online dashboard:</span> Our online dashboard allows you to do this easily with minimal
         typing, to do so just press 'Login' and then the dropdown next to your name and then 'Servers'. Select your server and you are greeted with a
         page with all the details you need to add a feed.<br><br>
 
         <span class="pl-4" style="font-weight: 600">Slash commands:</span> You can use a new feature called slash commands which all you have to do
         is type a slash (/) and type add. A list of feed types will come up and will guide you in adding a feed.<br><br>
-      </p>
-
-      <div class="alert-box red">
-        <p>Bot commands will no longer work soon, please make sure you are using the dashboard or slash commands.</p>
-      </div>
-      <span class="pl-4" style="font-weight: 600">Bot commands:</span>
-      <br>The bot prefix is <code>sf!</code>, so to add a feed you can use the <code>sf!add</code>
-      command. To follow you state the feed type which can be <code>youtube</code>, <code>reddit</code>, <code>rss</code>, <code>twitch</code>,
-      <code>twitter</code> or <code>statuspage</code>. Next is the account name/subreddit or url. After that, mention the channel
-      you want to add the feed to and you're done!
       </p>
 
       <h4 class="mt-5">

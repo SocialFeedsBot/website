@@ -14,11 +14,11 @@
 
       <b-row class="p-2">
         <b-col sm="12" md="12" lg="12">
+          <b-button class="cbtn cbtn-dark mr-2" @click="modify()">
+            <fa icon="edit" style="color: #fff" /> Modify
+          </b-button>
           <b-button class="cbtn cbtn-red" @click="remove()">
             <fa icon="trash" style="color: #fff" /> Remove
-          </b-button>
-          <b-button class="cbtn cbtn-dark" @click="modify()">
-            <fa icon="edit" style="color: #fff" /> Modify
           </b-button>
         </b-col>
       </b-row>
@@ -59,11 +59,6 @@ export default {
 }
 </script>
 <style scoped>
-.block {
-  background-color: rgb(23, 24, 27);
-  border-radius: 5px;
-  border: 0.1px solid black;
-}
 
 .feed-icon {
   max-height: 50px;

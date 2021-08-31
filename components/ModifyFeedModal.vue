@@ -77,6 +77,7 @@ export default {
   mounted () {
     this.$root.$on('bv::modal::shown', (evt, id) => {
       if (id === 'modify-feed-modal') {
+        console.log(this.feed)
         this.editData.replies = this.feed.options.replies
         this.editData.excludeRSSDesc = this.feed.options.excludeDesc
         this.editData.message = this.feed.options.message
