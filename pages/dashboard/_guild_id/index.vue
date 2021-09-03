@@ -73,13 +73,12 @@ export default {
     return {
       ready: false,
       toModify: {},
-      deletePrompt: {},
-      feeds: []
+      deletePrompt: {}
     }
   },
 
   computed: {
-    getFeeds () {
+    feeds () {
       return this.$store.getters['feeds/feeds']
     },
 
@@ -93,12 +92,6 @@ export default {
 
     channels () {
       return this.$store.getters['guild/channels']
-    }
-  },
-
-  watch: {
-    getFeeds () {
-      this.feeds = this.getFeeds
     }
   },
 
