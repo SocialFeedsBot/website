@@ -44,11 +44,13 @@ export const actions = {
       })
 
       commit('SET_FEEDS', orderedFeeds)
+      return true
     }).catch((err) => {
       if (err.response && err.response.status === 401) {
         localStorage.removeItem('token')
         commit('SET_USER', null)
         commit('SET_USER_GUILDS', [])
+        return false
       }
     })
   },
