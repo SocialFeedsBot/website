@@ -3,11 +3,11 @@
     <div class="block">
       <b-row class="p-2">
         <b-col sm="2" md="2" lg="2">
-          <img :src="data.display?.icon || ('/' + data.type + '.png')" class="feed-icon">
+          <img :src="(data.display && data.display.icon) ? data.display.icon : ('/' + data.type + '.png')" class="feed-icon">
         </b-col>
 
         <b-col sm="10" md="10" lg="10">
-          <h6 class="text-truncate">{{ data.display && data.display.name ? data.display.name : data.url }}</h6>
+          <h6 class="text-truncate">{{ (data.display && data.display.name) ? data.display.name : data.url }}</h6>
           <a class="feed-url" target="_blank" :href="getURL(data)">View website</a>
         </b-col>
       </b-row>
