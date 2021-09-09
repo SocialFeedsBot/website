@@ -1,10 +1,10 @@
 <template>
   <transition name="slide" mode="out-in">
     <span v-if="displayNumber % 2 === 0" key="x" v>
-      {{ displayNumber }}
+      {{ displayNumber.toLocaleString() }}
     </span>
     <span v-else key="y">
-      {{ displayNumber }}
+      {{ displayNumber.toLocaleString() }}
     </span>
   </transition>
 </template>
