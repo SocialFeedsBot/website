@@ -1,61 +1,56 @@
 <template>
   <div>
-    <div v-if="ready === false">
-      <div style="text-align: center;">
-        <img src="@/assets/loading.gif" width="100px" height="100px" alt="loading">
-      </div>
-    </div>
-
-    <div v-else-if="ready === true">
+    <div v-if="ready == true">
       <AddFeedModal :channels="channels" @update="update()" />
       <ModifyFeedModal :channels="channels" :feed="toModify" @update="update()" />
-
-      <b-container class="mt-4 mb-3 pb-3 pt-2 guild-info">
-        <div class="row p-2">
-          <div class="col-3 col-lg-2 col-md-2 col-sm-3">
-            <div class="d-inline-block">
-              <img :src="getGuildIcon(guild)" class="rounded-circle" height="100%" width="100%" alt="guild icon">
-            </div>
-          </div>
-
-          <div class="col-9 col-lg-10 col-md-7">
-            <div class="h4 d-inline-block" style="font-weight: 700;">
-              {{ guild.name }}
-            </div>
-            <p style="font-weight: 100;">
-              Total feeds: {{ feedCount }}
-            </p>
-
-            <b-button class="cbtn cbtn-dark my-2 w-90" :to="{ name: 'dashboard' }">
-              Switch Server
-            </b-button>
-            <b-button v-b-modal.add-feed-modal class="cbtn cbtn-green w-90">
-              Add new feed
-            </b-button>
-          </div>
-        </div>
-      </b-container>
-
-      <!-- feeds -->
-      <br>
-      <b-container v-if="feedCount > 0" class="mb-3">
-        <div v-for="(fs, channelID) in feeds" :key="channelID">
-          <br><h4 class="channel-header">
-            #{{ channels.find(ch => ch.id === channelID).name.toUpperCase() }} ({{ fs.length }})
-          </h4><br>
-          <b-row>
-            <FeedBlock v-for="(feed, i) in fs" :key="channelID + '-' + i" :data="feed" @setPrompt="toggleData('prompt', feed)" @setModify="toggleData('modify', feed)" />
-          </b-row>
-        </div>
-      </b-container>
-
-      <div v-else class="center">
-        <h1>You haven't added any feeds yet...</h1>
-        <p>To add a new feed, press the <code>Add Feed</code> button at the top of the page!</p>
-      </div>
-
-      <DeleteFeedModal @removeFeed="remove(deletePrompt)" />
     </div>
+
+    <b-container class="mt-4 mb-3 pb-3 pt-2 guild-info">
+      <div class="row p-2">
+        <div class="col-3 col-lg-2 col-md-2 col-sm-3">
+          <div class="d-inline-block">
+            <img :src="getGuildIcon(guild)" class="rounded-circle skeleton" style="height: 100px; width:100px;" alt="guild icon">
+          </div>
+        </div>
+
+        <div class="col-9 col-lg-10 col-md-7">
+          <div class="h4 d-inline-block" style="font-weight: 700;" :class="{ 'skeleton': ready == false, 'skeleton-text': ready == false }">
+            {{ guild.name }}
+          </div>
+
+          <p style="font-weight: 100;">
+            Total feeds: {{ feedCount }}
+          </p>
+
+          <b-button class="cbtn cbtn-dark my-2 w-90" :to="{ name: 'dashboard' }">
+            Switch Server
+          </b-button>
+          <b-button v-b-modal.add-feed-modal class="cbtn cbtn-green w-90">
+            Add new feed
+          </b-button>
+        </div>
+      </div>
+    </b-container>
+
+    <!-- feeds -->
+    <br>
+    <b-container v-if="ready == true && feedCount > 0" class="mb-3">
+      <div v-for="(fs, channelID) in feeds" :key="channelID">
+        <br><h4 class="channel-header">
+          #{{ channels.find(ch => ch.id === channelID).name.toUpperCase() }} ({{ fs.length }})
+        </h4><br>
+        <b-row>
+          <FeedBlock v-for="(feed, i) in fs" :key="channelID + '-' + i" :data="feed" @setPrompt="toggleData('prompt', feed)" @setModify="toggleData('modify', feed)" />
+        </b-row>
+      </div>
+    </b-container>
+
+    <div v-else class="center">
+      <h1>You haven't added any feeds yet...</h1>
+      <p>To add a new feed, press the <code>Add Feed</code> button at the top of the page!</p>
+    </div>
+
+    <DeleteFeedModal @removeFeed="remove(deletePrompt)" />
   </div>
 </template>
 

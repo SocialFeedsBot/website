@@ -10,13 +10,16 @@
         </p>
         <br>
 
-        <img v-if="!ready" src="@/assets/loading.gif" width="100px" height="100px" alt="loading">
-
         <div v-if="ready && guilds.length === 0">
           <h4>No servers found.</h4>
           <p>Please ensure you have the <code>Manage Server</code> permission and the bot is invited in your server.</p>
         </div>
 
+        <div v-if="ready == false">
+          <div v-for="(index) in [1,2,3,4,5]" :key="index" class="d-inline-block p-2">
+            <div class="guild-icon blankGuild skeleton" />
+          </div>
+        </div>
         <div v-if="ready && guilds.length > 0">
           <div
             v-for="(guild, index) in guilds"
