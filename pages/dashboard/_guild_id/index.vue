@@ -50,8 +50,8 @@
       </b-container>
 
       <div v-else class="center">
-        <h1>No feeds added yet.</h1>
-        <p>Press the <code>Add new feed</code> button at the top of the page to start.</p>
+        <h1>You haven't added any feeds yet...</h1>
+        <p>To add a new feed, press the <code>Add Feed</code> button at the top of the page!</p>
       </div>
 
       <DeleteFeedModal @removeFeed="remove(deletePrompt)" />
@@ -148,7 +148,7 @@ export default {
           }
         })
 
-        // this.update()
+        this.update()
       } catch (e) {
         this.$bvToast.toast('Try again later.', {
           title: 'Error removing feed',

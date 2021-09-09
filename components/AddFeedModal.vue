@@ -143,7 +143,7 @@ export default {
           nsfw: this.channels.find(ch => ch.id === this.addData.channel).nsfw,
           options: { replies: this.addData.replies, excludeDesc: this.addData.excludeRSSDesc, message: this.addData.message || null }
         })
-        // this.$emit('update')
+        this.$emit('update')
         return 0
       } catch (e) {
         return e.response ? e.response.data.error : e.message

@@ -13,7 +13,7 @@
     </div>
 
     <div v-if="ready" class="container">
-      <div :class="{ green: messageBox.status === 'ok', amber: messageBox.status === 'warn', red: messageBox.status === 'critical' }" class="alert-box mt-4 mb-5 p-2">
+      <div :class="{ green: messageBox.status === 'ok', amber: messageBox.status === 'warn', red: messageBox.status === 'major' }" class="alert-box mt-4 mb-5 p-2">
         <h4>{{ messageBox.title }}</h4>
         {{ messageBox.body }}
       </div>
@@ -31,7 +31,7 @@
               Status: {{ service.status }}<br>
               <span v-if="service.uptime">Uptime: {{ formatUptime(service.uptime) }}</span><br>
               <span v-if="service.memory">Memory: {{ formatMemory(service.memory) }}</span><br>
-              <span v-if="service.guilds !== undefined">Servers: {{ service.guilds.toLocaleString() }} (shards {{ service.shards }})<br></span>
+              <span v-if="service.guilds !== undefined">Servers: {{ service.guilds.toLocaleString() }}<br></span>
             </b-card-text>
           </b-card>
         </div>
