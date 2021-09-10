@@ -54,7 +54,6 @@
 .cbtn-blurple {
   background: #5865F2 !important;
   border: 0px;
-  border-radius: 2px;
 }
 .cbtn-blurple:hover {
   background: #6f79ee !important;
@@ -64,19 +63,17 @@
 .cbtn-green {
   background: #49cc73 !important;
   border: 0px;
-  border-radius: 2px;
 }
 .cbtn-green:hover {
   background: #43b969 !important;
   border: 0px;
 }
 .cbtn-dark {
-  background: #141414 !important;
+  background: #464753 !important;
   border: 0px;
-  border-radius: 2px;
 }
 .cbtn-dark:hover {
-  background: rgb(31, 31, 31) !important;
+  background: #4f505c !important;
   border: 0px;
 }
 
@@ -88,6 +85,7 @@ button, .cbtn, .cbtn:active {
   padding-top: 10px;
   font-weight: 400;
   background: rgb(39, 41, 46);
+  border-radius: 4px;
 }
 .cbtn:hover, .cbtn:focus {
   box-shadow: 0 0.2em 0.5em -0.4em #1a1a1a;
@@ -106,7 +104,6 @@ button, .cbtn, .cbtn:active {
 .cbtn-red {
   background: #f54242;
   border: 0px;
-  border-radius: 2px;
 }
 .cbtn-red:hover {
   border: 0px;
@@ -207,9 +204,28 @@ button, .cbtn, .cbtn:active {
 }
 
 .modal-fade-enter-active,.modal-fade-leave-active {
-  transition: opacity .5s ease;
+  transition: opacity .1s ease;
 }
 
+.modal-head {
+  background-color: rgb(25, 26, 30);
+  border: 0;
+  border-top-left-radius: 1px;
+  border-top-right-radius: 1px;
+}
+.modal-foot {
+  background-color: rgb(25, 26, 30);
+  border: 0;
+  border-bottom-left-radius: 1px;
+  border-bottom-right-radius: 1px;
+}
+.modal-cont {
+  background-color: rgb(25, 26, 30);
+  border: 0;
+}
+.modal {
+  border: 0;
+}
 
 .alert-box {
   margin: 20px 0;

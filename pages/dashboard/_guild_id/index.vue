@@ -34,7 +34,7 @@
 
     <!-- feeds -->
     <br>
-    <b-container v-if="ready == true && feedCount > 0" class="mb-3">
+    <b-container v-if="ready == true && feedCount > 0" class="mb-4">
       <div v-for="(fs, channelID) in feeds" :key="channelID">
         <br><h4 class="channel-header">
           #{{ channels.find(ch => ch.id === channelID).name.toUpperCase() }} ({{ fs.length }})

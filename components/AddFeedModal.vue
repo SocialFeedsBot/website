@@ -153,25 +153,3 @@ export default {
 
 }
 </script>
-
-<style >
-  .modal-head {
-    background-color: rgb(23, 24, 27);
-    border: 0;
-    border-top-left-radius: 1px;
-    border-top-right-radius: 1px;
-  }
-  .modal-foot {
-    background-color: rgb(23, 24, 27);
-    border: 0;
-    border-bottom-left-radius: 1px;
-    border-bottom-right-radius: 1px;
-  }
-  .modal-cont {
-    background-color: rgb(23, 24, 27);
-    border: 0;
-  }
-  .modal {
-    border: 0;
-  }
-</style>
