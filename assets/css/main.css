@@ -95,10 +95,17 @@ button, .cbtn, .cbtn:active {
 }
 .cbtn.large {
   height: 60px;
-  width: 10%;
   width: 300px;
   font-weight: 400;
   font-size: 24px;
+}
+.cbtn-small {
+  height: 30px;
+  font-size: 14px;
+  padding-top: 5px;
+}
+.cbtn-small:focus, .cbtn-small:active {
+  padding-top: 5px;
 }
 
 .cbtn-red {
@@ -148,7 +155,7 @@ button, .cbtn, .cbtn:active {
   background-color: rgb(39, 44, 53);
   border-radius: 4px;
   box-shadow: rgb(20, 22, 27) 2px 2px 2px;
-  padding: 10px;
+  padding: 5px;
 }
 
 .dropdown.full-length {
@@ -167,6 +174,7 @@ button, .cbtn, .cbtn:active {
 .dropdown-toggle:active {
   background: transparent;
   border: 0px !important;
+  text-align: left;
 }
 
 .dropdown-menu {
@@ -240,7 +248,7 @@ button, .cbtn, .cbtn:active {
 .alert-box.red { border: 2px solid rgb(233, 104, 104); background-color: rgb(233, 104, 104, 0.1) }
 
 .skeleton {
-  opacity: 0.7;
+  opacity: 0.8;
   animation: skeleton-loading 1s linear infinite alternate;
 }
 .skeleton-text {

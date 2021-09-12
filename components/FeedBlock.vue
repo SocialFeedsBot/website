@@ -1,27 +1,29 @@
 <template>
   <b-col sm="10" lg="4" md="6" class="mb-2">
     <div class="block">
-      <b-row class="p-2">
+      <b-row class="p-1">
         <b-col sm="2" md="2" lg="2">
           <img :src="(data.display && data.display.icon) ? data.display.icon : ('/' + data.type + '.png')" class="feed-icon">
         </b-col>
 
         <b-col sm="10" md="10" lg="10">
-          <h6 class="text-truncate">{{ (data.display && data.display.name) ? data.display.name : data.url }}</h6>
-          <a class="feed-url" target="_blank" :href="getURL(data)">View website</a>
+          <h6 class="text-truncate mt-2">
+            {{ (data.display && data.display.name) ? data.display.name : data.url }}
+          </h6>
         </b-col>
       </b-row>
 
-      <b-row class="p-2">
-        <b-col sm="12" md="12" lg="12">
-          <b-button class="cbtn cbtn-dark mr-2" @click="modify()">
-            <fa icon="edit" style="color: #fff" /> Modify
-          </b-button>
-          <b-button class="cbtn cbtn-red" @click="remove()">
-            <fa icon="trash" style="color: #fff" /> Remove
-          </b-button>
-        </b-col>
-      </b-row>
+      <div class="p-1">
+        <b-button class="cbtn cbtn-small cbtn-dark ml-2 mr-2" target="_blank" :href="getURL(data)">
+          <fa :icon="['fas', 'link']" style="color: #fff" /> Website
+        </b-button>
+        <b-button class="cbtn cbtn-small cbtn-dark mr-2" @click="modify()">
+          <fa icon="edit" style="color: #fff" /> Modify
+        </b-button>
+        <b-button class="cbtn cbtn-small cbtn-red" @click="remove()">
+          <fa icon="trash" style="color: #fff" /> Remove
+        </b-button>
+      </div>
     </div>
   </b-col>
 </template>
@@ -61,9 +63,10 @@ export default {
 <style scoped>
 
 .feed-icon {
-  max-height: 50px;
-  max-width: 50px;
+  max-height: 40px;
+  max-width: 40px;
   border-radius: 50%;
+  box-shadow: rgb(20, 22, 27) 1px 1px 1px
 }
 
 .feed-url {

@@ -7,14 +7,14 @@
 
     <b-container class="mt-4 mb-3 pb-3 pt-2 guild-info">
       <div class="row p-2">
-        <div class="col-3 col-lg-2 col-md-2 col-sm-3">
+        <b-col lg="2" md="2" sm="3">
           <div class="d-inline-block">
             <img :src="getGuildIcon(guild)" class="rounded-circle skeleton" style="height: 100px; width:100px;" alt="guild icon">
           </div>
-        </div>
+        </b-col>
 
-        <div class="col-9 col-lg-10 col-md-7">
-          <div class="h4 d-inline-block" style="font-weight: 700;" :class="{ 'skeleton': ready == false, 'skeleton-text': ready == false }">
+        <b-col lg="9" md="10" sm="7">
+          <div class="h4 d-inline-block" style="font-weight: 700;" :class="{ 'skeleton': !(guild && guild.name), 'skeleton-text': !(guild && guild.name) }">
             {{ guild.name }}
           </div>
 
@@ -28,7 +28,7 @@
           <b-button v-b-modal.add-feed-modal class="cbtn cbtn-green w-90">
             Add new feed
           </b-button>
-        </div>
+        </b-col>
       </div>
     </b-container>
 
@@ -97,7 +97,9 @@ export default {
   methods: {
     async update () {
       this.ready = false
-      await this.$store.dispatch('guild/GET_GUILD', this.$route.params.guild_id)
+      if (!this.guild || !this.guild.name) {
+        await this.$store.dispatch('guild/GET_GUILD', this.$route.params.guild_id)
+      }
       await this.$store.dispatch('feeds/GET_FEEDS', this.$route.params.guild_id)
       this.ready = true
     },
