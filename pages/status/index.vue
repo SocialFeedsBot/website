@@ -14,7 +14,7 @@
 
     <div v-if="ready" class="container">
       <div :class="{ green: messageBox.status === 'ok', amber: messageBox.status === 'warn', red: messageBox.status === 'major' }" class="alert-box mt-4 mb-5 p-2">
-        <h4>{{ messageBox.title }}</h4>
+        <h4>{{ messageBox.head }}</h4>
         {{ messageBox.body }}
       </div>
 

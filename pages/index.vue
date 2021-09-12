@@ -14,22 +14,22 @@
 
           <ul style="list-style-type:none;">
             <li class="subheading">
-              <fa :icon="['fab', 'reddit']" /> Reddit
+              <fa :icon="['fab', 'reddit']" /> Get updates from your favourite subreddits
             </li>
             <li class="subheading">
-              <fa icon="rss" /> RSS
+              <fa icon="rss" /> Receive live news from RSS pages
             </li>
             <li class="subheading">
-              <fa :icon="['fab', 'twitter']" /> Twitter
+              <fa :icon="['fab', 'twitter']" /> Get the best tweets from the best accounts
             </li>
             <li class="subheading">
-              <fa :icon="['fab', 'twitch']" /> Twitch
+              <fa :icon="['fab', 'twitch']" /> Live updates from your favourite streamers
             </li>
             <li class="subheading">
-              <fa :icon="['fab', 'youtube']" /> YouTube
+              <fa :icon="['fab', 'youtube']" /> New YouTube video announcements
             </li>
             <li class="subheading">
-              <fa :icon="['fas', 'exclamation-circle']" /> Status pages
+              <fa :icon="['fas', 'exclamation-circle']" /> Live status updates from popular websites
             </li>
           </ul>
 
@@ -76,7 +76,7 @@ export default {
 
   async mounted () {
     await this.update()
-    this.interval = setInterval(() => this.update(), 60000)
+    this.interval = setInterval(() => this.update(), 60 * 1000)
   },
 
   beforeDestroy () {

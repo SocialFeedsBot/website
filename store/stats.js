@@ -90,7 +90,7 @@ export const actions = {
         commit('SET_STATUS_MESSAGE', outageMessage)
       } else {
         commit('SET_STATUS_MESSAGE', {
-          title: 'All services operational',
+          head: 'All services operational',
           body: 'No issues have been reported, please go to our support server if you are encountering any issues.',
           status: 'ok'
         })
