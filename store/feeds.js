@@ -16,6 +16,12 @@ export const mutations = {
 
   SET_TOTAL_FEEDS_COUNT (state, count) {
     state.totalFeeds = count
+  },
+
+  RESET (state) {
+    state.feeds = {}
+    state.feedCount = 0
+    state.totalFeeds = 0
   }
 
 }
@@ -59,6 +65,10 @@ export const actions = {
     return this.$axios.get('/feeds/counts').then(({ data }) => {
       commit('SET_TOTAL_FEEDS_COUNT', data.feedCount)
     }).catch((e) => { /* ignore */ })
+  },
+
+  RESET ({ commit }) {
+    commit('RESET')
   }
 
 }

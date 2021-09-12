@@ -94,6 +94,13 @@ export default {
     await this.update()
   },
 
+  beforeRouteUpdate (...args) {
+    this.beforeLeave(...args)
+  },
+  beforeRouteLeave (...args) {
+    this.beforeLeave(...args)
+  },
+
   methods: {
     async update () {
       this.ready = false
@@ -102,6 +109,15 @@ export default {
       }
       await this.$store.dispatch('feeds/GET_FEEDS', this.$route.params.guild_id)
       this.ready = true
+    },
+
+    async beforeLeave (to, from, next) {
+      if (!to.name || !to.name.includes('dashboard-guild_id')) {
+        this.$store.dispatch('guild/RESET')
+        this.$store.dispatch('feeds/RESET')
+      }
+
+      next()
     },
 
     getGuildIcon (guild) {

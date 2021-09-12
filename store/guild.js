@@ -11,6 +11,11 @@ export const mutations = {
 
   SET_GUILD_CHANNELS (state, channels) {
     state.channels = channels
+  },
+
+  RESET (state) {
+    state.guild = {}
+    state.channels = []
   }
 
 }
@@ -34,6 +39,10 @@ export const actions = {
         return false
       }
     })
+  },
+
+  RESET ({ commit }) {
+    commit('RESET')
   }
 
 }
