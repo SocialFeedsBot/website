@@ -14,7 +14,7 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;800&display=swap' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Work+Sans&display=swap' },
       { rel: 'preconnect', href: 'https://fonts.gstatic.com' }
     ]
   },
@@ -50,8 +50,7 @@ module.exports = {
   ],
 
   css: [
-    '@fortawesome/fontawesome-svg-core/styles.css',
-    { src: '@/assets/css/main.css' }
+    '@fortawesome/fontawesome-svg-core/styles.css'
   ],
 
   fontawesome: {
