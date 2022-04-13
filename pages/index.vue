@@ -1,60 +1,32 @@
 <template>
-  <b-container fluid class="mt-4">
-    <!-- intro -->
-    <div class="mt-8 ml-4 mr-4">
-      <b-row cols="12">
-        <b-col lg="7">
-          <h1 class="pb-4">
-            Get instant feeds to your server
-          </h1>
-          <h6 class="subheading pb-2">
-            Get updates from your favourite websites sent directly to your Discord server.<br>
-            Currently serving <span style="font-weight: 600;"><AnimatedNumber :number="guildCount" /></span> servers and posting <span style="font-weight: 600;"><AnimatedNumber :number="feedCount" /></span> feeds.
-          </h6>
+  <div class="lander">
+    <div class="content">
+      <h1>Feeds directly to your server,<br /> without the hassle.</h1>
+      <p>
+        Updates from your favourite websites sent directly to your server.
+        <br />
+        <br />
+        SocialFeeds removes the hassle of having to keep up to date across many social media platforms.
+      </p>
 
-          <ul style="list-style-type:none;">
-            <li class="subheading">
-              <fa :icon="['fab', 'reddit']" /> Get updates from your favourite subreddits
-            </li>
-            <li class="subheading">
-              <fa icon="rss" /> Receive live news from RSS pages
-            </li>
-            <li class="subheading">
-              <fa :icon="['fab', 'twitter']" /> Get the best tweets from the best accounts
-            </li>
-            <li class="subheading">
-              <fa :icon="['fab', 'twitch']" /> Live updates from your favourite streamers
-            </li>
-            <li class="subheading">
-              <fa :icon="['fab', 'youtube']" /> New YouTube video announcements
-            </li>
-            <li class="subheading">
-              <fa :icon="['fas', 'exclamation-circle']" /> Live status updates from popular websites
-            </li>
-          </ul>
-
-          <b-button class="cbtn cbtn-blurple large m-2" :to="{ name: 'invite' }">
-            <fa :icon="['fab', 'discord']" /> Add to Discord
-          </b-button>
-          <b-button class="cbtn cbtn-dark large m-2" :to="{ name: user ? 'dashboard' : 'oauth' }">
-            Dashboard
-          </b-button>
-        </b-col>
-
-        <b-col lg="5">
-          <b-img alt="rss feed example" class="example-image" src="~assets/examples/rss.png" w-100 fluid />
-        </b-col>
-      </b-row>
+      <div class="buttons">
+        <Button>
+          Add the bot
+        </Button>
+        <Button type="simple-light">
+          Read more
+        </Button>
+      </div>
     </div>
-  </b-container>
+    <img src="~assets/examples/rss.png" />
+  </div>
 </template>
 
 <script>
-import AnimatedNumber from '../components/AnimatedNumber'
+import Button from '@/components/Button.vue'
 
 export default {
-
-  components: { AnimatedNumber },
+  components: { Button },
 
   data: () => ({
     interval: false
@@ -92,3 +64,33 @@ export default {
 
 }
 </script>
+
+<style lang="scss" scoped>
+@import "@/assets/css/_variables.scss";
+
+.lander {
+  height: 80vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .content {
+    padding: 10rem;
+
+    h1 {
+      font-family: $font-family-brand;
+      font-weight: 600;
+    }
+
+    p {
+      font-weight: 400;
+    }
+  }
+}
+
+img {
+  width: 25rem;
+  height: auto;
+  border-radius: 0.5rem;
+}
+</style>
