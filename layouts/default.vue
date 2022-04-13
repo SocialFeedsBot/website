@@ -18,20 +18,12 @@ export default {
 
 <style>
 html, body {
-  height: 100%;
   color: white;
-  background-color: rgb(28, 32, 41);
-  font-family: 'Poppins', sans-serif;
-  font-weight: 300;
-}
-
-#app {
-  position: relative;
-}
-
-#content {
-  height: 100%;
-  min-height: 100vh;
+  background-color: #2E2E40;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 400;
+  padding: 0;
+  margin: 0;
 }
 
 .page-enter-active,
