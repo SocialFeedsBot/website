@@ -44,7 +44,6 @@ module.exports = {
   */
   modules: [
     // Doc: https://bootstrap-vue.js.org
-    'bootstrap-vue/nuxt',
     'nuxt-fontawesome',
     '@nuxtjs/axios',
     '@nuxtjs/style-resources'
