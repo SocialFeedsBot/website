@@ -1,12 +1,18 @@
 <template>
-  <button class="button">
+  <button :class="classes">
     <slot></slot>
   </button>
 </template>
 
 <script>
 export default {
+  props: ['type'],
 
+  computed: {
+    classes () {
+      return `button ${this.$props.type || ''}`
+    }
+  }
 }
 </script>
 
@@ -23,5 +29,17 @@ export default {
     font-weight: 600;
     font-size: 1rem;
     color: #fff;
+
+    &.simple-dark {
+      background-color: $background;
+    }
+
+    &.simple-light {
+      background-color: $background-light;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
 }
 </style>
