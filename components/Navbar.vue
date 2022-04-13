@@ -1,10 +1,12 @@
 <template>
   <nav>
     <div class="content">
-      <div class="logo">
-        <img src="@/assets/logo-outline.png" />
-        <span class="brand">SocialFeeds</span>
-      </div>
+      <router-link :to="{ path: '/' }">
+        <div class="logo">
+          <img src="@/assets/logo-outline.png" />
+          <span class="brand">SocialFeeds</span>
+        </div>
+      </router-link>
 
       <div class="nav-links">
         <NavLink :to="{ path: '/invite'}">Invite</NavLink>
@@ -29,34 +31,6 @@
 <script>
 import Button from './Button.vue'
 import NavLink from './navbar/Link.vue'
-
-/*
-
-      <b-navbar-nav class="ml-auto">
-        <img v-if="user && !user.id" src="@/assets/loading.gif" width="40px" height="40px" alt="loading">
-
-        <li v-else-if="user" class="nav-item user-dropdown">
-          <a href="#" target="_self" class="nav-link p-md-2">
-            <b-dropdown right size="sm" toggle-class="cbtn">
-              <template slot="button-content">
-                <img class="rounded-circle" width="30" :src="avatarURL">
-                <div class="d-inline-block ml-2">{{ user.username }}</div>
-              </template>
-              <!-- dropdown list -->
-              <b-dropdown-item v-if="user.isAdmin" :to="{ name: 'admin' }">Admin Panel</b-dropdown-item>
-              <b-dropdown-item :to="{ name: 'dashboard' }">Servers</b-dropdown-item>
-              <b-dropdown-item :to="{ name: 'logout' }">Logout</b-dropdown-item>
-            </b-dropdown>
-          </a>
-        </li>
-
-        <b-nav-item v-else :to="{ name: 'oauth' }">
-          Login
-        </b-nav-item>
-      </b-navbar-nav>
-    </b-collapse>
-  </b-navbar>
-*/
 
 export default {
   components: { Button, NavLink },
@@ -86,6 +60,11 @@ export default {
 
 <style lang="scss">
 @import "@/assets/css/_variables.scss";
+
+  a {
+    text-decoration: none;
+    color: #fff;
+  }
 
   nav {
     display: flex;
