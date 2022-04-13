@@ -1,27 +1,36 @@
 <template>
-  <b-navbar toggleable="lg" type="dark" variant="dark" sticky>
-    <b-img src="@/assets/logo-outline.png" class="navbar-logo" alt="feeds" />
-    <b-navbar-brand style="font-weight: 600; font-style: bold;" :to="{ path: '/' }">
-      SocialFeeds
-    </b-navbar-brand>
+  <nav>
+    <div class="content">
+      <div class="logo">
+        <img src="@/assets/logo-outline.png" />
+        <span class="brand">SocialFeeds</span>
+      </div>
 
-    <b-navbar-toggle target="nav-text-collapse" />
+      <div class="nav-links">
+        <NavLink :to="{ path: '/invite'}">Invite</NavLink>
+        <NavLink :to="{ path: '/support'}">Support</NavLink>
+        <NavLink :to="{ path: '/status'}">Status</NavLink>
+        <NavLink :to="{ path: '/faq'}">FAQ</NavLink>
+      </div>
+    </div>
+    <div class="user">
+      <img v-if="user && !user.id" src="@/assets/loading.gif" width="40px" height="40px" alt="loading">
 
-    <b-collapse id="nav-text-collapse" is-nav>
-      <b-navbar-nav>
-        <b-nav-item :to="{ name: 'invite' }" exact>
-          Invite
-        </b-nav-item>
-        <b-nav-item :to="{ name: 'support' }" exact>
-          Support
-        </b-nav-item>
-        <b-nav-item :to="{ name: 'status' }" exact>
-          Status
-        </b-nav-item>
-        <b-nav-item :to="{ name: 'faq' }" exact>
-          FAQ
-        </b-nav-item>
-      </b-navbar-nav>
+      <li v-else-if="user" class="nav-item user-dropdown">
+        <!--- TODO: Implement a dropdown --->
+      </li>
+      <NavLink v-else :to="{ path: '/login' }">
+        <Button>Login</Button>
+      </NavLink>
+    </div>
+  </nav>
+</template>
+
+<script>
+import Button from './Button.vue'
+import NavLink from './navbar/Link.vue'
+
+/*
 
       <b-navbar-nav class="ml-auto">
         <img v-if="user && !user.id" src="@/assets/loading.gif" width="40px" height="40px" alt="loading">
@@ -47,10 +56,10 @@
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
-</template>
+*/
 
-<script>
 export default {
+  components: { Button, NavLink },
 
   data () {
     return { admin: false }
@@ -76,21 +85,50 @@ export default {
 </script>
 
 <style lang="scss">
-  .navbar {
-    padding: 0px;
-    background-color: rgb(23, 24, 27) !important;
-  }
+@import "@/assets/css/_variables.scss";
 
-  .navbar-brand {
-    padding: 0px;
-  }
+  nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background-color: $background-light;
 
-  .navbar-logo {
-    height: 56px;
-    width: 56px;
-    margin-right: 8px;
-  }
-  .user-dropdown {
-    background: transparent;
+    .content {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .logo {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        font-size: 1.5rem;
+
+        img {
+          width: 4rem;
+          height: 4rem;
+        }
+      }
+
+      .nav-links {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-left: 2rem;
+
+        & > *:not(:last-child) {
+          margin-right: 1.5rem;
+        }
+      }
+    }
+
+    .user {
+      margin-right: 0.5rem;
+    }
   }
 </style>
