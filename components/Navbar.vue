@@ -1,4 +1,5 @@
 <template>
+  <!--- TODO: mobile responsiveness -->
   <nav>
     <div class="content">
       <router-link :to="{ path: '/' }">
