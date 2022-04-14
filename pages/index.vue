@@ -18,7 +18,7 @@
         </Button>
       </div>
     </div>
-    <img src="~assets/examples/rss.png" />
+    <img src="~assets/examples/example.png" />
   </div>
 </template>
 
