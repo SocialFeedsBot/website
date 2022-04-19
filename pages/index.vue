@@ -1,32 +1,69 @@
 <template>
-  <div class="lander">
-    <div class="content">
-      <h1>Feeds directly to your server,<br /> without the hassle.</h1>
+  <div class="home">
+    <div class="lander">
+      <div class="content">
+        <h1>Feeds directly to your server,<br /> without the hassle.</h1>
+        <p>
+          Updates from your favourite websites sent directly to your server.
+          <br />
+          <br />
+          SocialFeeds removes the hassle of having to keep up to date across many social media platforms.
+        </p>
+
+        <div class="buttons">
+          <Button>
+            Add the bot
+          </Button>
+          <Button type="simple-light">
+            Read more
+          </Button>
+        </div>
+      </div>
+      <img src="~assets/examples/example.png" />
+    </div>
+
+    <div class="services">
+      <h1>Posts from the service to your server<span class="fullstop">.</span></h1>
       <p>
-        Updates from your favourite websites sent directly to your server.
-        <br />
-        <br />
-        SocialFeeds removes the hassle of having to keep up to date across many social media platforms.
+        With many social-media platforms supported, you can quickly configure feeds to post from your favourite social media to your server
+      </p>
+
+      <div class="sources">
+        <Source name="Twitter" />
+        <Source name="RSS" />
+        <Source name="YouTube" />
+        <Source name="Twitch" />
+        <Source name="Statuspage" />
+        <Source name="Reddit" />
+        <Source name="Roblox" isNew />
+      </div>
+
+      <div class="missed-one">
+        <p>Think we've missed a service?</p>
+        <router-link :to="{ path: '/support' }">Let us know</router-link>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h1>Get feeds from your favourite social-medias to your servers<span class="fullstop">.</span></h1>
+      <p>
+        Add SocialFeeds today and start receiving posts straight to your discord server.
       </p>
 
       <div class="buttons">
-        <Button>
-          Add the bot
-        </Button>
-        <Button type="simple-light">
-          Read more
-        </Button>
+        <Button>Add the bot</Button>
+        <Button type="simple-light">Go to the dashboard</Button>
       </div>
     </div>
-    <img src="~assets/examples/example.png" />
   </div>
 </template>
 
 <script>
 import Button from '@/components/Button.vue'
+import Source from '@/components/home/Source.vue'
 
 export default {
-  components: { Button },
+  components: { Button, Source },
 
   data: () => ({
     interval: false
@@ -68,6 +105,12 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/css/_variables.scss";
 
+.home {
+  & > *:nth-child(2n) {
+    background-color: $background-light;
+  }
+}
+
 .lander {
   height: 80vh;
   display: flex;
@@ -86,11 +129,71 @@ export default {
       font-weight: 400;
     }
   }
+
+  img {
+    width: 25rem;
+    height: auto;
+  }
 }
 
-img {
-  width: 25rem;
-  height: auto;
-  border-radius: 0.5rem;
+.services,
+.cta {
+  padding: 4rem;
+
+  h1 {
+    font-family: $font-family-brand;
+    font-weight: 600;
+
+    .fullstop {
+      color: $blurple;
+    }
+  }
+}
+
+.services {
+  .sources {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 1rem;
+  }
+}
+
+.missed-one {
+  margin-top: 2rem;
+  text-align: center;
+  color: $accent;
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    text-decoration: underline;
+    color: $accent;
+
+    &:hover {
+      color: lighten($color: $accent, $amount: 5)
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .lander {
+    text-align: center;
+
+    img {
+      display: none;
+    }
+
+    .content {
+      padding: 2rem;
+      margin: 0 auto;
+
+    }
+  }
+
+  .services .sources {
+    grid-template-columns: auto;
+  }
 }
 </style>
