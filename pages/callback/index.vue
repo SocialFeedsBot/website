@@ -15,7 +15,6 @@ export default {
 
     if (token) {
       localStorage.setItem('token', token)
-      this.$ws.connect()
       const user = await this.$axios.$get('/users/@me')
       this.$store.commit('user/SET_USER', { token, ...user })
     }

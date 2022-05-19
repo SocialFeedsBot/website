@@ -28,7 +28,6 @@ module.exports = {
   plugins: [
     '~/plugins/axios',
     '~/plugins/fontawesome',
-    '~/plugins/ws',
     '~/plugins/gtag'
   ],
   /*

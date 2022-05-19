@@ -22,7 +22,7 @@
       <li v-else-if="user" class="nav-item user-dropdown">
         <!--- TODO: Implement a dropdown --->
       </li>
-      <NavLink v-else :to="{ path: '/login' }">
+      <NavLink v-else :to="{ path: '/oauth' }">
         <Button>Login</Button>
       </NavLink>
     </div>
