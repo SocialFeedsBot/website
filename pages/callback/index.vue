@@ -8,7 +8,7 @@ export default {
     const code = this.$route.query.code
     let token
     try {
-      token = await this.$axios.$post(`/oauth/callback/${code}`)
+      token = await this.$axios.$post(`/oauth/callback?code=${code}`)
     } catch (e) {
       // dont do anything :D
     }
@@ -18,8 +18,6 @@ export default {
       const user = await this.$axios.$get('/users/@me')
       this.$store.commit('user/SET_USER', { token, ...user })
     }
-
-    window.location = '/'
   }
 }
 </script>

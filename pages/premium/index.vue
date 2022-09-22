@@ -14,7 +14,8 @@
     <div class="tiers">
       <h1>Select a tier that suits you<span class="fullstop">.</span></h1>
       <p>
-        We aim to charge little but enough to keep us posting to your servers. Select one that best matches your servers needs.
+        We aim to charge little but enough to keep us posting to your servers. Select one that best matches your servers needs.<br>
+        To upgrade, select a server from your profile, head to premium and select the tier you'd like to upgrade to.
       </p>
 
       <div class="tierlist">
@@ -23,13 +24,6 @@
             <li>60 max feed capacity.</li>
             <li>No advertisements.</li>
           </ul>
-
-          <Button v-if="user">
-            Upgrade now!
-          </Button>
-          <Button v-else>
-            Login to upgrade
-          </Button>
         </Tier>
 
         <Tier name="Tier 2">
@@ -38,13 +32,6 @@
             <li>Change the avatar and username of webhooks.</li>
             <li>No advertisements.</li>
           </ul>
-
-          <Button v-if="user">
-            Upgrade now!
-          </Button>
-          <Button v-else>
-            Login to upgrade
-          </Button>
         </Tier>
 
         <Tier name="Tier 3">
@@ -53,13 +40,6 @@
             <li>Change the avatar and username of webhooks.</li>
             <li>No advertisements.</li>
           </ul>
-
-          <Button v-if="user">
-            Upgrade now!
-          </Button>
-          <Button v-else>
-            Login to upgrade
-          </Button>
         </Tier>
 
         <Tier name="Tier 4">
@@ -68,13 +48,6 @@
             <li>Change the avatar and username of webhooks.</li>
             <li>No advertisements.</li>
           </ul>
-
-          <Button v-if="user">
-            Upgrade now!
-          </Button>
-          <Button v-else>
-            Login to upgrade
-          </Button>
         </Tier>
       </div>
     </div>
@@ -82,11 +55,10 @@
 </template>
 
 <script>
-import Button from '@/components/Button.vue'
 import Tier from '@/components/premium/Tier.vue'
 
 export default {
-  components: { Button, Tier },
+  components: { Tier },
 
   data: () => ({
     interval: false
@@ -95,6 +67,18 @@ export default {
   computed: {
     user () {
       return this.$store.getters['user/user']
+    }
+  },
+
+  methods: {
+    async createCheckout (tier) {
+      const res = await this.$axios.post('/premium/checkout', {
+        userID: '',
+        guildID: '',
+        tier: 1
+      })
+
+      window.location = res.data.url
     }
   }
 

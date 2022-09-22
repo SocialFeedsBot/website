@@ -9,7 +9,8 @@
       footer-class="modal-foot"
       modal-class="modal"
       hide-header-close
-    >
+      style="display: none;"
+    > <!-- BAILEY: its hidden bc i cant do this anymore im so sorry-->
       <p1 v-if="errorMessage !== ''" class="mb-4" style="color: #f54242">
         {{ errorMessage }}<br>
       </p1>

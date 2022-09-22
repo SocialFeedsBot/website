@@ -22,12 +22,9 @@
             Total feeds: {{ feedCount }}
           </p>
 
-          <b-button class="cbtn cbtn-dark my-2 w-90" :to="{ name: 'dashboard' }">
-            Switch Server
-          </b-button>
-          <b-button v-b-modal.add-feed-modal class="cbtn cbtn-green w-90">
-            Add new feed
-          </b-button>
+          <Button>Switch Server</Button> <!-- redirect to /dashboard-->
+          <Button>Add feed</Button> <!-- open add feed modal-->
+          <Button>Upgrade to premium!</Button> <!-- to only be shown when the server isn't premium -->
         </b-col>
       </div>
     </b-container>
@@ -64,6 +61,13 @@ export default {
 
   components: { FeedBlock, AddFeedModal, ModifyFeedModal, DeleteFeedModal },
 
+  beforeRouteUpdate (...args) {
+    this.beforeLeave(...args)
+  },
+  beforeRouteLeave (...args) {
+    this.beforeLeave(...args)
+  },
+
   data () {
     return {
       ready: false,
@@ -94,13 +98,6 @@ export default {
     await this.update()
   },
 
-  beforeRouteUpdate (...args) {
-    this.beforeLeave(...args)
-  },
-  beforeRouteLeave (...args) {
-    this.beforeLeave(...args)
-  },
-
   methods: {
     async update () {
       this.ready = false
@@ -111,7 +108,7 @@ export default {
       this.ready = true
     },
 
-    async beforeLeave (to, from, next) {
+    beforeLeave (to, from, next) {
       if (!to.name || !to.name.includes('dashboard-guild_id')) {
         this.$store.dispatch('guild/RESET')
         this.$store.dispatch('feeds/RESET')

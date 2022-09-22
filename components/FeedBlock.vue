@@ -1,4 +1,17 @@
 <template>
+  <div>
+    <!-- BAILEY: some sort of columns to make each feed a in a row thats a fixed size?-->
+    <img :src="(data.display && data.display.icon) ? data.display.icon : ('/' + data.type + '.png')" class="feed-icon"><br>
+    <h>{{ (data.display && data.display.title) ? data.display.title : data.url }}</h>
+    <Button>Website</Button> <!-- link to expanded data.url-->
+    <Button>Modify</Button> <!-- opens modify modal-->
+    <Button>{{ data.enabled ? 'Pause' : 'Resume' }}</Button> <!-- to be toggled-->
+    <Button>Delete</Button> <!-- confirmation of deletion modal-->
+  </div>
+
+  <!--
+  BAILEY: old code just for refence
+
   <b-col sm="10" lg="4" md="6" class="mb-2">
     <div class="block">
       <b-row class="p-1">
@@ -25,13 +38,14 @@
         </b-button>
       </div>
     </div>
-  </b-col>
+  </b-col> -->
 </template>
 
 <script>
+import Button from './Button.vue'
 export default {
+  components: { Button },
   props: ['data'],
-
   methods: {
     getURL ({ type, url }) {
       if (type === 'youtube') {
@@ -48,16 +62,13 @@ export default {
         return url
       }
     },
-
     remove () {
       this.$emit('setPrompt')
     },
-
     modify () {
       this.$emit('setModify')
     }
   }
-
 }
 </script>
 <style scoped>
