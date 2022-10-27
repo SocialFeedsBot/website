@@ -1,7 +1,6 @@
 const config = require('./config')
 
 module.exports = {
-  mode: 'universal',
   /*
   ** Headers of the page
   */
@@ -28,7 +27,8 @@ module.exports = {
   plugins: [
     '~/plugins/axios',
     '~/plugins/fontawesome',
-    '~/plugins/gtag'
+    '~/plugins/gtag',
+    { src: '~/plugins/bootstrap', mode: 'client', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -49,7 +49,8 @@ module.exports = {
   ],
 
   css: [
-    '@fortawesome/fontawesome-svg-core/styles.css'
+    '@fortawesome/fontawesome-svg-core/styles.css',
+    '~/assets/scss/main.scss'
   ],
 
   fontawesome: {
@@ -80,6 +81,7 @@ module.exports = {
     }
   },
   server: {
+    host: '0.0.0.0',
     port: config.port
   }
 }
