@@ -1,9 +1,13 @@
 FROM node:14
 
-COPY . /usr/src/
-WORKDIR /usr/src/
+WORKDIR /app
 
-RUN npm i
-RUN npm run build
+COPY package.json .
 
-CMD ["npm run start"]
+RUN npm install
+
+ADD . /app/
+
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]
