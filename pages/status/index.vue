@@ -1,47 +1,35 @@
 <template>
-  <div>
-    <br>
-    <div class="center mb-4">
-      <h1>Status</h1>
-      <p1>Monitor the status of SocialFeeds services.</p1>
-    </div>
-
+  <main>
     <div v-if="ready === false">
-      <div style="text-align: center;">
-        <img src="@/assets/loading.gif" width="100px" height="100px" alt="loading">
+      <div class="loader">
+        <img src="@/assets/loading.gif" alt="loading">
       </div>
     </div>
 
     <div v-if="ready" class="container">
-      <div :class="{ green: messageBox.status === 'ok', amber: messageBox.status === 'warn', red: messageBox.status === 'major' }" class="alert-box mt-4 mb-5 p-2">
-        <h4>{{ messageBox.head }}</h4>
-        {{ messageBox.body }}
+      <div
+        :class="{ green: messageBox.status === 'ok', amber: messageBox.status === 'warn', red: messageBox.status === 'major' }"
+        class="alert-box mt-4 mb-5 p-2"
+      >
+        <h2>{{ messageBox.head }}</h2>
+        <p v-if="messageBox.status !== 'ok'">
+          {{ messageBox.body }}
+        </p>
       </div>
 
-      <b-row>
-        <div v-for="service in Object.values(services).flat()" :key="service.name + service.id || 'uk'" class="cols-3 cols-sm-12">
-          <b-card
-            style="height: 12rem; width: 15rem;"
-            class="block mb-4 mr-4"
-          >
-            <b-card-title style="text-align: left; font-size: 20px">
-              <div class="mr-2 status-indicator" :class="{ green: service.status === 'ready', amber: service.status === 'resuming', red: service.status === 'disconnected' }" /> {{ service.name }}
-            </b-card-title>
-            <b-card-text style="text-align: left; font-weight: 100; line-height: 25px">
-              Status: {{ service.status }}<br>
-              <span v-if="service.uptime">Uptime: {{ formatUptime(service.uptime) }}</span><br>
-              <span v-if="service.memory">Memory: {{ formatMemory(service.memory) }}</span><br>
-              <span v-if="service.guilds !== undefined">Servers: {{ service.guilds.toLocaleString() }}<br></span>
-            </b-card-text>
-          </b-card>
+      <div class="grid">
+        <div v-for="service in Object.values(services).flat()" :key="service.name + service.id || 'uk'">
+          <StatusCard class="" :service="service" />
         </div>
-      </b-row>
+      </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
+import StatusCard from '@/components/StatusCard.vue'
 export default {
+  components: { StatusCard },
 
   data: () => ({
     ready: false
@@ -111,16 +99,47 @@ export default {
 </script>
 
 <style scoped>
+h2 {
+  margin: 3rem 1rem 1rem 1rem;
+}
 
-  .status-indicator {
-    border-radius: 12px;
-    border: 0px;
-    height: 18px;
-    width: 18px;
-    float: left;
-  }
-  .status-indicator.green { background-color: #81e968; }
-  .status-indicator.amber { background-color: #e9a668; }
-  .status-indicator.red { background-color: rgb(233, 104, 104); }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-gap: 1rem;
+}
 
+.status-indicator {
+  border-radius: 12px;
+  border: 0px;
+  height: 18px;
+  width: 18px;
+  float: left;
+}
+
+.status-indicator.green {
+  background-color: #81e968;
+}
+
+.status-indicator.amber {
+  background-color: #e9a668;
+}
+
+.status-indicator.red {
+  background-color: #e96868;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20vh;
+  height: 100%;
+}
+
+img {
+  width: 100px;
+  height: 100px;
+  margin: auto;
+}
 </style>

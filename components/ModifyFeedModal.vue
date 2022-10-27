@@ -10,15 +10,16 @@
       modal-class="modal"
       hide-header-close
       style="display: none;"
-    > <!-- BAILEY: its hidden bc i cant do this anymore im so sorry-->
+    >
+      <!-- BAILEY: its hidden bc i cant do this anymore im so sorry-->
       <p1 v-if="errorMessage !== ''" class="mb-4" style="color: #f54242">
         {{ errorMessage }}<br>
       </p1>
       <img :src="'/' + feed.type + '.png'" class="rounded-circle" height="25" width="25">
-      <p3>{{ feed.display && feed.display.title ? feed.display.title : feed.url }}</p3><br>
+      <h3>{{ feed.display && feed.display.title ? feed.display.title : feed.url }}</h3><br>
 
       <br>
-      <p3>Channel</p3>
+      <h3>Channel</h3>
       <b-dropdown v-model="editData.channel" :text="feed.channelID ? `#${channels.find(ch => ch.id === feed.channelID).name}` : 'Channel'" toggle-class="cbtn" class="full-length">
         <b-dropdown-item v-for="ch in channels.filter(c => c.type === 0)" :key="ch.id" @click="editData.channel = ch.id">
           #{{ ch.name }}
@@ -26,7 +27,7 @@
       </b-dropdown>
 
       <br><br>
-      <p3>Feed options</p3>
+      <h3>Feed options</h3>
       <SwitchButton :is-enabled="editData.includeMessage" @toggle="toggleMessage">
         Include a custom message
       </SwitchButton>
@@ -39,7 +40,7 @@
 
       <div v-if="editData.includeMessage">
         <br>
-        <p3>Custom message</p3>
+        <h3>Custom message</h3>
         <b-form-input id="url" v-model="editData.message" autocomplete="off" placeholder="Custom message" />
       </div>
 

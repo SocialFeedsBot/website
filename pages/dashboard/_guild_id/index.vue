@@ -1,43 +1,93 @@
 <template>
   <div>
-    <div v-if="ready == true">
-      <AddFeedModal :channels="channels" @update="update()" />
-      <ModifyFeedModal :channels="channels" :feed="toModify" @update="update()" />
-    </div>
+    <!-- <div v-if="ready == true"> -->
+    <AddFeedModal :channels="channels" @update="update()" />
+    <ModifyFeedModal :channels="channels" :feed="toModify" @update="update()" />
+    <!-- </div> -->
 
     <b-container class="mt-4 mb-3 pb-3 pt-2 guild-info">
       <div class="row p-2">
         <b-col lg="2" md="2" sm="3">
           <div class="d-inline-block">
-            <img :src="getGuildIcon(guild)" class="rounded-circle skeleton" style="height: 100px; width:100px;" alt="guild icon">
+            <img
+              :src="getGuildIcon(guild)"
+              class="rounded-circle skeleton"
+              style="height: 100px; width:100px;"
+              alt="guild icon"
+            >
           </div>
         </b-col>
 
         <b-col lg="9" md="10" sm="7">
-          <div class="h4 d-inline-block" style="font-weight: 700;" :class="{ 'skeleton': !(guild && guild.name), 'skeleton-text': !(guild && guild.name) }">
+          <div
+            class="h4 d-inline-block"
+            style="font-weight: 700;"
+            :class="{ 'skeleton': !(guild && guild.name), 'skeleton-text': !(guild && guild.name) }"
+          >
             {{ guild.name }}
           </div>
 
           <p style="font-weight: 100;">
             Total feeds: {{ feedCount }}
           </p>
-
-          <Button>Switch Server</Button> <!-- redirect to /dashboard-->
-          <Button>Add feed</Button> <!-- open add feed modal-->
-          <Button>Upgrade to premium!</Button> <!-- to only be shown when the server isn't premium -->
+          <button type="button" class="btn btn-dark">
+            Dark
+          </button>
+          <b-button v-b-modal.add-feed-modal>
+            asasd
+            <Button>Add feed</Button> <!-- TODO: open add feed modal-->
+          </b-button>
+          <Button>Upgrade to premium!</Button> <!--  TODO: to only be shown when the server isn't premium -->
         </b-col>
       </div>
     </b-container>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-feed-modal">
+      Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div id="exampleModal" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 id="exampleModalLabel" class="modal-title fs-5">
+              Modal title
+            </h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+            <button type="button" class="btn btn-primary">
+              Save changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- feeds -->
     <br>
     <b-container v-if="ready == true && feedCount > 0" class="mb-4">
       <div v-for="(fs, channelID) in feeds" :key="channelID">
-        <br><h4 class="channel-header">
+        <br>
+        <h4 class="channel-header">
           #{{ channels.find(ch => ch.id === channelID).name.toUpperCase() }} ({{ fs.length }})
         </h4><br>
         <b-row>
-          <FeedBlock v-for="(feed, i) in fs" :key="channelID + '-' + i" :data="feed" @setPrompt="toggleData('prompt', feed)" @setModify="toggleData('modify', feed)" />
+          <FeedBlock
+            v-for="(feed, i) in fs"
+            :key="channelID + '-' + i"
+            :data="feed"
+            @setPrompt="toggleData('prompt', feed)"
+            @setModify="toggleData('modify', feed)"
+          />
         </b-row>
       </div>
     </b-container>
@@ -52,14 +102,15 @@
 </template>
 
 <script>
-import AddFeedModal from '../../../components/AddFeedModal'
-import ModifyFeedModal from '../../../components/ModifyFeedModal'
-import DeleteFeedModal from '../../../components/DeleteFeedModal'
+import AddFeedModal from '@/components/AddFeedModal'
+import ModifyFeedModal from '@/components/ModifyFeedModal'
+import DeleteFeedModal from '@/components/DeleteFeedModal'
 import FeedBlock from '@/components/FeedBlock.vue'
+import Button from '@/components/Button'
 
 export default {
 
-  components: { FeedBlock, AddFeedModal, ModifyFeedModal, DeleteFeedModal },
+  components: { FeedBlock, AddFeedModal, ModifyFeedModal, DeleteFeedModal, Button },
 
   beforeRouteUpdate (...args) {
     this.beforeLeave(...args)

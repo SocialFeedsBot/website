@@ -1,31 +1,14 @@
 <template>
   <div class="home">
-    <div class="lander">
-      <div class="content">
-        <h1>Feeds directly to your server,<br /> without the hassle.</h1>
-        <p>
-          Updates from your favourite websites sent directly to your server.
-          <br />
-          <br />
-          SocialFeeds removes the hassle of having to keep up to date across many social media platforms.
-        </p>
-
-        <div class="buttons">
-          <Button>
-            Add the bot
-          </Button>
-          <Button type="simple-light">
-            Read more
-          </Button>
-        </div>
-      </div>
-      <img src="~assets/examples/example.png" />
-    </div>
+    <Header />
 
     <div class="services">
-      <h1>Posts from the service to your server<span class="fullstop">.</span></h1>
+      <h1>
+        Posts from the service to your server<span class="fullstop">.</span>
+      </h1>
       <p>
-        With many social-media platforms supported, you can quickly configure feeds to post from your favourite social media to your server
+        With many social-media platforms supported, you can quickly configure
+        feeds to post from your favourite social media to your server
       </p>
 
       <div class="sources">
@@ -35,24 +18,31 @@
         <Source name="Twitch" />
         <Source name="Statuspage" />
         <Source name="Reddit" />
-        <Source name="Roblox" isNew />
+        <Source name="Roblox" is-new />
       </div>
 
       <div class="missed-one">
         <p>Think we've missed a service?</p>
-        <router-link :to="{ path: '/support' }">Let us know</router-link>
+        <router-link :to="{ path: '/support' }">
+          Let us know
+        </router-link>
       </div>
     </div>
 
     <div class="cta">
-      <h1>Get feeds from your favourite social-medias to your servers<span class="fullstop">.</span></h1>
+      <h1>
+        Get feeds from your favourite social-medias to your servers<span class="fullstop">.</span>
+      </h1>
       <p>
-        Add SocialFeeds today and start receiving posts straight to your discord server.
+        Add SocialFeeds today and start receiving posts straight to your discord
+        server.
       </p>
 
       <div class="buttons">
         <Button>Add the bot</Button>
-        <Button type="simple-light">Go to the dashboard</Button>
+        <Button type="simple-light">
+          Go to the dashboard
+        </Button>
       </div>
     </div>
   </div>
@@ -60,10 +50,11 @@
 
 <script>
 import Button from '@/components/Button.vue'
+import Header from '@/components/home/Header.vue'
 import Source from '@/components/home/Source.vue'
 
 export default {
-  components: { Button, Source },
+  components: { Button, Source, Header },
 
   data: () => ({
     interval: false
@@ -98,7 +89,6 @@ export default {
       await this.$store.dispatch('stats/GET_GUILD_COUNT')
     }
   }
-
 }
 </script>
 
@@ -106,33 +96,8 @@ export default {
 @import "@/assets/css/_variables.scss";
 
 .home {
-  & > *:nth-child(2n) {
+  &>*:nth-child(2n) {
     background-color: $background-light;
-  }
-}
-
-.lander {
-  height: 80vh;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  .content {
-    padding: 10rem;
-
-    h1 {
-      font-family: $font-family-brand;
-      font-weight: 600;
-    }
-
-    p {
-      font-weight: 400;
-    }
-  }
-
-  img {
-    width: 25rem;
-    height: auto;
   }
 }
 
@@ -172,7 +137,7 @@ export default {
     color: $accent;
 
     &:hover {
-      color: lighten($color: $accent, $amount: 5)
+      color: lighten($color: $accent, $amount: 5);
     }
   }
 }
@@ -188,7 +153,6 @@ export default {
     .content {
       padding: 2rem;
       margin: 0 auto;
-
     }
   }
 

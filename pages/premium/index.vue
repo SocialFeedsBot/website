@@ -1,57 +1,23 @@
 <template>
-  <div class="home">
-    <div class="lander">
-      <div class="content">
-        <h1>Upgrade your server!</h1>
-        <p>
-          Choose from a variety of tiers to boost up your server.
-          <br><br>
-          We have tiers that are best suited for you. Choose the best one and setup your subscription!
-        </p>
-      </div>
-    </div>
-
+  <main class="home">
     <div class="tiers">
       <h1>Select a tier that suits you<span class="fullstop">.</span></h1>
       <p>
-        We aim to charge little but enough to keep us posting to your servers. Select one that best matches your servers needs.<br>
+        We aim to charge little but enough to keep us posting to your servers. Select one that best matches your servers
+        needs.<br>
         To upgrade, select a server from your profile, head to premium and select the tier you'd like to upgrade to.
       </p>
 
-      <div class="tierlist">
-        <Tier name="Tier 1">
-          <ul>
-            <li>60 max feed capacity.</li>
-            <li>No advertisements.</li>
-          </ul>
-        </Tier>
-
-        <Tier name="Tier 2">
-          <ul>
-            <li>150 max feed capacity.</li>
-            <li>Change the avatar and username of webhooks.</li>
-            <li>No advertisements.</li>
-          </ul>
-        </Tier>
-
-        <Tier name="Tier 3">
-          <ul>
-            <li>300 max feed capacity.</li>
-            <li>Change the avatar and username of webhooks.</li>
-            <li>No advertisements.</li>
-          </ul>
-        </Tier>
-
-        <Tier name="Tier 4">
-          <ul>
-            <li>No max feed capacity.</li>
-            <li>Change the avatar and username of webhooks.</li>
-            <li>No advertisements.</li>
-          </ul>
-        </Tier>
+      <div class="tierGrid">
+        <Tier type="0" />
+        <Tier type="0+" />
+        <Tier type="1" />
+        <Tier type="2" />
+        <Tier type="3" />
+        <Tier type="4" />
       </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
@@ -68,18 +34,6 @@ export default {
     user () {
       return this.$store.getters['user/user']
     }
-  },
-
-  methods: {
-    async createCheckout (tier) {
-      const res = await this.$axios.post('/premium/checkout', {
-        userID: '',
-        guildID: '',
-        tier: 1
-      })
-
-      window.location = res.data.url
-    }
   }
 
 }
@@ -89,19 +43,20 @@ export default {
 @import "@/assets/css/_variables.scss";
 
 .home {
-  & > *:nth-child(2n) {
-    background-color: $background-light;
-  }
+  margin-top: 5rem;
+  // &>*:nth-child(2n) {
+  //   background-color: $background-light;
+  // }
 }
 
 .lander {
-  height: 80vh;
+  height: 30vh;
   display: flex;
   flex-direction: row;
   align-items: center;
 
   .content {
-    padding: 10rem;
+    padding: 10rem 0;
 
     h1 {
       font-family: $font-family-brand;
@@ -115,14 +70,13 @@ export default {
 }
 
 .tiers {
-  .tierlist {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-gap: 1rem;
-    align-items: center;
-  }
 
-  padding: 4rem;
+  .tierGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(510px, 1fr));
+    grid-gap: 1rem;
+    margin-top: 4rem;
+  }
 
   h1 {
     font-family: $font-family-brand;

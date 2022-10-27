@@ -16,10 +16,10 @@
         </div>
 
         <div v-if="ready == false">
-          <div v-for="(index) in [1,2,3,4,5]" :key="index" class="d-inline-block p-2">
-            <div class="guild-icon blankGuild skeleton" />
-          </div>
+          <h4>Please reload.</h4>
+          <p>If you have logged in for the first time we are currently syncing your servers, please wait 30 seconds and refresh.</p>
         </div>
+
         <div v-if="ready && guilds.length > 0">
           <div
             v-for="(guild, index) in guilds"

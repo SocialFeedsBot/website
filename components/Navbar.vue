@@ -4,24 +4,39 @@
     <div class="content">
       <router-link :to="{ path: '/' }">
         <div class="logo">
-          <img src="@/assets/logo-outline.png" />
+          <img src="@/assets/logo-outline.png">
           <span class="brand">SocialFeeds</span>
         </div>
       </router-link>
 
       <div class="nav-links">
-        <NavLink :to="{ path: '/invite'}">Invite</NavLink>
-        <NavLink :to="{ path: '/support'}">Support</NavLink>
-        <NavLink :to="{ path: '/status'}">Status</NavLink>
-        <NavLink :to="{ path: '/faq'}">FAQ</NavLink>
+        <NavLink :to="{ path: '/invite' }">
+          Invite
+        </NavLink>
+        <NavLink :to="{ path: '/support' }">
+          Support
+        </NavLink>
+        <NavLink :to="{ path: '/status' }">
+          Status
+        </NavLink>
+        <NavLink :to="{ path: '/faq' }">
+          FAQ
+        </NavLink>
+        <NavLink :to="{ path: '/premium' }" class="premium">
+          Premium
+        </NavLink>
       </div>
     </div>
     <div class="user">
       <img v-if="user && !user.id" src="@/assets/loading.gif" width="40px" height="40px" alt="loading">
 
-      <li v-else-if="user" class="nav-item user-dropdown">
-        <!--- TODO: Implement a dropdown --->
-      </li>
+      <!-- <li v-else-if="user" class="nav-item user-dropdown">
+        - TODO: Implement a dropdown -
+      </li> -->
+      <NavLink v-else-if="user" :to="{ path: '/dashboard' }">
+        <Button>Dashboard</Button>
+      </NavLink>
+
       <NavLink v-else :to="{ path: '/oauth' }">
         <Button>Login</Button>
       </NavLink>
@@ -62,53 +77,57 @@ export default {
 <style lang="scss">
 @import "@/assets/css/_variables.scss";
 
-  a {
-    text-decoration: none;
-    color: #fff;
-  }
+a {
+  text-decoration: none;
+  color: #fff;
+}
 
-  nav {
+nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  background-color: $background-light;
+
+  .content {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem;
-    background-color: $background-light;
 
-    .content {
+    .logo {
       display: flex;
       flex-direction: row;
       align-items: center;
 
-      .logo {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 1.5rem;
 
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 600;
-        font-size: 1.5rem;
-
-        img {
-          width: 4rem;
-          height: 4rem;
-        }
-      }
-
-      .nav-links {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-left: 2rem;
-
-        & > *:not(:last-child) {
-          margin-right: 1.5rem;
-        }
+      img {
+        width: 4rem;
+        height: 4rem;
       }
     }
 
-    .user {
-      margin-right: 0.5rem;
+    .nav-links {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-left: 2rem;
+
+      &>*:not(:last-child) {
+        margin-right: 1.5rem;
+      }
+
+      .premium {
+        color: $premium;
+      }
     }
   }
+
+  .user {
+    margin-right: 0.5rem;
+  }
+}
 </style>
