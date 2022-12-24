@@ -1,11 +1,11 @@
 <template>
   <div class="header">
     <div class="content">
-      <h1>Feeds directly to your server,<br /> without the hassle.</h1>
+      <h1>Feeds directly to your server,<br> without the hassle.</h1>
       <p>
         Updates from your favourite websites sent directly to your server.
-        <br />
-        <br />
+        <br>
+        <br>
         SocialFeeds removes the hassle of having to keep up to date across many social media platforms.
       </p>
 

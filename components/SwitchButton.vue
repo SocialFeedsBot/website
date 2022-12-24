@@ -28,7 +28,7 @@ export default {
 
   .switch-button {
     $switch-button-height: 1.4em;
-    $switch-button-color: #7289DA;
+    $switch-button-color: #6F79EE;
     $switch-button-border-thickness: 2px;
     $switch-transition: all 0.2s ease-in-out;
     $switch-is-rounded: true;
@@ -64,7 +64,7 @@ export default {
       .button {
         background: white;
         transform: translateX(
-            calc(#{$button-side-length} + (0.9 * #{$switch-button-border-thickness}))
+            calc(#{$button-side-length} + (0.1 * #{$switch-button-border-thickness}))
         );
       }
     }

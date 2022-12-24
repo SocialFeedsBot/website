@@ -17,6 +17,8 @@ export default {
       localStorage.setItem('token', token)
       const user = await this.$axios.$get('/users/@me')
       this.$store.commit('user/SET_USER', { token, ...user })
+
+      this.$router.push({ name: 'dashboard' })
     }
   }
 }

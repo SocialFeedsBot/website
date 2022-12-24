@@ -5,7 +5,7 @@
       <p>View frequently asked questions and a list of commands.</p>
       <div class="information-alert">
         Discord have deprecated bot commands, this means we no longer listen to commands beginning with
-        '<code>sf!</code>'. Please use the dashboard to manage your feeds, or use Discord slash commands.
+        '<code>sf!</code>'. Please use the dashboard to manage your feeds, or use Discord slash commands (<code>/</code>).
       </div>
     </div>
 
@@ -14,9 +14,9 @@
       <p>
         To add a feed, you can use any one of 2 options:<br><br>
       </p>
-      <h3 class="top">
+      <h4>
         Online dashboard:
-      </h3>
+      </h4>
       <p>
         Our online dashboard allows you to do this
         easily with minimal
@@ -24,13 +24,13 @@
         server and you are greeted with a
         page with all the details you need to add a feed.
       </p>
-      <h3>
+      <h4>
         Slash commands:
-      </h3>
+      </h4>
       <p>
         You can use a new feature called slash
         commands which all you have to do
-        is type a slash (/) and type add. A list of feed types will come up and will guide you in adding a feed.<br><br>
+        is type a slash (<code>/</code>) and type add. A list of feed types will come up and will guide you in adding a feed.<br><br>
       </p>
 
       <h2>
@@ -86,8 +86,8 @@ p {
 }
 
 .information-alert {
-  background-color: #4d72aa;
-  border: 1px solid #e0e0e0;
+  background-color: #4d72aa66;
+  border: 1px solid #e0e0e067;
   border-radius: 5px;
   padding: 1rem;
   margin-bottom: 1rem;

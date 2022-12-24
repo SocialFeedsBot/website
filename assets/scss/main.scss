@@ -1,1 +1,10 @@
-@import "node_modules/bootstrap/scss/bootstrap"
+@import "node_modules/bootstrap/scss/bootstrap";
+@import "@/assets/css/_variables.scss";
+
+.dropdown-toggle, .dropdown-menu {
+  background-color: $background-darker;
+}
+
+.dropdown-item:active {
+  background-color: rgba(255, 255, 255, 0.3);
+}

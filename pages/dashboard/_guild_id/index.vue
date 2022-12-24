@@ -1,256 +1,234 @@
 <template>
-  <div>
-    <!-- <div v-if="ready == true"> -->
-    <AddFeedModal :channels="channels" @update="update()" />
-    <ModifyFeedModal :channels="channels" :feed="toModify" @update="update()" />
-    <!-- </div> -->
-
-    <b-container class="mt-4 mb-3 pb-3 pt-2 guild-info">
-      <div class="row p-2">
-        <b-col lg="2" md="2" sm="3">
-          <div class="d-inline-block">
-            <img
-              :src="getGuildIcon(guild)"
-              class="rounded-circle skeleton"
-              style="height: 100px; width:100px;"
-              alt="guild icon"
-            >
+  <div v-if="ready">
+    <div class="guild-header grid">
+      <div class="col-sm-3 col-md-2 col-lg-1">
+        <img v-if="guild.icon" class="rounded-circle" :src="getGuildIcon()" height="75" width="75">
+        <div v-else class="guild-icon blankGuild lg">
+          <div class="blankGuildName lg">
+            {{ acronym(guild?.name) }}
           </div>
-        </b-col>
-
-        <b-col lg="9" md="10" sm="7">
-          <div
-            class="h4 d-inline-block"
-            style="font-weight: 700;"
-            :class="{ 'skeleton': !(guild && guild.name), 'skeleton-text': !(guild && guild.name) }"
-          >
-            {{ guild.name }}
-          </div>
-
-          <p style="font-weight: 100;">
-            Total feeds: {{ feedCount }}
-          </p>
-          <button type="button" class="btn btn-dark">
-            Dark
-          </button>
-          <b-button v-b-modal.add-feed-modal>
-            asasd
-            <Button>Add feed</Button> <!-- TODO: open add feed modal-->
-          </b-button>
-          <Button>Upgrade to premium!</Button> <!--  TODO: to only be shown when the server isn't premium -->
-        </b-col>
+        </div>
       </div>
-    </b-container>
+      <div class="col-sm-7 col-md-8 col-lg-9">
+        <h2>{{ guild.name }}</h2>
+        <p :style="{ color: feedCount >= guild.premium.maxFeeds ? 'red' : '' }">
+          {{ feedCount }}/{{ guild.premium.maxFeeds }} total feeds used.
+          {{ feedCount >= guild.premium.maxFeeds ? 'You cannot add any feeds until you upgrade.' : '' }}
+        </p>
+      </div>
+      <div class="col-sm-2 col-md-2 col-lg-2">
+        <Button v-if="feedCount < guild.premium.maxFeeds" type="success" data-bs-toggle="modal" data-bs-target="#add-feed-modal">
+          Add new feed
+        </Button>
+        <a v-else href="/premium">
+          <Button type="warn">
+            Upgrade now!
+          </Button>
+        </a>
+      </div>
+    </div>
 
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-feed-modal">
-      Launch demo modal
-    </button>
+    <div v-if="errMessage" class="error-box">
+      <h3>Something went wrong adding this feed.</h3>
+      <p>{{ errMessage }}</p>
+    </div>
 
-    <!-- Modal -->
-    <div id="exampleModal" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 id="exampleModalLabel" class="modal-title fs-5">
-              Modal title
-            </h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-          </div>
-          <div class="modal-body">
-            ...
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-              Close
-            </button>
-            <button type="button" class="btn btn-primary">
-              Save changes
-            </button>
-          </div>
+    <!-- WIP: Feed list-->
+    <div v-if="ready == true && feedCount > 0" class="container mb-4">
+      <div v-for="(fs, channelID) in feeds" :key="channelID">
+        <br>
+        <p class="channel-header">
+          #{{ channels.find(ch => ch.id === channelID).name.toLowerCase() }}
+        </p>
+
+        <div class="row">
+          <FeedBlock
+            v-for="(feed, i) in fs"
+            :key="channelID + '-' + i"
+            :feed="feed"
+            @del="setDeletingFeed(feed)"
+            @modify="setModifyingFeed(feed)"
+            @update="updateFeeds()"
+          />
         </div>
       </div>
     </div>
 
-    <!-- feeds -->
-    <br>
-    <b-container v-if="ready == true && feedCount > 0" class="mb-4">
-      <div v-for="(fs, channelID) in feeds" :key="channelID">
-        <br>
-        <h4 class="channel-header">
-          #{{ channels.find(ch => ch.id === channelID).name.toUpperCase() }} ({{ fs.length }})
-        </h4><br>
-        <b-row>
-          <FeedBlock
-            v-for="(feed, i) in fs"
-            :key="channelID + '-' + i"
-            :data="feed"
-            @setPrompt="toggleData('prompt', feed)"
-            @setModify="toggleData('modify', feed)"
-          />
-        </b-row>
-      </div>
-    </b-container>
-
-    <div v-else class="center">
-      <h1>You haven't added any feeds yet...</h1>
-      <p>To add a new feed, press the <code>Add Feed</code> button at the top of the page!</p>
+    <DeleteModal @del="deleteFeed()" />
+    <AddModal :channels="channels" @error="handleError" @update="updateFeeds" />
+    <ModifyModal :channels="channels" :feed="toModify" @update="updateFeeds" @edit="editFeed" />
+  </div>
+  <div v-else class="container mb-5 pb-3 w-75">
+    <div style="text-align: center;" class="mt-4">
+      <img src="@/assets/loading.gif" height="100" width="100">
     </div>
-
-    <DeleteFeedModal @removeFeed="remove(deletePrompt)" />
   </div>
 </template>
 
 <script>
-import AddFeedModal from '@/components/AddFeedModal'
-import ModifyFeedModal from '@/components/ModifyFeedModal'
-import DeleteFeedModal from '@/components/DeleteFeedModal'
+import Button from '@/components/Button.vue'
 import FeedBlock from '@/components/FeedBlock.vue'
-import Button from '@/components/Button'
+import DeleteModal from '@/components/DeleteFeedModal.vue'
+import AddModal from '@/components/AddFeedModal.vue'
+import ModifyModal from '@/components/ModifyFeedModal.vue'
 
 export default {
 
-  components: { FeedBlock, AddFeedModal, ModifyFeedModal, DeleteFeedModal, Button },
+  components: { Button, FeedBlock, DeleteModal, AddModal, ModifyModal },
 
-  beforeRouteUpdate (...args) {
-    this.beforeLeave(...args)
-  },
-  beforeRouteLeave (...args) {
-    this.beforeLeave(...args)
-  },
+  layout: 'dashboard',
 
   data () {
-    return {
-      ready: false,
-      toModify: {},
-      deletePrompt: {}
-    }
+    return { ready: false, deletingFeed: null, errMessage: null, toModify: null }
   },
 
   computed: {
+
+    guild () {
+      return this.$store.getters['guild/guild']
+    },
+
+    user () {
+      return this.$store.getters['user/user']
+    },
+
+    channels () {
+      return this.$store.getters['guild/channels']
+    },
+
     feeds () {
       return this.$store.getters['feeds/feeds']
     },
 
     feedCount () {
       return this.$store.getters['feeds/count']
-    },
-
-    guild () {
-      return this.$store.getters['guild/guild']
-    },
-
-    channels () {
-      return this.$store.getters['guild/channels']
     }
+
   },
 
   async mounted () {
-    await this.update()
+    await this.$store.dispatch('guild/GET_GUILD', this.$route.params.guild_id)
+    await this.$store.dispatch('feeds/GET_FEEDS', this.$route.params.guild_id)
+
+    // const res = await this.$axios.post('/premium/checkout', { tier: 1, userID: this.user.id, guildID: this.$route.params.guild_id })
+    // window.location = res.data.url
+    this.ready = true
   },
 
   methods: {
-    async update () {
-      this.ready = false
-      if (!this.guild || !this.guild.name) {
-        await this.$store.dispatch('guild/GET_GUILD', this.$route.params.guild_id)
-      }
+    getGuildIcon () {
+      return `https://cdn.discordapp.com/icons/${this.guild.id}/${this.guild.icon}.png?size=256`
+    },
+
+    acronym (name) {
+      return name.split(/\s/).reduce((accumulator, word) => {
+        return accumulator + word.charAt(0)
+      }, '')
+    },
+
+    // feed functions
+
+    async updateFeeds () {
       await this.$store.dispatch('feeds/GET_FEEDS', this.$route.params.guild_id)
-      this.ready = true
     },
 
-    beforeLeave (to, from, next) {
-      if (!to.name || !to.name.includes('dashboard-guild_id')) {
-        this.$store.dispatch('guild/RESET')
-        this.$store.dispatch('feeds/RESET')
-      }
-
-      next()
+    setDeletingFeed (feed) {
+      this.deletingFeed = feed
     },
 
-    getGuildIcon (guild) {
-      if (guild && guild.icon) {
-        return `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`
-      } else {
-        return '/static/blank-server.png'
-      }
+    setModifyingFeed (feed) {
+      this.toModify = feed
     },
 
-    toggleMessage (val) {
-      this.addData.includeMessage = val
-    },
-
-    toggleReplies (val) {
-      this.addData.replies = val
-    },
-
-    toggleRSSDesc (val) {
-      this.addData.excludeRSSDesc = val
-    },
-
-    toggleData (type, feed) {
-      if (type === 'prompt') {
-        this.deletePrompt = feed
-        this.$bvModal.show('remove-feed-modal')
-      } else if (type === 'modify') {
-        this.toModify = feed
-        this.$bvModal.show('modify-feed-modal')
-      }
-    },
-
-    async remove (data) {
+    async deleteFeed () {
       try {
-        await this.$axios.delete('/feeds', {
+        await this.$axios.delete(`/feeds/${this.$route.params.guild_id}`, {
           data: {
-            url: data.url,
-            type: data.type,
-            webhookID: data.webhook.id,
-            guildID: this.$route.params.guild_id
+            url: this.deletingFeed.url,
+            type: this.deletingFeed.type,
+            webhookID: this.deletingFeed.webhookID
           }
         })
 
-        this.update()
+        await this.updateFeeds()
       } catch (e) {
-        this.$bvToast.toast('Try again later.', {
-          title: 'Error removing feed',
-          autoHideDelay: 6000,
-          appendToast: false,
-          variant: 'danger'
-        })
       }
+
+      this.deletingFeed = null
+    },
+
+    async editFeed (data) {
+      try {
+        await this.$axios.patch(`/feeds/${this.$route.params.guild_id}`, {
+          webhookID: this.toModify.webhookID,
+          url: this.toModify.url,
+          newURL: data.newURL || this.toModify.url,
+          type: this.toModify.type.toLowerCase(),
+          channelID: data.channel || this.toModify.channelID,
+          nsfw: this.channels.find(ch => ch.id === (data.channel || this.toModify.channelID)).nsfw,
+          options: { replies: data.replies || this.toModify.options.replies, excludeRSSDesc: data.excludeDesc || this.toModify.options.excludeRSSDesc, message: data.message || this.toModify.options.message || null }
+        })
+        this.updateFeeds()
+      } catch (e) {
+        this.handleError(e.response ? e.response.data.error : e.message)
+      }
+    },
+
+    handleError (e) {
+      this.errMessage = e
+      setTimeout(() => {
+        this.errMessage = null
+      }, 5000)
     }
   }
-
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+@import "@/assets/css/_variables.scss";
+
+.guild-header {
+  background: $background-light;
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  padding-bottom: 1px;
+}
+
+.blankGuild {
+  background-color: #2e3338;
+  width: 35px;
+  height: 35px;
+  border-radius: 50% !important;
+}
+.blankGuild.lg {
+  width: 75px;
+  height: 75px;
+}
+.blankGuildName {
+  font-size: 20px;
+  text-align: center;
+  color: #707070
+}
+.blankGuildName.lg {
+  font-size: 45px;
+}
+
 .channel-header {
   font-size: 16px;
-  color: darkgrey;
-  font-weight: 600;
-  flex: 1;
-  margin: 0;
-  padding: 0;
-  border: 0;
+  color: #9c9b9b;
   vertical-align: baseline;
 }
 
-.guild-info {
-  background: rgb(39, 44, 53);
-  border-radius: 10px;
-  border-width: 5px;
-  box-shadow: rgb(20, 22, 27) 2px 2px 2px;
+.error-box {
+  margin: 20px 0;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 22px;
+  border: 2px solid rgb(233, 104, 104); background-color: rgb(233, 104, 104, 0.1)
 }
 
-#url {
-  background-color: #23272A;
-  border-color: #1b1b1b;
-  border-radius: 1px;
-  color: #ffffff
-}
-
-.check-box {
-  background: #23272A
-}
 </style>

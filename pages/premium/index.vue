@@ -9,30 +9,47 @@
       </p>
 
       <div class="tierGrid">
-        <Tier type="0" />
-        <Tier type="0+" />
-        <Tier type="1" />
-        <Tier type="2" />
-        <Tier type="3" />
-        <Tier type="4" />
+        <Tier type="0" @select="select" />
+        <Tier type="1" @select="select" />
+        <Tier type="2" @select="select" />
+        <Tier type="3" @select="select" />
+        <Tier type="4" @select="select" />
       </div>
     </div>
+
+    <UpgradeModal @select="goCheckout" />
   </main>
 </template>
 
 <script>
 import Tier from '@/components/premium/Tier.vue'
+import UpgradeModal from '@/components/UpgradeModal.vue'
 
 export default {
-  components: { Tier },
+  components: { Tier, UpgradeModal },
 
   data: () => ({
-    interval: false
+    interval: false,
+    selected: 0
   }),
 
   computed: {
     user () {
       return this.$store.getters['user/user']
+    }
+  },
+
+  methods: {
+    select (t) { this.selected = t },
+
+    async goCheckout (guild) {
+      console.log(guild)
+      const res = await this.$axios.post('/premium/checkout', {
+        userID: this.user.id,
+        guildID: guild,
+        tier: this.selected
+      })
+      window.location = res.data.url
     }
   }
 

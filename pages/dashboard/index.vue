@@ -1,46 +1,24 @@
 <template>
-  <div>
-    <div class="container mb-5 pb-3">
-      <div style="text-align: center;">
+  <div v-if="ready">
+    <div style="text-align: center;">
+      <div v-if="ready && guildID === ''">
         <h3 class="mt-4 pt-4">
-          Please select a server
+          Select a server from the side panel.
         </h3>
         <p class="d-block mb-4">
-          If your server does not show up here, ensure you have the 'Manage Server' permission and you have invited the bot.
+          If your server does not show up there, ensure you have the 'Manage Server' permission and you have invited the bot.
         </p>
-        <br>
-
-        <div v-if="ready && guilds.length === 0">
-          <h4>No servers found.</h4>
-          <p>Please ensure you have the <code>Manage Server</code> permission and the bot is invited in your server.</p>
-        </div>
-
-        <div v-if="ready == false">
-          <h4>Please reload.</h4>
-          <p>If you have logged in for the first time we are currently syncing your servers, please wait 30 seconds and refresh.</p>
-        </div>
-
-        <div v-if="ready && guilds.length > 0">
-          <div
-            v-for="(guild, index) in guilds"
-            :key="index"
-            class="d-inline-block mx-2 transition"
-            style="cursor:pointer"
-            @click="manage(guild)"
-          >
-            <div>
-              <div v-b-tooltip.hover :title="guild.name" class="d-inline-block p-2">
-                <img v-if="guild.icon" class="guild-icon rounded-circle ml-auto" :src="getGuildIcon(guild)" height="100" width="100">
-                <div v-else class="guild-icon blankGuild">
-                  <div class="blankGuildName">
-                    {{ acronym(guild.name) }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
+      <div v-else-if="ready && guildID !== ''">
+        <h3 class="mt-4 pt-4">
+          {{ currentGuild.name }}
+        </h3>
+      </div>
+    </div>
+  </div>
+  <div v-else class="container mb-5 pb-3 w-75">
+    <div style="text-align: center;" class="mt-4">
+      <img src="@/assets/loading.gif" height="100" width="100">
     </div>
   </div>
 </template>
@@ -48,29 +26,79 @@
 <script>
 export default {
 
+  layout: 'dashboard',
+
   data: () => ({
-    ready: false
+    ready: false,
+    guildID: ''
   }),
 
   computed: {
+    user () {
+      return this.$store.getters['user/user']
+    },
+
     guilds () {
       return this.$store.getters['user/manageableGuilds']
+    },
+
+    guildFeeds () {
+      return this.$store.getters['feeds/feeds']
+    },
+
+    guildFeedCount () {
+      return this.$store.getters['feeds/count']
+    },
+
+    currentGuild () {
+      return this.$store.getters['guild/guild']
+    },
+
+    currentGuildID () {
+      return this.$store.getters['guild/currentGuild']
+    },
+
+    guildChannels () {
+      return this.$store.getters['guild/channels']
     }
   },
 
   async mounted () {
-    this.ready = false
-    await this.$store.dispatch('user/GET_USER_GUILDS')
-    this.ready = true
+    await this.refresh()
   },
 
   methods: {
+    async refresh () {
+      this.ready = false
+
+      await this.$store.dispatch('user/GET_USER_GUILDS')
+      if (this.guildID !== '') {
+        await this.$store.dispatch('guild/GET_GUILD', this.guildID)
+        await this.$store.dispatch('feeds/GET_FEEDS', this.guildID)
+      }
+
+      if (!this.user) {
+        this.$router.push({ name: 'oauth' })
+        return
+      }
+
+      this.ready = true
+    },
+
     getGuildIcon (guild) {
       if (guild && guild.icon) { return `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png` } else { return '/static/blank-server.png' }
     },
 
-    manage (guild) {
-      this.$router.push({ name: 'dashboard-guild_id', params: { guild_id: guild.id } })
+    async switchServer (guild) {
+      this.ready = false
+      this.guildID = guild.id
+
+      // reset current state
+      await this.$store.dispatch('guild/RESET')
+      await this.$store.dispatch('feeds/RESET')
+
+      // get new data
+      await this.refresh()
     },
 
     acronym (name) {
@@ -84,24 +112,27 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+@import "@/assets/css/_variables.scss";
+
 .guild-icon {
   background-color: #2e3338
 }
 .guild-icon:hover {
-  box-shadow: 0 0 5px 2px #000;
+  box-shadow: 0 0 10px 2px #1b1d1f;
   border: 0px;
+  animation: 0.5s ease infinite expand;
 }
 .blankGuild {
   background-color: #2e3338;
-  width: 100px;
-  height: 100px;
-  border-radius: 50% !important;
+  width: 35px;
+  height: 35px;
+  border-radius: 25% !important;
 }
 .blankGuildName {
-  font-weight: 400;
   font-size: 20px;
-  width: 100%;
-  line-height: 96px;
+  text-align: center;
+  color: #707070
 }
+
 </style>

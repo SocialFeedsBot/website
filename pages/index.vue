@@ -39,8 +39,10 @@
       </p>
 
       <div class="buttons">
-        <Button>Add the bot</Button>
-        <Button type="simple-light">
+        <Button page="invite">
+          Add the bot
+        </Button>
+        <Button page="dashboard" type="simple-light">
           Go to the dashboard
         </Button>
       </div>

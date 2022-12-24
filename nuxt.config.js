@@ -50,6 +50,7 @@ module.exports = {
 
   css: [
     '@fortawesome/fontawesome-svg-core/styles.css',
+    '~/assets/scss/css.css',
     '~/assets/scss/main.scss'
   ],
 

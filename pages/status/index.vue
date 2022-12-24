@@ -7,17 +7,12 @@
     </div>
 
     <div v-if="ready" class="container">
-      <div
-        :class="{ green: messageBox.status === 'ok', amber: messageBox.status === 'warn', red: messageBox.status === 'major' }"
-        class="alert-box mt-4 mb-5 p-2"
-      >
-        <h2>{{ messageBox.head }}</h2>
-        <p v-if="messageBox.status !== 'ok'">
-          {{ messageBox.body }}
-        </p>
-      </div>
+      <h2>{{ messageBox.head }}</h2>
+      <p v-if="messageBox.status !== 'ok'" :class="{ 'text-green': messageBox.status === 'ok', 'text-amber': messageBox.status === 'warn', 'text-red': messageBox.status === 'major' }">
+        {{ messageBox.body }}
+      </p>
 
-      <div class="grid">
+      <div class="grid grid-cols-4">
         <div v-for="service in Object.values(services).flat()" :key="service.name + service.id || 'uk'">
           <StatusCard class="" :service="service" />
         </div>
@@ -47,7 +42,7 @@ export default {
 
   mounted () {
     this.update()
-    this.interval = setInterval(() => this.update(), 4000)
+    this.interval = setInterval(() => this.update(), 2500)
   },
 
   beforeDestroy () {
@@ -98,16 +93,22 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/css/_variables.scss";
 h2 {
   margin: 3rem 1rem 1rem 1rem;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fill, 400px);
+  grid-gap: .5rem;
 }
+
+.text-green { color: #81e968; }
+
+.text-amber { color: #e9a668; }
+.text-red { color: rgb(233, 104, 104); }
 
 .status-indicator {
   border-radius: 12px;

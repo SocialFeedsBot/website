@@ -45,39 +45,41 @@ export const actions = {
 
   GET_STATUS ({ commit }) {
     this.$axios.get('/status/').then(({ data: services }) => {
-      commit('SET_SHARDS', services.shards.sort((a, b) => a.uptime - b.uptime).map((shards) => {
+      commit('SET_SHARDS', services.shards.sort((a, b) => a.id - b.id).map((sharder) => {
         let status = 'ready'
-        if (shards.uptime < 10000) {
+        if (sharder.status === 'disconnected') {
+          status = 'disconnected'
+        } else if (sharder.uptime < 10000) {
           status = 'resuming'
         }
 
         return {
-          name: `Shards ${shards.id}`,
+          name: `Shards ${sharder.id}`,
           status,
-          uptime: shards.uptime / 60000,
-          memory: shards.memory,
-          guilds: shards.guilds,
-          shards: shards.shards.map(s => s.id).sort((a, b) => a - b).join(', ')
+          uptime: sharder.uptime / 60000,
+          memory: sharder.memory,
+          guilds: sharder.guilds,
+          shards: (sharder.shards || []).map(s => s.id).sort((a, b) => a - b).join(', ')
         }
       }))
 
-      commit('SET_INTERACTIONS', services.interactions.sort((a, b) => a.interactionsID - b.interactionsID).map(interactions => ({
-        name: `Interactions ${interactions.interactionsID}`,
-        status: interactions.uptime < 10000 ? 'resuming' : 'ready',
+      commit('SET_INTERACTIONS', services.interactions.sort((a, b) => a.id - b.id).map(interactions => ({
+        name: `Interactions ${interactions.id}`,
+        status: interactions.status === 'disconnected' ? 'disconnected' : (interactions.uptime < 10000 ? 'resuming' : 'ready'),
         uptime: interactions.uptime / 60000,
         memory: interactions.memory
       })))
 
-      commit('SET_APIS', services.apis.sort((a, b) => a.uptime - b.uptime).map(api => ({
+      commit('SET_APIS', services.apis.sort((a, b) => a.id - b.id).map(api => ({
         name: `API ${api.id}`,
-        status: api.uptime < 10000 ? 'resuming' : 'ready',
+        status: api.disconnected ? 'disconnected' : (api.uptime < 10000 ? 'resuming' : 'ready'),
         uptime: api.uptime / 60000,
         memory: api.memory
       })))
 
-      commit('SET_FEEDS', services.feeds.sort((a, b) => a.uptime - b.uptime).map(feeds => ({
+      commit('SET_FEEDS', services.feeds.sort((a, b) => a.id - b.id).map(feeds => ({
         name: `Feeds ${feeds.id}`,
-        status: feeds.uptime < 10000 ? 'resuming' : 'ready',
+        status: feeds.disconnected ? 'disconnected' : (feeds.uptime < 10000 ? 'resuming' : 'ready'),
         uptime: feeds.uptime / 60000,
         memory: feeds.memory
       })))

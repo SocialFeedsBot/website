@@ -40,6 +40,14 @@
             {{ service.guilds.toLocaleString() }}
           </p>
         </div>
+        <div v-if="service.shards?.length" class="stat">
+          <div class="key">
+            Shards
+          </div>
+          <p class="value">
+            {{ shards }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -68,7 +76,7 @@ export default {
         case 'resuming':
           return 'Partial Outage'
         default:
-          return 'Down'
+          return 'Offline'
       }
     },
     type () {
@@ -76,6 +84,10 @@ export default {
     },
     id () {
       return this.service.name.split(' ')[1] || 'Service'
+    },
+    shards () {
+      const shards = [...this.service.shards].sort((a, b) => a.id - b.id)
+      return `${shards[0]}-${shards[shards.length - 1]}`
     }
   },
 

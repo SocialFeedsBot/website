@@ -29,7 +29,6 @@ export const mutations = {
 export const actions = {
 
   GET_FEEDS ({ rootGetters, commit }, guildID) {
-    commit('SET_FEEDS', {})
     return this.$axios.get(`/feeds/${guildID || ''}`).then(async ({ data }) => {
       const feeds = []
       feeds.push(...data.feeds)
@@ -55,6 +54,7 @@ export const actions = {
       if (err.response && err.response.status === 401) {
         localStorage.removeItem('token')
         commit('SET_USER', null)
+        commit('SET_FEEDS', {})
         commit('SET_USER_GUILDS', [])
         return false
       }

@@ -2,7 +2,7 @@
   <!--- TODO: mobile responsiveness -->
   <nav>
     <div class="content">
-      <router-link :to="{ path: '/' }">
+      <router-link :to="{ path: '/' }" style="text-decoration: none; color: inherit;">
         <div class="logo">
           <img src="@/assets/logo-outline.png">
           <span class="brand">SocialFeeds</span>
@@ -28,13 +28,15 @@
       </div>
     </div>
     <div class="user">
-      <img v-if="user && !user.id" src="@/assets/loading.gif" width="40px" height="40px" alt="loading">
+      <Button v-if="!loaded">
+        <img src="@/assets/loading.gif" width="30px" height="30px" alt="loading">
+      </Button>
 
       <!-- <li v-else-if="user" class="nav-item user-dropdown">
         - TODO: Implement a dropdown -
       </li> -->
       <NavLink v-else-if="user" :to="{ path: '/dashboard' }">
-        <Button>Dashboard</Button>
+        <Button>{{ user.username }}#{{ user.discriminator }}</Button>
       </NavLink>
 
       <NavLink v-else :to="{ path: '/oauth' }">
@@ -52,7 +54,7 @@ export default {
   components: { Button, NavLink },
 
   data () {
-    return { admin: false }
+    return { loaded: false, admin: false }
   },
 
   computed: {
@@ -69,6 +71,7 @@ export default {
 
   async mounted () {
     await this.$store.dispatch('user/GET_USER')
+    this.loaded = true
   }
 
 }

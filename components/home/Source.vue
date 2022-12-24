@@ -1,6 +1,6 @@
 <template>
   <div class="source">
-    <img :src="imagePath" />
+    <img :src="imagePath">
     <h2>
       {{ name }}
     </h2>
@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   props: ['name', 'isNew'],
 
@@ -62,7 +62,7 @@ export default {
     background-color: $blurple;
     font-family: $font-family-brand;
     font-weight: 500;
-    text-transform: capitalize;
+    text-transform: uppercase;
   }
 }
 </style>

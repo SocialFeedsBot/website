@@ -43,8 +43,8 @@
             {{ customisation }}
           </p>
         </div>
-        <div class="button">
-          <Button @click="createCheckout()">
+        <div v-if="type !== '0'" class="button">
+          <Button data-bs-toggle="modal" data-bs-target="#upgrade-modal" @click="setTier(type)">
             Purchase
           </button>
         </div>
@@ -64,8 +64,6 @@ export default {
       switch (this.type) {
         case '0':
           return 'Free'
-        case '0+':
-          return '£2/month'
         case '1':
           return '£5/month'
         case '2':
@@ -81,8 +79,6 @@ export default {
     capacity () {
       switch (this.type) {
         case '0':
-          return '30'
-        case '0+':
           return '30'
         case '1':
           return '60'
@@ -100,8 +96,6 @@ export default {
       switch (this.type) {
         case '0':
           return 'No'
-        case '0+':
-          return 'Yes'
         case '1':
           return 'Yes'
         case '2':
@@ -117,8 +111,6 @@ export default {
     customisation () {
       switch (this.type) {
         case '0':
-          return 'No'
-        case '0+':
           return 'No'
         case '1':
           return 'No'
@@ -137,35 +129,27 @@ export default {
     }
   },
   methods: {
-    async createCheckout () {
-      let tier = 0
-      switch (this.type) {
+    setTier (t) {
+      let tier
+      switch (t) {
         case '0':
           tier = 0
           break
-        case '0+':
+        case '1':
           tier = 1
           break
-        case '1':
+        case '2':
           tier = 2
           break
-        case '2':
+        case '3':
           tier = 3
           break
-        case '3':
-          tier = 4
-          break
         case '4':
-          tier = 5
+          tier = 4
           break
       }
 
-      const res = await this.$axios.post('/premium/checkout', {
-        userID: '',
-        guildID: '',
-        tier
-      })
-      window.location = res.data.url
+      this.$emit('select', tier)
     }
   }
 }
