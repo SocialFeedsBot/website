@@ -72,14 +72,14 @@ export const actions = {
 
       commit('SET_APIS', services.apis.sort((a, b) => a.id - b.id).map(api => ({
         name: `API ${api.id}`,
-        status: api.disconnected ? 'disconnected' : (api.uptime < 10000 ? 'resuming' : 'ready'),
+        status: api.status === 'disconnected' ? 'disconnected' : (api.uptime < 10000 ? 'resuming' : 'ready'),
         uptime: api.uptime / 60000,
         memory: api.memory
       })))
 
       commit('SET_FEEDS', services.feeds.sort((a, b) => a.id - b.id).map(feeds => ({
         name: `Feeds ${feeds.id}`,
-        status: feeds.disconnected ? 'disconnected' : (feeds.uptime < 10000 ? 'resuming' : 'ready'),
+        status: feeds.status === 'disconnected' ? 'disconnected' : (feeds.uptime < 10000 ? 'resuming' : 'ready'),
         uptime: feeds.uptime / 60000,
         memory: feeds.memory
       })))
