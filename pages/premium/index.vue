@@ -7,6 +7,11 @@
         needs.<br>
         To upgrade, select a server from your profile, head to premium and select the tier you'd like to upgrade to.
       </p>
+      <a href="https://billing.stripe.com/p/login/6oEg0H90y4ZzbVC9AA">
+        <Button>
+          Manage your premium
+        </button>
+      </a>
 
       <div class="tierGrid">
         <Tier type="0" @select="select" />
@@ -22,11 +27,12 @@
 </template>
 
 <script>
+import Button from '@/components/Button.vue'
 import Tier from '@/components/premium/Tier.vue'
 import UpgradeModal from '@/components/UpgradeModal.vue'
 
 export default {
-  components: { Tier, UpgradeModal },
+  components: { Button, Tier, UpgradeModal },
 
   data: () => ({
     interval: false,

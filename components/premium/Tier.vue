@@ -87,7 +87,7 @@ export default {
         case '3':
           return '300'
         case '4':
-          return '1000+'
+          return '1,000'
         default:
           return 'Unknown'
       }
