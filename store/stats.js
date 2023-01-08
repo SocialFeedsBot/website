@@ -77,7 +77,7 @@ export const actions = {
         memory: api.memory
       })))
 
-      commit('SET_FEEDS', services.feeds.sort((a, b) => a.id - b.id).map(feeds => ({
+      commit('SET_FEEDS', services.feeds.sort((a, b) => tonumber(a.id.split('-')[1]) - tonumber(b.id.split('-')[1])).map(feeds => ({
         name: `Feeds ${feeds.id}`,
         status: feeds.status === 'disconnected' ? 'disconnected' : (feeds.uptime < 10000 ? 'resuming' : 'ready'),
         uptime: feeds.uptime / 60000,
