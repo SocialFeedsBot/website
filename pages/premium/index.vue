@@ -14,7 +14,7 @@
       </a>
 
       <div class="tierGrid">
-        <Tier type="0" @select="select" />
+        <Tier type="0" />
         <Tier type="1" @select="select" />
         <Tier type="2" @select="select" />
         <Tier type="3" @select="select" />
@@ -46,14 +46,14 @@ export default {
   },
 
   methods: {
-    select (t) { this.selected = t },
+    select (t, a) { this.selected = { tier: t, period: a } },
 
     async goCheckout (guild) {
-      console.log(guild)
       const res = await this.$axios.post('/premium/checkout', {
         userID: this.user.id,
         guildID: guild,
-        tier: this.selected
+        tier: this.selected.tier,
+        period: this.selected.period
       })
       window.location = res.data.url
     }

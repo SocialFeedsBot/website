@@ -44,8 +44,11 @@
           </p>
         </div>
         <div v-if="type !== '0'" class="button">
-          <Button data-bs-toggle="modal" data-bs-target="#upgrade-modal" @click="setTier(type)">
-            Purchase
+          <Button data-bs-toggle="modal" data-bs-target="#upgrade-modal" @click="setTier(type, 'month')">
+            Monthly
+          </button>
+          <Button data-bs-toggle="modal" data-bs-target="#upgrade-modal" @click="setTier(type, 'year')">
+            Yearly
           </button>
         </div>
       </div>
@@ -65,13 +68,13 @@ export default {
         case '0':
           return 'Free'
         case '1':
-          return '£5/month'
+          return '£5/month or £50/year'
         case '2':
-          return '£10/month'
+          return '£10/month or £100/year'
         case '3':
-          return '£15/month'
+          return '£15/month or £150/year'
         case '4':
-          return '£30/month'
+          return '£30/month or £300/year'
         default:
           return 'Unknown'
       }
@@ -129,12 +132,9 @@ export default {
     }
   },
   methods: {
-    setTier (t) {
+    setTier (a, b) {
       let tier
-      switch (t) {
-        case '0':
-          tier = 0
-          break
+      switch (a) {
         case '1':
           tier = 1
           break
@@ -149,7 +149,7 @@ export default {
           break
       }
 
-      this.$emit('select', tier)
+      this.$emit('select', tier, b)
     }
   }
 }
