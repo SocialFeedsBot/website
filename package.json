@@ -36,7 +36,7 @@
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/google-analytics": "^2.4.0",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.0.0",
+    "eslint": "^8.34.0",
     "eslint-ast-utils": "^1.1.0",
     "eslint-plugin-jest": "^24.3.6",
     "eslint-plugin-nuxt": "^2.0.0",
