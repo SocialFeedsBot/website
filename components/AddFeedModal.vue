@@ -85,6 +85,9 @@
           <SwitchButton v-if="addData.type === 'Twitter'" :is-enabled="addData.replies" @toggle="toggleOption('replies')">
             Include replies
           </SwitchButton>
+          <SwitchButton v-if="addData.type === 'Twitter'" :is-enabled="addData.retweets" @toggle="toggleOption('retweets')">
+            Include retweets
+          </SwitchButton>
           <SwitchButton v-if="addData.type === 'RSS'" :is-enabled="addData.excludeRSSDesc" @toggle="toggleOption('desc')">
             Exclude brief description (just send an embedded link)
           </SwitchButton>
@@ -132,6 +135,7 @@ export default {
     return {
       addData: {
         replies: false,
+        retweets: true,
         excludeRSSDesc: false,
         includeMessage: false,
         type: '',
@@ -139,7 +143,7 @@ export default {
         url: '',
         message: ''
       },
-      defaultAddData: { replies: false, excludeRSSDesc: false, includeMessage: false, type: '', channel: '', url: '', message: '' },
+      defaultAddData: { replies: false, retweets: true, excludeRSSDesc: false, includeMessage: false, type: '', channel: '', url: '', message: '' },
       channel: ''
     }
   },
@@ -154,6 +158,8 @@ export default {
         this.addData.includeMessage = !this.addData.includeMessage
       } else if (opt === 'replies') {
         this.addData.replies = !this.addData.replies
+      } else if (opt === 'retweets') {
+        this.addData.retweets = !this.addData.retweets
       } else if (opt === 'desc') {
         this.addData.excludeRSSDesc = !this.addData.excludeRSSDesc
       }
@@ -178,7 +184,7 @@ export default {
           type: this.addData.type.toLowerCase(),
           channelID: this.addData.channel,
           nsfw: this.channels.find(ch => ch.id === this.addData.channel).nsfw,
-          options: { replies: this.addData.replies, excludeDesc: this.addData.excludeRSSDesc, message: this.addData.message || null }
+          options: { replies: this.addData.replies, retweets: this.addData.retweets, excludeDesc: this.addData.excludeRSSDesc, message: this.addData.message || null }
         })
         this.$emit('update')
         this.addData = JSON.parse(JSON.stringify(this.defaultAddData))
